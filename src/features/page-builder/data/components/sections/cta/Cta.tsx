@@ -1,0 +1,96 @@
+import { SectionContainer } from "@/components/layouts/SectionContainer";
+import { CTASectionSchemaType } from "../../../schema/pageBuilder";
+import { ContentContainer } from "@/components/content/ContentContainer";
+import Image from "next/image";
+
+export function Cta({ section }: { section: CTASectionSchemaType }) {
+  return (
+    <div className="relative overflow-hidden">
+      <div className="w-screen h-[140px] rounded-b-[100px] bg-white"></div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1920"
+        height="1798"
+        viewBox="0 0 1920 1798"
+        fill="none"
+        className="absolute left-1/2  -translate-x-1/2 w-full max-w-none -top-100 md:-top-100 -z-1"
+        preserveAspectRatio="xMidYMin slice"
+      >
+        <g filter="url(#filter0_f_327_2267)">
+          <path
+            d="M-388 531.555C-204.407 531.555 -206.5 828.554 -63 531.555C80.5 234.556 305 808.553 466 531.555C627 254.557 733.5 939.053 1030 531.555C1326.5 124.057 1330.73 531.555 1488 531.555C1614.81 531.555 1750 10.5563 1884 531.555C2018 1052.55 2158.82 531.555 2309 531.555V1497.56H-388V531.555Z"
+            fill="url(#paint0_linear_327_2267)"
+          />
+        </g>
+        <defs>
+          <filter
+            id="filter0_f_327_2267"
+            x="-688"
+            y="0"
+            width="3297"
+            height="1797.56"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="150"
+              result="effect1_foregroundBlur_327_2267"
+            />
+          </filter>
+          <linearGradient
+            id="paint0_linear_327_2267"
+            x1="982"
+            y1="457.5"
+            x2="1046.08"
+            y2="1403.51"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.00154131" stopColor="white" />
+            <stop offset="0.151644" stopColor="#FFCE1D" />
+            <stop offset="0.301746" stopColor="#FFC800" />
+            <stop offset="0.63368" stopColor="#FFAE00" />
+            <stop offset="1" stopColor="#FF9D00" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div className="flex flex-col lg:flex-row justify-between">
+        <SectionContainer className={"bg-transparent!"}>
+          <div className="pb-40  min-[1440px]:py-[150px] z-1 relative">
+            <ContentContainer
+              content={section}
+              classContainer="xl:pl-20 flex flex-col justify-start! items-left! text-left! mr-auto"
+              width="max-w-[800px] "
+              classH="text-[80px]!"
+              classP="body-large"
+              classCtas="justify-start! justify-start "
+              classBtn="mr-auto"
+            />
+          </div>
+        </SectionContainer>
+        <div className="w-[1260px] h-[950px]  relative scale-120 translate-x-[10%] ">
+          <Image
+            src="/home/watch.png"
+            alt="cough monitor smart watch"
+            width={700}
+            height={700}
+            className="z-1 w-screen md:w-[70vw]  lg:w-[700px] h-auto lg:object-cover translate-y-[-25%] lg:translate-y-[20%] relative"
+          ></Image>
+          <Image
+            className="absolute inset-0 object-contain object-cover object-left "
+            src={"/home/honeycombs.png"}
+            alt={"CoughMonitor Suite "}
+            fill
+          />
+        </div>
+      </div>
+      <div className="w-screen h-[140px] rounded-t-[100px] bg-white"></div>
+    </div>
+  );
+}

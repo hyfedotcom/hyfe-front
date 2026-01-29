@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+@theme {
+  --color-black: #2e3542;
+  --color-white: #ffffff;
+  --color-border: #e6dfcc;
+
+  --color-gray-100: #f7f7f9;
+  --color-gray-200: #e7e8eb;
+  --color-gray-300: #d5d7dd;
+  --color-gray-400: #b9bcc5;
+  --color-gray-500: #a1a5b1;
+  --color-gray-600: #8a909d;
+  --color-gray-700: #707887;
+  --color-gray-800: #47505f;
+  --color-gray-900: #32353b;
+
+  --color-primary-100: #fff9cc;
+  --color-primary-200: #fff199;
+  --color-primary-300: #fee866;
+  --color-primary-400: #fedd33;
+  --color-primary-500: #fdc500;
+  --color-primary-600: #e3b100;
+  --color-primary-700: #c99c00;
+  --color-primary-800: #a17c00;
+  --color-primary-900: #725600;
+
+  --color-bg-100: #f7f5ed;
+  --color-bg-150: #f6f3e9;
+  --color-activ: #fbf9f2;
+  --color-card: #faf9f7;
+
+  --color-primary: var(--color-primary-500);
+
+  --color-body: var(--color-gray-800);
+  --color-body-secondary: var(--color-gray-700);
+
+  --color-heading: var(--color-black);
+  --color-heading-secondary: var(--color-gray-800);
+
+  --shadow-classic:
+    0px 24px 24px -12px rgba(87, 141, 235, 0.08),
+    0px 12px 12px -6px rgba(14, 51, 126, 0.08),
+    0px 6px 6px -3px rgba(42, 50, 70, 0.08),
+    0px 3px 3px -1.5px rgba(42, 49, 70, 0.08),
+    0px 1px 1px -0.5px rgba(42, 46, 70, 0.08),
+    0px 0px 0px 1px rgba(14, 70, 126, 0.08);
+
+  --shadow-hover:
+    0px 237px 66px 0px rgba(254, 198, 0, 0),
+    0px 152px 61px 0px rgba(254, 198, 0, 0.01),
+    0px 85px 51px 0px rgba(254, 198, 0, 0.05),
+    0px 38px 38px 0px rgba(254, 198, 0, 0.09),
+    0px 9px 21px 0px rgba(254, 198, 0, 0.1);
+}
+
+.body-large {
+  /* 18px → 20px */
+  @apply text-[clamp(18px,0.6vw+16px,20px)] leading-[1.4] text-body font-normal;
+}
+
+.body-medium {
+  /* 15px → 16px */
+  @apply text-[clamp(15px,0.45vw+14px,16px)] leading-[1.5] text-body font-normal;
+}
+
+.body-small {
+  /* 13px → 14px */
+  @apply text-[clamp(13px,0.4vw+12px,14px)] leading-[1.43] text-body font-medium;
+}
+
+h1 {
+  /* 42px → 80px */
+  @apply text-[clamp(42px,6vw+18px,80px)] leading-[126%] font-semibold text-heading;
+}
+
+h2 {
+  /* 28px → 48px */
+  @apply text-[clamp(28px,3.2vw+16px,48px)] leading-[126%] font-medium text-heading;
+}
+
+h3 {
+  /* 22px → 32px */
+  @apply text-[clamp(22px,2.2vw+14px,32px)] leading-[126%] font-medium text-heading;
+}
+
+h4,
+.h4-class {
+  /* 18px → 24px */
+  @apply text-[clamp(18px,1.6vw+12px,24px)] leading-[126%] font-medium text-heading;
+}
+
+body {
+  background: var(--color-white);
+  color: var(--foreground);
+  font-family: var(--font-poppins), Helvetica, sans-serif;
+}
