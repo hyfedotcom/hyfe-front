@@ -28,7 +28,7 @@ export default async function StrapiFetch<T>({
     headers: {
       Authorization: `Bearer ${serverEnv.STRAPI_TOKEN}`,
     },
-    next: { tags },
+    next: { tags, revalidate: 86400 },
     cache: isDraft ? "no-store" : "force-cache",
   });
 
