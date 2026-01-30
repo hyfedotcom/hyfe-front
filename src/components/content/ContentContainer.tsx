@@ -1,8 +1,8 @@
 import { Button } from "../ui/buttons/Button";
 
 type Props = {
-  title: string;
-  paragraph?: string;
+  title?: string;
+  paragraph?: string | null;
   ctas?: {
     label: string;
     url: string;

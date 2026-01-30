@@ -10,7 +10,7 @@ export function Partners({ section }: { section: PartnersSectionType }) {
     <SectionContainer>
       <div className="space-y-10 md:space-y-15 bg-white">
         <ContentContainer content={section} width="max-w-[900px]"/>
-        <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-6 gap-5 w-full ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center xl:grid-cols-6 gap-5 w-full mx-auto">
           {logos.map((p, i) => (
             <PartnersCard key={i} partner={p} />
           ))}

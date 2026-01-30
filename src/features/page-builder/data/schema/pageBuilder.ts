@@ -1,10 +1,9 @@
-import {  z } from "zod";
+import { z } from "zod";
 import {
   CardCtaSchema,
   CardLinkSchema,
   CardSchema,
   CardsFeedMaybeListSchema,
-
   CtaSchema,
   StatSchema,
 } from "./shared";
@@ -19,7 +18,7 @@ export const SectionHeroStatsSchema = z
     stats: z.array(StatSchema),
   })
   .transform((res) => ({
-    type: "hero-stats",
+    type: "hero-stats" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ?? res.ctas ?? undefined,
@@ -35,7 +34,7 @@ export const SectionCardsGridSchema = z
     cards: z.array(CardSchema),
   })
   .transform((res) => ({
-    type: "cards-grid",
+    type: "cards-grid" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ? res.ctas : undefined,
@@ -50,7 +49,7 @@ export const PartnersSectionSchema = z
     logos: z.array(MediaSchema),
   })
   .transform((res) => ({
-    type: "partners",
+    type: "partners" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     logos: res.logos,
@@ -64,7 +63,7 @@ export const ProductsCardsSchema = z
     cards: z.array(CardCtaSchema),
   })
   .transform((res) => ({
-    type: "products-cards",
+    type: "products-cards" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     cards: res.cards,
@@ -78,7 +77,7 @@ export const ResourceLinksSchema = z
     links: z.array(CardLinkSchema),
   })
   .transform((res) => ({
-    type: "resource-links",
+    type: "resource-links" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     links: res.links,
@@ -93,7 +92,7 @@ export const FeatureCardsRightSectionSchema = z
     cards: z.array(CardSchema),
   })
   .transform((res) => ({
-    type: "feature-cards-right",
+    type: "feature-cards-right" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     ctas: [res.cta],
@@ -108,9 +107,9 @@ export const CTASectionSchema = z
     ctas: z.array(CtaSchema),
   })
   .transform((res) => ({
-    type: "cta",
+    type: "cta" as const,
     title: res.title,
-    paragraph: res.paragraph,
+    paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ?? undefined,
   }));
 
@@ -122,7 +121,7 @@ export const TabbedResourceFeedSectionSchema = z
     cards: CardsFeedMaybeListSchema,
   })
   .transform((res) => ({
-    type: "tabbed-resource-feed",
+    type: "tabbed-resource-feed" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     cards: res.cards,
@@ -136,10 +135,10 @@ export const ResourceFeedSectionSchema = z
     cards: CardsFeedMaybeListSchema.nullable(),
   })
   .transform((res) => ({
-    type: "resource-feed",
+    type: "resource-feed" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
-    cards: res.cards && res.cards.flatMap((e => e.cards)),
+    cards: res.cards && res.cards.flatMap((e) => e.cards),
   }));
 
 export const PageSectionsSchema = z.array(

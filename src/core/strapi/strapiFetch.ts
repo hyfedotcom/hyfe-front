@@ -22,7 +22,7 @@ export default async function StrapiFetch<T>({
     if (toQuery) url.search = toQuery;
   }
 
-  console.log("FETCH URL:", url);
+
 
   const res = await fetch(url, {
     headers: {
@@ -35,7 +35,7 @@ export default async function StrapiFetch<T>({
   if (!res.ok) {
     const text = await res.text().catch(() => "");
     throw new Error(
-      `Strapi error ${res.status} for ${url.toString()}: ${text}`,
+      `Strapi error ${res.status} : ${text}`,
     );
   }
 

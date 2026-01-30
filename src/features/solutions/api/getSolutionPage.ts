@@ -9,8 +9,9 @@ export default async function getSolutionPage({ slug }: { slug: string }) {
     query: pageSolution(slug),
     tags: [`page-solution:${slug}`],
   });
-
-  const page = parseOrThrow(StrapiCollectionSchema, pageData);
-
   // console.log(pageData);
+  const page = parseOrThrow(StrapiCollectionSchema, pageData);
+  
+  // console.log(page);
+  return page
 }

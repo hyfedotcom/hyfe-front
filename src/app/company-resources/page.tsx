@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 
 export default async function ScienceResources() {
   const data = await getPageResource({ slug: "company-resource" });
-  // console.log(data);
+  
   if (!data) return notFound();
   const resourceTypes: Array<"news" | "insights"> = ["news", "insights"];
   return (

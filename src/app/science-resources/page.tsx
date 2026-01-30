@@ -1,12 +1,11 @@
 import { getPageResource } from "@/features/page-builder/data/api/getPage";
-import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 import { ResourcesListHero } from "@/features/resources/client";
 import { ResourceButton } from "@/features/resources/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
 
 export default async function ScienceResources() {
   const data = await getPageResource({ slug: "science-and-research-resource" });
-  // console.log(data);
+
   if (!data) return notFound();
   const resourceTypes: Array<"publications" | "white-papers" | "cough-news"> = [
     "publications",

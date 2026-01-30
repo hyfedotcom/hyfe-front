@@ -10,7 +10,7 @@ export async function getPage({ type, slug }: { type?: string; slug: string }) {
     query: pageBuilder,
     tags: [`page:${slug}`],
   });
-  console.log(data);
+  // console.log(data);
   const page = parseOrThrow(StrapiCollectionSchema, data);
   return page;
 }

@@ -23,13 +23,14 @@ export const CardSchema = z.looseObject({
   image: MediaSchema,
   title: z.string(),
   description: z.string().nullable(),
+  icon: MediaSchema.optional().nullable(),
 });
 
 export const CardCtaSchema = z.looseObject({
   title: z.string(),
   description: z.string().nullable(),
   cta: z.array(CtaSchema),
-  image: MediaSchema,
+  image: MediaSchema ?? undefined,
 });
 
 export const CardLinkSchema = z.looseObject({
@@ -74,7 +75,7 @@ const CardsFeedDomainBase = z
       date: c.date,
       cover: MediaSchema.parse(c.cover),
       tags: c.tags,
-      type: c.type
+      type: c.type,
     })),
   }));
 

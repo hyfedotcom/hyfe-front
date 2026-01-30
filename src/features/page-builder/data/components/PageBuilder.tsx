@@ -6,7 +6,6 @@ import {
   PageSectionsType,
   PartnersSectionType,
   ProductsCardsSectionType,
-  ResourceFeedSectionType,
   ResourceLinksSectionType,
   TabbedResourceFeedSectionType,
 } from "../schema/pageBuilder";
@@ -18,10 +17,34 @@ import { ResourceLinks } from "./sections/resourceLinks/ResourceLinks";
 import { FeatureCardsRight } from "./sections/featureCardsRight/FeatureCardsRight";
 import { Cta } from "./sections/cta/Cta";
 import { TabbedResourceFeed } from "./sections/TabbedResourceFeed/TabbedResourceFeed";
-import { NewsSubscription } from "./sections/newsSubscription/NewsSubscription";
 import { ResourceFeed } from "./sections/resourceFeed/ResourceFeed";
+import { Accordion } from "@/app/solutions/sections/accordion/Accordion";
+import {
+  AccordionType,
+  CardProductStepsType,
+  ContentImageSplitType,
+  ProblemInsightSolutionType,
+  ResourceFeedType,
+  SectionsType,
+  SolutionMapType,
+  SolutionsHeroType,
+  TestimonialsFeedType,
+} from "@/features/solutions/schema/hero/strapi.schema";
+import { ProblemInsightSolution } from "@/app/solutions/sections/problemInsightSolution/ProblemInsightSolution";
+import { Hero } from "@/app/solutions/sections/hero/Hero";
+import { Map } from "@/app/solutions/sections/map/Map";
+import { CardProductSteps } from "./sections/CardProductSteps/CardProductSteps";
+import ContentImageSplit from "@/app/solutions/sections/ContentImageSplit/ContentImageSplit";
+import { Testimonials } from "@/app/solutions/sections/testimonials/Testimonials";
 
-export function PageBuilder({ sections }: { sections: PageSectionsType }) {
+type PageBuilderSection =
+  | PageSectionsType[number]
+  | SectionsType[number]
+  | AccordionType
+  | ProblemInsightSolutionType;
+
+export function PageBuilder({ sections }: { sections: PageBuilderSection[] }) {
+  if (!sections) return;
   return (
     <>
       {sections.map((s, i) => {
@@ -57,9 +80,31 @@ export function PageBuilder({ sections }: { sections: PageSectionsType }) {
               />
             );
           case "resource-feed":
+            return <ResourceFeed key={i} section={s as ResourceFeedType} />;
+          case "accordion":
+            return <Accordion key={i} section={s as AccordionType} />;
+          case "problem-insight-solution":
             return (
-              <ResourceFeed key={i} section={s as ResourceFeedSectionType} />
+              <ProblemInsightSolution
+                key={i}
+                section={s as ProblemInsightSolutionType}
+              />
             );
+          case "hero":
+            return <Hero key={i} section={s as SolutionsHeroType} />;
+          case "map":
+            return <Map key={i} section={s as SolutionMapType} />;
+          case "card-product-steps":
+            return (
+              <CardProductSteps key={i} section={s as CardProductStepsType} />
+            );
+          case "content-image-split":
+            return (
+              <ContentImageSplit key={i} section={s as ContentImageSplitType} />
+            );
+          case "testimonials-feed":
+            return <Testimonials key={i} section={s as TestimonialsFeedType} />;
+
           default:
             break;
         }

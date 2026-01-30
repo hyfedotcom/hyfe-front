@@ -94,6 +94,7 @@ export const pageBuilder = {
             },
           },
         },
+
         // "resource.tabbed-resource-feed": {
         //   fields: ["title", "paragraph"],
         //   populate: {

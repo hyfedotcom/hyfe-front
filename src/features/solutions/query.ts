@@ -1,5 +1,5 @@
 export const pageSolution = (slug: string) => ({
-  filteres: { slug: { $eq: slug } },
+  filters: { slug: { $eq: slug } },
   fields: ["slug", "name"],
   populate: {
     seo: {
@@ -20,14 +20,14 @@ export const pageSolution = (slug: string) => ({
     },
     sections: {
       on: {
-        // "shared.hero": {
-        //   fields: ["title", "paragraph"],
-        //   populate: {
-        //     ctas: {
-        //       fields: ["url", "label"],
-        //     },
-        //   },
-        // },
+        "shared.hero-simple": {
+          fields: ["title", "paragraph"],
+          populate: {
+            ctas: {
+              fields: ["url", "label"],
+            },
+          },
+        },
         "shared.partners": {
           populate: {
             fields: ["title", "paragraph"],
@@ -64,11 +64,38 @@ export const pageSolution = (slug: string) => ({
                 image: {
                   fields: ["url", "alternativeText", "width", "height"],
                 },
+                icon: {
+                  fields: ["url", "alternativeText", "width", "height"],
+                },
+              },
+            },
+          },
+        },
+        "shared.card-product-steps": {
+          fields: ["title", "paragraph"],
+          populate: {
+            ctas: {
+              fields: ["url", "label"],
+            },
+            cards: {
+              fields: ["title", "description"],
+              populate: {
+                image: {
+                  fields: ["url", "alternativeText", "width", "height"],
+                },
               },
             },
           },
         },
         "shared.cta": {
+          fields: ["title", "paragraph"],
+          populate: {
+            ctas: {
+              fields: ["url", "label"],
+            },
+          },
+        },
+        "shared.map": {
           fields: ["title", "paragraph"],
           populate: {
             ctas: {
@@ -92,6 +119,33 @@ export const pageSolution = (slug: string) => ({
                   fields: ["label", "url"],
                 },
               },
+            },
+          },
+        },
+        "resource.resource-feed": {
+          fields: ["title", "paragraph", "type"],
+          populate: {
+            tag: {
+              fields: ["tag"],
+            },
+          },
+        },
+        "shared.content-image-split": {
+          fields: ["title", "variant"],
+          populate: {
+            content: {
+              fields: ["paragraph"],
+            },
+            image: {
+              fields: ["url", "alternativeText", "width", "height"],
+            },
+          },
+        },
+        "shared.testimonials-feed": {
+          fields: ["title", "paragraph"],
+          populate: {
+            testimonials: {
+              fields: ["paragraph", "name", "role"],
             },
           },
         },

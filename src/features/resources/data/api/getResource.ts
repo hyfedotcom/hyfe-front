@@ -19,8 +19,8 @@ export async function getResource({
     tags: [`resource:${type}-${slug}`],
     isDraft: isDraft ?? undefined,
   });
-  console.log(resourceData);
+
   const resource = parseOrThrow(SlugSchema, resourceData);
-  console.log(resource);
+
   return resource;
 }
