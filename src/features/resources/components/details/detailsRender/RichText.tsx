@@ -13,6 +13,7 @@ function isExternal(href: string) {
 }
 
 export function RichText({ blocks }: { blocks: ResourceBlockContent }) {
+  console.log(blocks);
   const cleaned = blocks
     .map((block) => ({
       ...block,
@@ -219,7 +220,13 @@ function spaceClass(prev: Block | undefined, cur: Block, next?: Block) {
   if (t === "paragraph") {
     if (next?.type === "heading") {
       const mb =
-        next?.level === 2 ? "mb-15" : next?.level === 3 ? "mb-12" : "mb-6";
+        next?.level === 2
+          ? "mb-15"
+          : next?.level === 3
+            ? "mb-12"
+            : next?.level === 4
+              ? "mb-10"
+              : "mb-6";
       return `${mb}`;
     }
     if (next?.type === "paragraph") {
@@ -232,13 +239,14 @@ function spaceClass(prev: Block | undefined, cur: Block, next?: Block) {
     return "mb-15";
   }
   if (t === "list") {
-  
     const mb =
-      next?.type === "heading"
+      next?.type === "heading" && next?.level === 2
         ? "mb-15"
-        : next?.type === "paragraph"
-          ? "mb-5"
-          : "mb-15";
+        : next?.type === "heading" && next?.level === 4
+          ? "mb-10"
+          : next?.type === "paragraph"
+            ? "mb-5"
+            : "mb-15";
     return `${mb}`;
   }
   if (t === "quote") return "mb-6";

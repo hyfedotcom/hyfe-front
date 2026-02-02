@@ -21,6 +21,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@/core/*": ["./src/core/*"],
       "@/resources/*": ["./src/features/resources/server"],
       "@/shared/*": ["./src/shared/*"],
       "@/strapi/*": ["./src/core/strapi/*"],

@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
         destination: "/publications/:slug",
         permanent: true,
       },
+      {
+        source: "/research",
+        destination: "/solutions/research",
+        permanent: true,
+      },
     ];
   },
 };
