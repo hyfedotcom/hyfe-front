@@ -2,10 +2,9 @@ import StrapiFetch from "@/core/strapi/strapiFetch";
 import { faqQuery } from "../faq.query";
 import { parseOrThrow } from "@/features/resources";
 import { StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
-import { FaqPageRawSchema } from "../schema/faq.schema";
+import { FaqPageRawSchema, FaqPageType } from "../schema/faq.schema";
 
-
-export async function getFaq() {
+export async function getFaq(): Promise<FaqPageType> {
   const faqData = await StrapiFetch({
     path: `/api/faq-landing`,
     query: faqQuery,
@@ -15,5 +14,5 @@ export async function getFaq() {
 
   const faq = parseOrThrow(StrapiCollectionSchema(FaqPageRawSchema), faqData);
 
-  return faq;
+  return faq as FaqPageType;
 }

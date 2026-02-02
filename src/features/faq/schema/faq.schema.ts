@@ -25,3 +25,4 @@ export const FaqPageRawSchema = z.looseObject({
 });
 
 export type FaqSectionsType = z.infer<typeof FaqSectionsSchema>;
+export type FaqPageType = z.infer<typeof FaqPageRawSchema>;
