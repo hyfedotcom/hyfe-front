@@ -2,11 +2,11 @@
 
 import { JumpLinks } from "@/components/navigation/JumpLinks";
 import { FAQSection } from "./FAQSection";
-import { FaqSectionsType } from "@/features/faq/schema/faq.schema";
+import { FaqSectionType } from "@/features/faq/schema/faq.schema";
 import { useMemo } from "react";
 import { useActiveSection } from "./useActiveSection";
 
-export function FAQClient({ sections }: { sections: FaqSectionsType[] }) {
+export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
   const slugify = (s: string) =>
     s
       .trim()

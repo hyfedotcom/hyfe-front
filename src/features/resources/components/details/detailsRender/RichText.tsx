@@ -13,7 +13,6 @@ function isExternal(href: string) {
 }
 
 export function RichText({ blocks }: { blocks: ResourceBlockContent }) {
-  console.log(blocks);
   const cleaned = blocks
     .map((block) => ({
       ...block,

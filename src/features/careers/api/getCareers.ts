@@ -12,11 +12,11 @@ export default async function getCareers(): Promise<CareersType> {
     query: careersQuery,
     tags: ["page:careers"],
   });
-  console.log(careersData);
+
   const careers = parseOrThrow(
     StrapiCollectionSchema(CareersPageRawSchema),
     careersData,
   );
-  console.log(careers);
+
   return careers as CareersType;
 }

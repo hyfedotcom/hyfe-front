@@ -18,6 +18,14 @@ export async function POST(req: Request) {
     console.log(model);
     let newModel;
 
+    console.log(
+      "Upcoming webbhook",
+      body,
+      "model:" + model,
+      "slug" + slug,
+      "entry:" + entry,
+    );
+
     if (
       model === "news-item" ||
       model === "insight" ||
@@ -40,18 +48,24 @@ export async function POST(req: Request) {
 
       revalidateTag(`resource:${newModel}-${entry.slug}`, "max");
       revalidateTag(`resource:${newModel}-list`, "max");
-      return NextResponse.json({ type: "news-item" });
+      return NextResponse.json({ model: "news-item" });
     }
-    if (entry.type === "resource-landing") {
+
+    if (entry.model === "faq-landing" || entry.model === "faq") {
+      revalidateTag(`page:faq-landing`, "max");
+      return NextResponse.json({ model: "faq" });
+    }
+
+    if (entry.model === "resource-landing") {
       revalidateTag(`page:${model}`, "max");
-      return NextResponse.json({ type: "landing" });
+      return NextResponse.json({ model: "landing" });
     }
-    if (entry.type === "home") {
+    if (entry.model === "home") {
       revalidateTag(`page:home`, "max");
-      return NextResponse.json({ type: "home" });
+      return NextResponse.json({ model: "home" });
     } else {
       revalidateTag(`page:${model || slug}`, "max");
-      return NextResponse.json({ type: "page" });
+      return NextResponse.json({ model: "page" });
     }
 
     // console.log(

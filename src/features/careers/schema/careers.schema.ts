@@ -39,5 +39,5 @@ export const CareersPageRawSchema = z
     vacancies: res.vacancies,
   }));
 
-export type CareersType = z.infer<typeof CareersPageRawSchema>;
+export type   CareersType = z.infer<typeof CareersPageRawSchema>;
 export type VacancyType = z.infer<typeof VacancySchema>;

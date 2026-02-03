@@ -1,6 +1,6 @@
 export function LocationsType({ location_type }: { location_type: string }) {
   return (
-    <div className="flex gap-2 px-4 py-2 bg-bg-150 rounded-[10px]">
+    <div className="flex gap-2 px-4 py-2 bg-bg-150 rounded-[10px] w-max">
       <svg
         width="24"
         height="24"

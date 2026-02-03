@@ -1,10 +1,10 @@
-import { getFaq } from "@/features/faq/api/getFaq";
+import { getFaqPage } from "@/features/faq/api/getFaq";
 import { notFound } from "next/navigation";
 import { FAQClient } from "./FAQClient";
 
 export default async function FAQ({}) {
-  const data = await getFaq();
-  console.log(data);
+  const data = await getFaqPage();
+
   if (!data) return notFound();
   const { paragraph, sections, title } = data;
 

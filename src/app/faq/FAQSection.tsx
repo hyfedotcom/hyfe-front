@@ -1,10 +1,10 @@
 "use client";
 
-import { FaqSectionsType } from "@/features/faq/schema/faq.schema";
+import { FaqSectionType } from "@/features/faq/schema/faq.schema";
 import FAQItem from "./FAQItem";
 import { useState } from "react";
 
-export function FAQSection({ section }: { section: FaqSectionsType }) {
+export function FAQSection({ section }: { section: FaqSectionType }) {
   const { faqs, title } = section;
   const [active, setActive] = useState<null | number>(null);
 

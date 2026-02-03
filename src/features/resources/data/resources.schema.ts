@@ -65,16 +65,16 @@ export const MediaSchema = MediaRawSchema.transform((m) => ({
 ============================================================================ */
 
 export const SeoRawSchema = z.looseObject({
-  meta_title: z.string().nullable(),
-  meta_description: z.string().nullable(),
-  keywords: z.string().nullable(),
-  meta_robots: z.string().nullable(),
-  canonical_URL: z.string().nullable(),
-  structured_data: z.string().nullable(), // обычно textarea с JSON-LD
-  meta_image: MediaRawSchema.nullable(), // если это media
+  meta_title: z.string().nullish(),
+  meta_description: z.string().nullish(),
+  keywords: z.string().nullish(),
+  meta_robots: z.string().nullish(),
+  canonical_URL: z.string().nullish(),
+  structured_data: z.string().nullish(), // обычно textarea с JSON-LD
+  meta_image: MediaRawSchema.nullish(), // если это media
 });
 
-// DOMAIN: удобно для UI/Next
+// DOMAIN: удобно для С/Next
 export const SeoDomainSchema = z.object({
   title: z.union([z.string(), z.undefined()]),
   description: z.union([z.string(), z.undefined()]),
@@ -624,7 +624,10 @@ export const CtaSchema = StrapiCollection(ResourceCtaRawSchema)
    VALIDATION HELPER
 ============================================================================ */
 
-export function parseOrThrow<T extends z.ZodTypeAny>(schema: T, data: unknown) {
+export function parseOrThrow<T extends z.ZodTypeAny>(
+  schema: T,
+  data: unknown,
+): z.infer<T> {
   const r = schema.safeParse(data);
   if (!r.success) {
     // дерево удобно, когда вложенные структуры
