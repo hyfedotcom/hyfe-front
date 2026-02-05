@@ -2,6 +2,7 @@
 import { z } from "zod";
 import {
   ResourceBlockContentSchema,
+  SeoDomainSchema,
   SeoRawSchema,
   SeoSchema,
 } from "@/features/resources";
@@ -40,7 +41,7 @@ export const FaqSectionSchema = z.object({
 export const FaqPageSchema = z.object({
   title: z.string(),
   paragraph: z.string().optional(),
-  seo: SeoSchema,
+  seo: SeoDomainSchema,
   sections: z.array(FaqSectionSchema),
 });
 

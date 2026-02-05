@@ -11,12 +11,12 @@ export function Card({
       <div className="flex  gap-3">
         <div>
           {name && (
-            <p className="body-large text-gray-700 font-medium line-clamp-1">
+            <p className="body-large text-body font-medium! line-clamp-1">
               {name}
             </p>
           )}
           {role && (
-            <p className="body-small text-gray-500 line-clamp-1">{role}</p>
+            <p className="body-small text-body-secondary line-clamp-1">{role}</p>
           )}
         </div>
         {/* {rating && (

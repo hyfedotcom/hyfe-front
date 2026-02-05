@@ -1,21 +1,17 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
-import { teamItemQuery } from "./team.query";
-import { parseOrThrow } from "@/features/resources";
+import { memberBySlugQuery } from "./team.query";
 import { StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
-import { MemberForBuidSchema } from "../schema/team.schema";
-import { toSlug } from "@/shared/utils/toSlug";
+import { parseOrThrow } from "@/features/resources";
+import { MembersSchema } from "../schema/team.schema";
 
 export async function getMember(slug: string) {
-  const membersRaw = await StrapiFetch({
+  const raw = await StrapiFetch({
     path: "/api/teams",
-    query: teamItemQuery,
-    tags: ["item:team"],
+    query: memberBySlugQuery(slug),
+    tags: [`member:${slug}`, "team:members:all"],
   });
 
-  const members = parseOrThrow(
-    StrapiCollectionSchema(MemberForBuidSchema),
-    membersRaw,
-  );
+  const list = parseOrThrow(StrapiCollectionSchema(MembersSchema), raw);
 
-  return members.find((m) => toSlug(m.name) === slug);
+  return list[0] ?? null;
 }

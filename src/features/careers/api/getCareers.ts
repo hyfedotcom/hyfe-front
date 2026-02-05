@@ -1,22 +1,44 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
-import { careersQuery } from "../query/careers.query";
+
 import {
   parseOrThrow,
   StrapiCollectionSchema,
 } from "@/features/shared/schema/strapi.schema";
-import { CareersPageRawSchema, CareersType } from "../schema/careers.schema";
+import {
+  CareersPageRawSchema,
+  VacanciesSchema,
+} from "../schema/careers.schema";
+import { careersQuery, vacanciesQuery } from "./careers.query";
 
-export default async function getCareers(): Promise<CareersType> {
-  const careersData = await StrapiFetch({
-    path: "/api/careers-landing",
-    query: careersQuery,
-    tags: ["page:careers"],
-  });
+export default async function getCareers() {
+  const [landingRaw, vacanciesRaw] = await Promise.all([
+    StrapiFetch({
+      path: "/api/careers-landing",
+      query: careersQuery,
+      tags: ["careers:landing"],
+    }),
+    StrapiFetch({
+      path: "/api/vacancies-items",
+      query: vacanciesQuery,
+      tags: ["careers:vacancies:list"],
+    }),
+  ]);
 
-  const careers = parseOrThrow(
+  const landing = parseOrThrow(
     StrapiCollectionSchema(CareersPageRawSchema),
-    careersData,
+    landingRaw,
   );
 
-  return careers as CareersType;
+  const vacancies = parseOrThrow(
+    StrapiCollectionSchema(VacanciesSchema),
+    vacanciesRaw,
+  );
+
+  return {
+    title: landing.title,
+    paragraph: landing.paragraph,
+    images: landing.images,
+    seo: landing.seo,
+    vacancies: vacancies,
+  };
 }

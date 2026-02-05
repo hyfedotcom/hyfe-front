@@ -7,7 +7,7 @@ import {
   CardSchema,
   CtaSchema,
 } from "@/features/page-builder/data/schema/shared";
-import { MediaSchema } from "@/features/resources";
+import { MediaSchema, SeoSchema } from "@/features/resources";
 import { z } from "zod";
 
 // export const SolutionsHeroSchema = z
@@ -201,6 +201,7 @@ export const SolutionRawSchema = z.looseObject({
   name: z.string(),
   slug: z.string(),
   sections: SectionsSchema,
+  seo: SeoSchema,
 });
 
 export const StrapiCollectionSchema = z
@@ -220,4 +221,4 @@ export type ResourceFeedType = z.infer<typeof ResourceFeed>;
 export type CardProductStepsType = z.infer<typeof CardProductStepsSchema>;
 export type ContentImageSplitType = z.infer<typeof ContentImageSplitSchema>;
 export type TestimonialsFeedType = z.infer<typeof TestimonialsFeedSchema>;
-export type SectionsType= z.infer<typeof SectionsSchema>;
+export type SectionsType = z.infer<typeof SectionsSchema>;

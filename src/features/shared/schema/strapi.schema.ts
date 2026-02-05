@@ -20,3 +20,9 @@ export function parseOrThrow<T extends z.ZodTypeAny>(
   }
   return r.data;
 }
+
+export const SlugsSchema = z.array(
+  z.looseObject({
+    slug: z.string(),
+  }),
+);

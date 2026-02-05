@@ -1,4 +1,9 @@
-import { MediaSchema, ResourceBlockContentSchema } from "@/features/resources";
+import {
+  MediaSchema,
+  ResourceBlockContentSchema,
+  SeoRawSchema,
+  SeoSchema,
+} from "@/features/resources";
 import { z } from "zod";
 
 export const VacancySchema = z
@@ -13,6 +18,7 @@ export const VacancySchema = z
     rich_text: z.looseObject({
       content: ResourceBlockContentSchema,
     }),
+    seo: SeoRawSchema,
   })
   .transform((res) => ({
     title: res.title,
@@ -23,6 +29,7 @@ export const VacancySchema = z
     time_zone: res.time_zone,
     apply_link: res.apply_link,
     rich_text: res.rich_text,
+    seo: SeoSchema.parse(res.seo),
   }));
 
 export const CareersPageRawSchema = z
@@ -30,14 +37,18 @@ export const CareersPageRawSchema = z
     title: z.string(),
     paragraph: z.string().nullable(),
     images: z.array(MediaSchema).optional(),
-    vacancies: z.array(VacancySchema),
+    seo: SeoRawSchema,
+    // vacancies: z.array(VacancySchema),
   })
   .transform((res) => ({
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     images: res.images ?? undefined,
-    vacancies: res.vacancies,
+    seo: SeoSchema.parse(res.seo),
+    // vacancies: res.vacancies,
   }));
 
-export type   CareersType = z.infer<typeof CareersPageRawSchema>;
+export const VacanciesSchema = z.array(VacancySchema);
+
+export type CareersType = z.infer<typeof CareersPageRawSchema>;
 export type VacancyType = z.infer<typeof VacancySchema>;

@@ -1,6 +1,30 @@
 import { NextResponse } from "next/server";
 import { serverEnv } from "@/core/env.server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+const RESOURCE_UID_MAP: Record<string, string> = {
+  "api::news-item.news-item": "news-items",
+  "api::insight.insight": "insights",
+  "api::cough-news-item.cough-news-item": "cough-news-items",
+  "api::publication.publication": "publications",
+  "api::white-paper.white-paper": "white-papers",
+};
+
+const RESOURCE_MODEL_MAP: Record<string, string> = {
+  "news-item": "news-items",
+  insight: "insights",
+  "cough-news-item": "cough-news-items",
+  publication: "publications",
+  "white-paper": "white-papers",
+};
+
+const RESOURCE_ROUTE_TYPE_BY_UID: Record<string, string> = {
+  "api::news-landing.news-landing": "news",
+  "api::cough-news-landing.cough-news-landing": "cough-news",
+  "api::insights-landing.insights-landing": "insights",
+  "api::publications-landing.publications-landing": "publications",
+  "api::white-papers-landing.white-papers-landing": "white-papers",
+};
 
 export async function POST(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -13,10 +37,10 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const model = body.model;
-    const slug = body.slug;
+
     const entry = body.entry;
-    console.log(model);
-    let newModel;
+    const uid = body.uid;
+    const slug = typeof entry?.slug === "string" ? entry.slug : body?.slug;
 
     console.log(
       "Upcoming webbhook",
@@ -26,55 +50,115 @@ export async function POST(req: Request) {
       "entry:" + entry,
     );
 
+    // 1.0 CAREERS LANDING
     if (
-      model === "news-item" ||
-      model === "insight" ||
-      model === "white-paper" ||
-      model === "publication" ||
-      model === "cough-news-item"
+      uid === "api::careers-landing.careers-landing" ||
+      model === "careers-landing"
     ) {
-      console.log(`🌍 News-item ipdated: ${entry.slug}`);
-      if (model === "news-item") {
-        newModel = "news-items";
-      } else if (model === "insight") {
-        newModel = "insights";
-      } else if (model === "cough-news-item") {
-        newModel = "cough-news-items";
-      } else if (model === "publication") {
-        newModel = "publications";
-      } else if (model === "white-paper") {
-        newModel = "white-papers";
+      revalidateTag("careers:landing", "max");
+      revalidateTag("careers:vacancies:list", "max");
+      revalidatePath("/careers");
+      return NextResponse.json({ ok: true, kind: "careers-landing" });
+    }
+
+    // 1.1 VACANCIES
+    if (
+      uid === "api::vacancies-item.vacancies-item" ||
+      model === "vacancies-item"
+    ) {
+      revalidateTag("careers:vacancies:list", "max");
+      revalidateTag("careers:vacancies:all", "max"); // <- прибьёт все detail-страницы (вкл. старый slug)
+
+      if (slug) {
+        revalidateTag(`careers:vacancy:${slug}`, "max");
+        revalidatePath(`/careers/${slug}`);
       }
 
-      revalidateTag(`resource:${newModel}-${entry.slug}`, "max");
-      revalidateTag(`resource:${newModel}-list`, "max");
-      return NextResponse.json({ model: "news-item" });
+      revalidatePath("/careers");
+      return NextResponse.json({ ok: true, kind: "vacancy", slug });
     }
 
-    if (entry.model === "faq-landing" || entry.model === "faq") {
-      revalidateTag(`page:faq-landing`, "max");
-      return NextResponse.json({ model: "faq" });
+    // 2.0 TEAM LANDING
+    if (uid === "api::team-landing.team-landing" || model === "team-landing") {
+      revalidateTag("team:landing", "max");
+      revalidateTag("team:members:list", "max");
+      revalidatePath("/team");
+
+      return NextResponse.json({ ok: true, lind: "team-landing" });
+    }
+    // 2.1 TEAM ITEM
+    if (uid === "api::team.team" || model === "team") {
+      revalidateTag("team:members:list", "max");
+      revalidateTag("team:landing", "max");
+      revalidateTag("team:members:all", "max");
+
+      if (slug) {
+        revalidateTag(`member:${slug}`, "max");
+        revalidatePath(`/team/${slug}`);
+      }
+
+      return NextResponse.json({ ok: true, kind: "member", slug });
     }
 
-    if (entry.model === "resource-landing") {
-      revalidateTag(`page:${model}`, "max");
-      return NextResponse.json({ model: "landing" });
-    }
-    if (entry.model === "home") {
-      revalidateTag(`page:home`, "max");
-      return NextResponse.json({ model: "home" });
-    } else {
-      revalidateTag(`page:${model || slug}`, "max");
-      return NextResponse.json({ model: "page" });
+    /// 2.2 TEAM GROUP
+    if (uid === "api::team-group.team-group") {
+      revalidateTag("team:landing", "max");
+      revalidateTag("team:members:list", "max");
+      revalidatePath("/team");
+      revalidateTag("team:landing", "max");
+      revalidateTag("team:members:all", "max");
     }
 
-    // console.log(
-    //   "Upcoming webbhook",
-    //   body,
-    //   "model:" + model,
-    //   "slug" + slug,
-    //   "entry:" + entry,
-    // );
+    // 3.0 RESOURCES
+    const resourceModel =
+      (uid && RESOURCE_UID_MAP[uid]) || RESOURCE_MODEL_MAP[model];
+
+    if (resourceModel) {
+      console.log(
+        `🌍 Resource updated: ${uid ?? model}${slug ? ` | ${slug}` : ""}`,
+      );
+
+      if (slug) {
+        revalidateTag(`resource:${resourceModel}-${slug}`, "max");
+      }
+      revalidateTag(`resource:${resourceModel}-list`, "max");
+
+      return NextResponse.json({
+        ok: true,
+        kind: "resource",
+        uid,
+        model,
+        resourceModel,
+        slug,
+      });
+    }
+
+    // 3.1 RESOURCE LANDING
+    const routeType = RESOURCE_ROUTE_TYPE_BY_UID[uid];
+
+    if (routeType) {
+      revalidateTag(`resource:${routeType}-list`, "max");
+      revalidateTag(`resource:${routeType}-landing`, "max"); // если ты так тегируешь detail
+    }
+    // 4.0 FAQ LANDING
+    if (uid === "api::faq-landing.faq-landing") {
+      revalidateTag("faq:faq-landing", "max");
+    }
+    /// 4.1 FAQ ITEM
+    if (uid === "api::faq.faq") {
+      revalidateTag("faq:faq-list", "max");
+    }
+
+    /// 4.2 FAQ GROUP
+    if (uid === "api::faq-group.faq-group") {
+      revalidateTag("faq:faq-landing", "max");
+      revalidateTag("faq:faq-list", "max");
+    }
+
+    // 5.0 SOLUTION PAGES
+    if (uid === "api::solution.solution") {
+      revalidateTag(`solution:${slug}`, "max");
+    }
 
     return NextResponse.json({ message: "Unhandled model", model });
   } catch (error) {

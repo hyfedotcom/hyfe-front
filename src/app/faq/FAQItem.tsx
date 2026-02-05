@@ -1,5 +1,5 @@
 import { ResourceBlockContent } from "@/features/resources";
-import { RichText } from "@/features/resources/components/details/detailsRender/RichText";
+import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
 import * as React from "react";
 
 type FaqItemProps = {
@@ -23,8 +23,8 @@ export default function FAQItem({
     <div
       data-open={active}
       className={[
-        "group w-fullrounded-[20px] bg-card  border hover:border-primary rounded-[20px]",
-        active ? "border-primary" : "border-border",
+        "group w-fullrounded-[20px] bg-card  border hover:border-primary rounded-[20px] hover:shadow-hover duration-300",
+        active ? "border-primary shadow-hover" : "border-border",
         className,
       ].join(" ")}
     >
@@ -34,17 +34,17 @@ export default function FAQItem({
         onClick={onToggle}
         aria-expanded={active}
         aria-controls={contentId}
-        className="
+        className={`
           flex w-full items-center justify-between gap-3
-          text-left cursor-pointer px-5 pt-5 pb-5
-          min-w-0
-        "
+          text-left cursor-pointer px-5 ${active ? "pb-3" : "pb-5"} pt-5
+          min-w-0 duration-300
+        `}
       >
-        <h4 className="flex-1 min-w-0 break-words whitespace-normal font-normal!">
+        <h4 className="text-[20px]! flex-1 min-w-0 break-words whitespace-normal font-medium!">
           {question}
         </h4>
 
-        <span className="shrink-0 inline-flex items-center justify-center rounded-[8px] bg-black p-2">
+        <span className="shrink-0 inline-flex items-center justify-center rounded-[8px] ">
           <svg
             width="24"
             height="24"
@@ -52,9 +52,10 @@ export default function FAQItem({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className={`
-              text-white
+              text-black
               transition-transform duration-200 ease-out
-              group-hover:rotate-45
+ 
+    
            ${active ? "rotate-45" : ""}
             `}
           >
@@ -76,7 +77,7 @@ export default function FAQItem({
       >
         <div className="overflow-hidden">
           <div className="px-5 text-sm leading-relaxed text-white/80 w-full break-words max-w-[95%] [&_p:last-child]:mb-5">
-            <RichText blocks={answer} />
+            <RichText bodySize="body-medium" blocks={answer} />
           </div>
         </div>
       </div>

@@ -25,7 +25,8 @@
       "@/resources/*": ["./src/features/resources/server"],
       "@/shared/*": ["./src/shared/*"],
       "@/strapi/*": ["./src/core/strapi/*"],
-      "@/framer":["./src/features/framer-motion/index"]
+      "@/framer":["./src/features/framer-motion/index"],
+      "@/features":["./src/features/*"]
     }
   },
   "include": [

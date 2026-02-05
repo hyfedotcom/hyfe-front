@@ -1,6 +1,24 @@
 import { getFaqPage } from "@/features/faq/api/getFaq";
 import { notFound } from "next/navigation";
 import { FAQClient } from "./FAQClient";
+import { Metadata } from "next";
+import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
+
+export const dynamic = "force-static";
+export const revalidate = false;
+
+export async function generateMetadata() {
+  const fallback: Metadata = {
+    title: "",
+    description: "",
+    robots: { index: false, follow: false },
+  };
+  const data = await getFaqPage();
+
+  if (!data || !data.seo) return fallback;
+  console.log(data);
+  return getSeoMetadata(data.seo);
+}
 
 export default async function FAQ({}) {
   const data = await getFaqPage();
@@ -17,7 +35,7 @@ export default async function FAQ({}) {
             <p>{paragraph}</p>
           </div>
         </main>
-        <FAQClient sections={sections} />
+        {sections && <FAQClient sections={sections} />}
       </div>
     </div>
   );

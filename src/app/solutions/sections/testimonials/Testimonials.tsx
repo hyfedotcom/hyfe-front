@@ -8,7 +8,7 @@ export function Testimonials({ section }: { section: TestimonialsFeedType }) {
 
   return (
     <SectionContainer className="bg-gray-50 overflow-hidden  z-300 relative">
-      <div className="container !px-0 md:!px-10 space-y-10">
+      <div className=" space-y-10">
         <ContentContainer
           classContainer="px-4 md:px-0"
           classH="text-balance"

@@ -22,6 +22,7 @@ const CareersLandingRawSchema = z.looseObject({
   title: z.string(),
   paragraph: z.string().nullable(),
   sections: z.array(SectionsRawCshema),
+  seo: SeoRawSchema,
 });
 
 const BiographyRawSchema = z.looseObject({
@@ -33,6 +34,7 @@ const MemberRawSchema = z.looseObject({
   linkedin: z.string().nullable(),
   twitter: z.string().nullable(),
   location: z.string().nullable(),
+  slug: z.string(),
   job: z.string(),
   image: MediaRawSchema,
   biography: BiographyRawSchema,
@@ -46,15 +48,18 @@ const MembersRawSchema = z.array(MemberRawSchema);
 
 export const MemberSchema = z.object({
   name: z.string(),
-  linkedin: z.string().optional(),
-  twitter: z.string().optional(),
-  location: z.string().optional(),
+  linkedin: z.union([z.string(), z.undefined()]).nullable(),
+  twitter: z.union([z.string(), z.undefined()]).nullable(),
+  location: z.union([z.string(), z.undefined()]).nullable(),
+  slug: z.string(),
   job: z.string(),
   image: MediaSchema,
   biography: BiographyRawSchema,
   seo: SeoSchema,
-  team_group: TeamGroupSchema.nullable(),
+  team_group: TeamGroupSchema.nullable().optional(),
 });
+
+export const MembersSchema = z.array(MemberSchema);
 
 export const TeamSectionSchema = z.object({
   titie: z.string(),
@@ -70,11 +75,11 @@ export const TeamPageSchema = z.object({
 
 /* ----------------------- Derived (for building sections) --------------------- */
 
-export const CareersLandingForBuildSchema = CareersLandingRawSchema.transform(
+export const TeamLandingForBuildSchema = CareersLandingRawSchema.transform(
   (res) => ({
     title: res.title,
     paragraph: res.paragraph ?? undefined,
-    seo: res.seo,
+    seo: SeoSchema.parse(res.seo),
     groupOrder: res.sections
       ? res.sections.map((item) =>
           item.team_group ? item.team_group.name_group : "",
@@ -87,6 +92,7 @@ export const MemberForBuidSchema = MembersRawSchema.transform((res) =>
   res.map((item) => ({
     name: item.name,
     job: item.job,
+    slug: item.slug,
     linkedin: item.linkedin ?? undefined,
     twitter: item.twitter ?? undefined,
     location: item.location ?? undefined,
@@ -96,5 +102,7 @@ export const MemberForBuidSchema = MembersRawSchema.transform((res) =>
     team_group: item.team_group,
   })),
 );
+
+
 
 export type MemberType = z.infer<typeof MemberSchema>;

@@ -9,7 +9,7 @@ import { VacancyItem } from "./VacancyItem";
 export default async function CareersPage() {
   const careers = await getCareers();
   if (!careers) notFound();
-  const { images, paragraph, title, vacancies } = careers as CareersType;
+  const { images, paragraph, title, vacancies } = careers;
   return (
     <div className="mx-auto w-full max-w-[950px] px-4 md:px-10">
       <main className="space-y-11  pb-[100px] ">

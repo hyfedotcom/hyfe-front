@@ -4,7 +4,7 @@ import { ResourceCard } from "@/features/resources/client";
 import {  ResourcesTypes } from "../../../schema/shared";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ResourceButton } from "@/features/resources/components/ui/ResourceButton";
+import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { ResourceCardListType } from "@/features/resources";
 
 export type ResourcesLists = ResourceCardListType[];

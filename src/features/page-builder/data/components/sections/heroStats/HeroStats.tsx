@@ -101,7 +101,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
           {stats.map((s, i) => (
             <div
               key={i}
-              className="w-full flex flex-col items-center justify-center py-10 bg-[#FBF9F2]/20 backdrop-blur-[40px] rounded-[20px] border-2 border-[#FFF199]/25"
+              className="w-full flex flex-col items-center justify-center py-10 bg-[#FBF9F2]/20 backdrop-blur-[6px] rounded-[20px] border-2 border-[#FFF199]/25"
             >
               <h2 className="text-[60px]! md:text-[80px]! text-center">
                 {s.value}

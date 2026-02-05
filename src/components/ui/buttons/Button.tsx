@@ -65,7 +65,7 @@ export function Button({
 
   if (tag === "a") {
     return (
-      <a href={url} className={className}>
+      <a href={url} target="_blank" className={className}>
         {content}
       </a>
     );

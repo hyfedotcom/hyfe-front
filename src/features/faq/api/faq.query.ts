@@ -21,6 +21,7 @@ export const faqLandingQuery = {
 };
 
 export const faqItemQuery = {
+  pagination: { pageSize: 1000 },
   fields: ["question", "answer"],
   populate: {
     faq_group: {

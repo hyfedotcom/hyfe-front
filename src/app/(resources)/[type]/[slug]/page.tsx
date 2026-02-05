@@ -1,13 +1,14 @@
-import { ResourceDetails } from "@/features/resources/components/details/ResourceDetails";
-import { ResourceButtonBack } from "@/features/resources/components/ui/ResourceButtonBack";
+import { ResourceDetails } from "@/app/(resources)/components/details/ResourceDetails";
+import { ResourceButtonBack } from "@/app/(resources)/components/ui/ResourceButtonBack";
 import {
   getResource,
   getResourcesList,
   ResourceType,
 } from "@/features/resources";
-import { ResourceDetailsHero } from "@/features/resources/components/details/ResourceDetailsHero";
+import { ResourceDetailsHero } from "@/app/(resources)/components/details/ResourceDetailsHero";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { Metadata } from "next";
+import { Sheet } from "@/components/layouts/sheet/Sheet";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -80,15 +81,17 @@ export default async function ResourceSingle({ params }: PageProps) {
   const resource = await getResource({ type, slug });
 
   return (
-    <div className="w-full relative overflow-hidden">
-      <ResourceButtonBack label={`All ${type}`} url={`/${type}`} />
-      <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[260px] px-4 md:px-10">
-        <ResourceDetailsHero data={resource} type={type} />
-        <ResourceDetails
-          data={resource.blocks}
-          resourceType={type as ResourceType}
-        />
+    <Sheet returnPath={type}>
+      <div className="w-full relative overflow-hidden">
+        {/* <ResourceButtonBack label={`All ${type}`} url={`/${type}`} /> */}
+        <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
+          <ResourceDetailsHero data={resource} type={type} />
+          <ResourceDetails
+            data={resource.blocks}
+            resourceType={type as ResourceType}
+          />
+        </div>
       </div>
-    </div>
+    </Sheet>
   );
 }

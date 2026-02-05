@@ -1,7 +1,10 @@
 import { getPageResource } from "@/features/page-builder/data/api/getPage";
 import { ResourcesListHero } from "@/features/resources/client";
-import { ResourceButton } from "@/features/resources/components/ui/ResourceButton";
+import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
+
+export const dynamic = "force-static";
+export const revalidate = false;
 
 export default async function ScienceResources() {
   const data = await getPageResource({ slug: "science-and-research-resource" });

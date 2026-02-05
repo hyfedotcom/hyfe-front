@@ -56,6 +56,10 @@ html {
     0px 85px 51px 0px rgba(254, 198, 0, 0.05),
     0px 38px 38px 0px rgba(254, 198, 0, 0.09),
     0px 9px 21px 0px rgba(254, 198, 0, 0.1);
+
+  --shadow-active:
+    0 9px 21px rgb(254 198 0 / 10%), 0 24px 38px rgb(254 198 0 / 2%),
+    0 152px 61px rgb(254 198 0 / 1%);
 }
 
 .body-large {

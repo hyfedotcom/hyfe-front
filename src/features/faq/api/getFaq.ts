@@ -10,7 +10,6 @@ import {
   FaqItemForBuildSchema,
   FaqLandingForBuildSchema,
   FaqPageSchema,
-  type FaqPageType,
 } from "../schema/faq.schema";
 import { buildSections } from "../utils/buildSections";
 
@@ -19,12 +18,12 @@ export async function getFaqPage() {
     StrapiFetch({
       path: `/api/faq-landing`,
       query: faqLandingQuery,
-      tags: ["page:faq"],
+      tags: ["faq:faq-landing"],
     }),
     StrapiFetch({
       path: "/api/faqs",
       query: faqItemQuery,
-      tags: ["faq:list"],
+      tags: ["faq:faq-list"],
     }),
   ]);
 
@@ -32,18 +31,20 @@ export async function getFaqPage() {
     StrapiCollectionSchema(FaqLandingForBuildSchema),
     landingRaw,
   );
-
   const items = parseOrThrow(
     StrapiCollectionSchema(z.array(FaqItemForBuildSchema)),
     itemsRaw,
   );
 
+  console.log(landingRaw);
+  console.log(itemsRaw);
   if (!landing.groupOrder) return null;
 
   const sections = buildSections({
     groupOrder: landing.groupOrder,
     items,
   });
+  console.log(landing.seo);
 
   return FaqPageSchema.parse({
     title: landing.title,

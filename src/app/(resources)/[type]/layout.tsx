@@ -1,8 +1,17 @@
-export const dynamic = "force-static";
-export const revalidate = false;
+import ResourceTypePage from "../components/layout/ResourceTypePage";
 
-export default function Layout({
+export default async function Layout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
-  return <>{children}</>;
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ type: string }>;
+}) {
+  const { type } = await params;
+  return (
+    <>
+      <ResourceTypePage type={type} />
+      {children}
+    </>
+  );
 }

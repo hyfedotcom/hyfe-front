@@ -7,7 +7,7 @@ export async function getResourcesList({ type }: { type: string }) {
     const landingData = await StrapiFetch<unknown>({
       path: `/api/${type}-landing`,
       query: resourceLanding,
-      tags: [`page:${type}-landing`],
+      tags: [`resource:${type}-landing`],
     });
 
     if (type === "news") type = "news-items";
