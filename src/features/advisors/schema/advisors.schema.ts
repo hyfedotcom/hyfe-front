@@ -39,7 +39,7 @@ const AdvisorMemberRawSchema = z.looseObject({
   image: MediaRawSchema,
   biography: BiographyRawSchema,
   seo: SeoRawSchema,
-  team_group: TeamGroupSchema.nullable(),
+  team_group: TeamGroupSchema.nullable().optional(),
   
 });
 
