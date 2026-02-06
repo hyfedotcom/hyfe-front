@@ -26,7 +26,7 @@ export function PageBuilder({ sections }: { sections?: PageBuilderSection[] }) {
         const shouldClip =
           shouldRoundTop && !NO_OVERFLOW_TYPES.has(section.type);
         const wrapperClass = shouldRoundTop
-          ? `shadow-[0_10px_40px_rgba(0,0,0,0.10)] relative z-10 -mt-[40px] pt-[40px] bg-white rounded-t-[60px] ${
+          ? ` shadow-[0_-25px_40px_rgba(0,0,0,0.08)] relative z-10 -mt-[40px] pt-[40px] bg-white rounded-t-[60px] ${
               shouldClip ? " overflow-hidden" : ""
             }`
           : undefined;
