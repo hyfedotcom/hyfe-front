@@ -95,7 +95,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
             />
           ))}
         </motion.div>
-        <div className="relative mx-auto w-full max-w-[1254px] h-[800px]">
+        <div className="relative mx-auto w-full max-w-[1254px] h-[800px] translate-x-[-5%]">
           <motion.div style={{ y: tabletY }} className="relative z-10">
             <Image
               className="w-full h-auto translate-x-[100px]"

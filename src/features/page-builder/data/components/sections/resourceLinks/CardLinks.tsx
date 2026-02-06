@@ -26,7 +26,7 @@ export function CardLink({ card }: { card: CardLinkType }) {
   return (
     <Link
       href={`/${linkHref}`}
-      className="bg-card border flex flex-col justify-between border-border rounded-[20px] hover:border-primary hover:bg-activ p-5 space-y-8 group/card"
+      className="bg-card border flex flex-col justify-between border-border rounded-[20px] hover:border-primary hover:bg-activ p-5 space-y-8 group/card  hover:shadow-hover duration-300"
     >
       <div className="p-3 rounded-full bg-white w-max">
         {Icon && <Icon className="text-primary min-w-8 min-h-8" />}
