@@ -1,4 +1,5 @@
 import { cx, NavLink } from "@/features/header/helpers/header.helpers";
+import { BaseLink, MegaSection } from "@/features/header/type/header.type";
 import QuestionIcon from "@/shared/icons/company/QuestionIcon";
 import CoughNewsIcon from "@/shared/icons/resources/CoughNewsIcon";
 import InsightsIcon from "@/shared/icons/resources/InsightsIcon";

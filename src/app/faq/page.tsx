@@ -27,7 +27,7 @@ export default async function FAQ({}) {
   const { paragraph, sections, title } = data;
 
   return (
-    <div className="px-4 md:px-10 xl:px-20">
+    <div className="px-4 md:px-10 xl:px-20  pb-[100px] md:pb-[140px]">
       <div className=" gap-10 w-full 2xl:w-[80%] mx-auto">
         <main className="pt-[260px] pb-[60px] lg:ml-[340px]">
           <div className="space-y-5">

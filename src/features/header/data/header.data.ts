@@ -1,3 +1,5 @@
+import { NavItem } from "../type/header.type";
+
 export const headerNav: NavItem[] = [
   {
     id: "product",

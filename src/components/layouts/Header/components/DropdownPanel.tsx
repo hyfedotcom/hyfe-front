@@ -1,4 +1,5 @@
 import { cx, NavLink } from "@/features/header/helpers/header.helpers";
+import { BaseLink } from "@/features/header/type/header.type";
 import BriefeCaseIcon from "@/shared/icons/company/BriefeCaseIcon";
 import CompassIcon from "@/shared/icons/company/CompassIcon";
 import GraduationCapIcon from "@/shared/icons/company/GraduationCapIcon";

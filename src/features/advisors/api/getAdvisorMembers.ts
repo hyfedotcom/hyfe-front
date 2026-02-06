@@ -1,7 +1,9 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
 import { advisorBySlugQuery } from "./advisors.query";
-import { StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
-import { parseOrThrow } from "@/features/resources";
+import {
+  StrapiCollectionSchema,
+  parseOrThrow,
+} from "@/features/shared/schema/strapi.schema";
 import { AdvisorsSchema } from "../schema/advisors.schema";
 
 export async function getAdvisorMember(slug: string) {

@@ -1,7 +1,9 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
 import { memberBySlugQuery } from "./team.query";
-import { StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
-import { parseOrThrow } from "@/features/resources";
+import {
+  StrapiCollectionSchema,
+  parseOrThrow,
+} from "@/features/shared/schema/strapi.schema";
 import { MembersSchema } from "../schema/team.schema";
 
 export async function getMember(slug: string) {

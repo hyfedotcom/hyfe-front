@@ -1,4 +1,5 @@
 import { cx, NavLink } from "@/features/header/helpers/header.helpers";
+import { BaseLink } from "@/features/header/type/header.type";
 import Image from "next/image";
 
 export function BigCardsPanel({

@@ -3,20 +3,18 @@ import { ContentContainer } from "@/components/content/ContentContainer";
 import { ResourceCard } from "@/features/resources/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/buttons/Button";
-import ResourceFetch from "./ResourceFetch";
-import { ResourceFeedType } from "@/features/solutions/schema/hero/strapi.schema";
+import type { ResourceFeedSectionRenderable } from "../../pageBuilder.types";
 
-export async function ResourceFeed({ section }: { section: ResourceFeedType }) {
-  const cards = await ResourceFetch({
-    type: section.typeResource,
-    filterTag: section.tag,
-  });
+export function ResourceFeed({
+  section,
+}: {
+  section: ResourceFeedSectionRenderable;
+}) {
+  const list = section.cards?.slice(0, 4);
 
-  const list = cards?.slice(0, 4);
-  
   return (
     <SectionContainer className="bg-transparent!">
-      <div id={`${section.type}`} className="space-y-10 ">
+      <div id={`${section.typeResource}`} className="space-y-10 ">
         <div className="flex justify-between">
           <ContentContainer content={section} classContainer="text-left" />
           <Button label={`View all`} url={`/${section.typeResource}`} />

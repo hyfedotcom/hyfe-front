@@ -20,7 +20,6 @@ export function buildSections({
     if (existing) return existing;
     const created: FaqSectionType = { title: key, faqs: [] };
     map.set(key, created);
-    console.log(created);
     return created;
   };
 

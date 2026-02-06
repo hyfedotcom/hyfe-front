@@ -1,4 +1,4 @@
-import StrapiFetch from "@/strapi/strapiFetch";
+import StrapiFetch from "@/core/strapi/strapiFetch";
 import { resourceBySlug } from "../resources.query";
 import { parseOrThrow, SlugSchema } from "../resources.schema";
 

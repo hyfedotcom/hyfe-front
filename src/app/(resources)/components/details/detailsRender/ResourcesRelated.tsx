@@ -5,14 +5,14 @@ import { ResourceCard } from "../../ui/ResourceCard";
 import type {
   ResourceCardType,
   ResourceType,
-  ResourcBlockType,
+  ResourceBlockType,
 } from "@/features/resources/data/resources.types";
 import { ButtonArrow } from "@/components/ui/buttons/ButtonArrow";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/buttons/Button";
 
 type RelatedBlock = Extract<
-  ResourcBlockType,
+  ResourceBlockType,
   { type: "resource.related-resources" }
 >;
 

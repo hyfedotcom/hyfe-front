@@ -94,6 +94,14 @@ export const pageBuilder = {
             },
           },
         },
+        "resource.resource-feed": {
+          fields: ["title", "paragraph", "type"],
+          populate: {
+            tag: {
+              fields: ["tag"],
+            },
+          },
+        },
 
         // "resource.tabbed-resource-feed": {
         //   fields: ["title", "paragraph"],
@@ -162,111 +170,5 @@ export const pageBuilder = {
         // },
       },
     },
-  },
-};
-
-export const pageBuilderResourceRelation = {
-  fields: ["title", "paragraph"],
-  populate: {
-    seo: {
-      fields: [
-        "meta_title",
-        "meta_description",
-        "keywords",
-
-        "meta_robots",
-        "canonical_URL",
-        "structured_data",
-      ],
-      populate: {
-        meta_image: {
-          fields: ["url", "alternativeText", "width", "height"],
-        },
-      },
-    },
-    // sections: {
-    //   on: {
-    //     "shared.hero-stats": {
-    //       fields: ["title", "paragraph"],
-    //       populate: {
-    //         ctas: { fields: ["label", "url"] },
-    //         stats: { fields: ["value", "label"] },
-    //       },
-    //     },
-    //     "shared.cta": {
-    //       fields: ["title", "paragraph"],
-    //       populate: {
-    //         ctas: {
-    //           fields: ["label", "url"],
-    //         },
-    //       },
-    //     },
-    //     "resource.resource-feed": {
-    //       fields: ["title", "paragraph"],
-    //       populate: {
-    //         cards: {
-    //           fields: ["type"],
-    //           populate: {
-    //             publications: {
-    //               fields: ["slug", "title", "excerpt", "date", "type"],
-    //               populate: {
-    //                 cover: {
-    //                   fields: ["url", "alternativeText", "width", "height"],
-    //                 },
-    //                 tags: {
-    //                   fields: ["tag"],
-    //                 },
-    //               },
-    //             },
-    //             white_papers: {
-    //               fields: ["slug", "title", "excerpt", "date", "type"],
-    //               populate: {
-    //                 cover: {
-    //                   fields: ["url", "alternativeText", "width", "height"],
-    //                 },
-    //                 tags: {
-    //                   fields: ["tag"],
-    //                 },
-    //               },
-    //             },
-    //             news: {
-    //               fields: ["slug", "title", "excerpt", "date", "type"],
-    //               populate: {
-    //                 cover: {
-    //                   fields: ["url", "alternativeText", "width", "height"],
-    //                 },
-    //                 tags: {
-    //                   fields: ["tag"],
-    //                 },
-    //               },
-    //             },
-    //             cough_news: {
-    //               fields: ["slug", "title", "excerpt", "date", "type"],
-    //               populate: {
-    //                 cover: {
-    //                   fields: ["url", "alternativeText", "width", "height"],
-    //                 },
-    //                 tags: {
-    //                   fields: ["tag"],
-    //                 },
-    //               },
-    //             },
-    //             insights: {
-    //               fields: ["slug", "title", "excerpt", "date", "type"],
-    //               populate: {
-    //                 cover: {
-    //                   fields: ["url", "alternativeText", "width", "height"],
-    //                 },
-    //                 tags: {
-    //                   fields: ["tag"],
-    //                 },
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
   },
 };

@@ -5,7 +5,7 @@ import {
   StrapiCollectionSchema,
 } from "@/features/shared/schema/strapi.schema";
 import {
-  MemberForBuidSchema,
+  MemberForBuildSchema,
   TeamLandingForBuildSchema,
 } from "../schema/team.schema";
 import { buildSections } from "../utils/buildSections";
@@ -24,14 +24,12 @@ export async function getTeam() {
     }),
   ]);
 
-  console.log(landingRaw);
   const landing = parseOrThrow(
     StrapiCollectionSchema(TeamLandingForBuildSchema),
     landingRaw,
   );
-  console.log(landing);
   const members = parseOrThrow(
-    StrapiCollectionSchema(MemberForBuidSchema),
+    StrapiCollectionSchema(MemberForBuildSchema),
     membersRaw,
   );
   if (!members || !landing || !landing.groupOrder) {

@@ -8,6 +8,17 @@ export const StrapiCollectionSchema = <S extends z.ZodTypeAny>(SchemaItem: S) =>
     })
     .transform((res) => (res as { data: z.output<S> }).data);
 
+export const StrapiMetaSchema = z.unknown();
+
+export const StrapiResponse = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({
+    data: dataSchema,
+    meta: StrapiMetaSchema.optional(),
+  });
+
+export const StrapiCollection = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  StrapiResponse(z.array(itemSchema));
+
 export function parseOrThrow<T extends z.ZodTypeAny>(
   schema: T,
   data: unknown,

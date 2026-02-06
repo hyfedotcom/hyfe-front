@@ -1,16 +1,66 @@
+"use client";
+
 import { Button } from "@/components/ui/buttons/Button";
 import { HeroStatsSectionType } from "../../../schema/pageBuilder";
 import Image from "next/image";
+import { motion, useScroll, useTransform } from "@/framer";
+import { useRef } from "react";
+
+function ScrollRevealItem({
+  progress,
+  start,
+  end,
+  className,
+  children,
+  yFrom = 24,
+}: {
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  start: number;
+  end: number;
+  className?: string;
+  children: React.ReactNode;
+  yFrom?: number;
+}) {
+  const opacity = useTransform(progress, [start, end], [0, 1]);
+  const y = useTransform(progress, [start, end], [yFrom, 0]);
+
+  return (
+    <motion.div style={{ opacity, y }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
 
 export function HeroStats({ section }: { section: HeroStatsSectionType }) {
   const { title, paragraph, ctas, stats, type } = section;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const totalItems = stats?.length ?? 0;
+  const revealStart = 0.4;
+  const revealSpan = 0.4;
+  const step = totalItems > 0 ? revealSpan / totalItems : revealSpan;
+  const mapY = useTransform(scrollYProgress, [0, 0.2], [120, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
+  const getRange = (index: number) => {
+    const start = revealStart + index * step;
+    const end = Math.min(start + step * 1.2, 0.98);
+    return [start, end] as const;
+  };
+
   return (
-    <main className="w-full  pt-[240px] relative overflow-hidden h-auto space-y-20 md:space-y-40 lg:space-y-[326px]">
+    <main
+      ref={sectionRef}
+      className="w-full pt-[240px] relative  h-auto min-h-[220vh] md:min-h-[160vh] space-y-20 md:space-y-40 lg:space-y-[326px]"
+    >
       <div>
         {" "}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bottom-0 translate-y-[32%]"
+          className="pointer-events-none absolute inset-0 -z-10 bottom-0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +68,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
             height="1798"
             viewBox="0 0 1920 1798"
             fill="none"
-            className="absolute left-1/2  -translate-x-1/2 w-full max-w-none -top-200 md:-top-140 "
+            className="absolute left-1/2 -translate-x-1/2 translate-y-[32%] w-full max-w-none -top-200 md:-top-140"
             preserveAspectRatio="xMidYMin slice"
           >
             <g filter="url(#filter0_f_327_2267)">
@@ -65,16 +115,18 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute inset-y-0 -inset-x-[12vw] md:inset-0">
-            <Image
-              src="/home/mappoints.png"
-              fill
-              alt="maps"
-              quality={95}
-              sizes="(max-width: 768px) 124vw, 100vw"
-              className="object-cover object-bottom origin-bottom
-                 scale-[0.88] md:scale-100"
-            />
+          <div className="sticky top-0 h-[100vh] flex items-end justify-center">
+            <motion.div style={{ y: mapY, scale }} className="w-screen">
+              <Image
+                src="/home/mappoints.png"
+                width={1920}
+                height={1080}
+                alt="maps"
+                quality={100}
+                sizes="100vw"
+                className="w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
+              />
+            </motion.div>
           </div>
         </div>
         <div className="flex flex-col items-center px-4 md:px-10 text-center space-y-11 z-3 relative">
@@ -97,20 +149,31 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
         </div>
       </div>
       {stats && (
-        <div className="flex flex-col lg:flex-row gap-3 px-4 lg:px-20 pb-20 md:pb-[329px]">
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              className="w-full flex flex-col items-center justify-center py-10 bg-[#FBF9F2]/20 backdrop-blur-[6px] rounded-[20px] border-2 border-[#FFF199]/25"
-            >
-              <h2 className="text-[60px]! md:text-[80px]! text-center">
-                {s.value}
-              </h2>
-              <strong className="mx-auto text-center w-full block">
-                {s.label}
-              </strong>
+        <div className="relative min-h-[120vh] md:min-h-[150vh]">
+          <div className="sticky top-1/2 -translate-y-1/2">
+            <div className="flex flex-col lg:flex-row gap-3 px-4 lg:px-20 pb-20 md:pb-[329px]">
+              {stats.map((s, i) => {
+                const [start, end] = getRange(i);
+                return (
+                  <ScrollRevealItem
+                    key={i}
+                    progress={scrollYProgress}
+                    start={start}
+                    end={end}
+                    className="w-full flex flex-col items-center justify-center py-10 bg-[#FBF9F2]/20 backdrop-blur-[6px] rounded-[20px] border-2 border-[#FFF199]/25"
+                    yFrom={18}
+                  >
+                    <h2 className="text-[60px]! md:text-[80px]! text-center">
+                      {s.value}
+                    </h2>
+                    <strong className="mx-auto text-center w-full block text-black">
+                      {s.label}
+                    </strong>
+                  </ScrollRevealItem>
+                );
+              })}
             </div>
-          ))}
+          </div>
         </div>
       )}
     </main>

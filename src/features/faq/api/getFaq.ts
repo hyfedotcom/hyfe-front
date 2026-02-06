@@ -36,16 +36,12 @@ export async function getFaqPage() {
     itemsRaw,
   );
 
-  console.log(landingRaw);
-  console.log(itemsRaw);
   if (!landing.groupOrder) return null;
 
   const sections = buildSections({
     groupOrder: landing.groupOrder,
     items,
   });
-  console.log(landing.seo);
-
   return FaqPageSchema.parse({
     title: landing.title,
     paragraph: landing.paragraph,

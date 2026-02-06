@@ -1,7 +1,16 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
-import { pageBuilder, pageBuilderResourceRelation } from "../query";
-import { parseOrThrow } from "@/features/page-builder/data/schema/parseOrThrow";
-import { StrapiCollectionSchema } from "../schema/pageBuilder";
+import { pageBuilder } from "../query";
+import { parseOrThrow } from "@/features/shared/schema/strapi.schema";
+import { PageCollectionSchema } from "../schema/pageBuilder";
+import {
+  FeedBuilder,
+  getResourceFeedKey,
+} from "@/features/resources/utils/FeedBuilder";
+import type { ResourceFeedSectionType } from "@/features/resources";
+
+const isResourceFeed = (section: {
+  type?: string;
+}): section is ResourceFeedSectionType => section.type === "resource-feed";
 
 export async function getPage({ type, slug }: { type?: string; slug: string }) {
   const url = type ? `${type}/${slug}` : slug;
@@ -10,25 +19,18 @@ export async function getPage({ type, slug }: { type?: string; slug: string }) {
     query: pageBuilder,
     tags: [`page:${slug}`],
   });
-  // console.log(data);
-  const page = parseOrThrow(StrapiCollectionSchema, data);
-  return page;
-}
+  const page = parseOrThrow(PageCollectionSchema, data);
+  if (!page?.sections?.length) return page;
 
-export async function getPageResource({
-  type,
-  slug,
-}: {
-  type?: string;
-  slug: string;
-}) {
-  const url = type ? `${type}/${slug}` : slug;
-  const data = await StrapiFetch<unknown>({
-    path: `/api/${url}`,
-    query: pageBuilderResourceRelation,
-    tags: [`page:${slug}`],
-  });
-  // console.log(data);
-  const page = parseOrThrow(StrapiCollectionSchema, data);
-  return page;
+  const feedSections = page.sections.filter(isResourceFeed);
+  if (!feedSections.length) return page;
+
+  const built = await FeedBuilder({ sections: feedSections });
+  const byKey = new Map(built.map((s) => [getResourceFeedKey(s), s] as const));
+
+  const nextSections = page.sections.map((s) =>
+    isResourceFeed(s) ? byKey.get(getResourceFeedKey(s)) ?? s : s,
+  );
+
+  return { ...page, sections: nextSections };
 }

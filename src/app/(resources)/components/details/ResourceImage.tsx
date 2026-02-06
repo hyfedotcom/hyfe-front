@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Resourceimage } from "../../../../features/resources/data/resources.types";
+import { ResourceImageType } from "../../../../features/resources/data/resources.types";
 
-export function ResourceImage({ block }: { block: Resourceimage }) {
+export function ResourceImage({ block }: { block: ResourceImageType }) {
   return (
     <div className="relative w-full overflow-hidden rounded-2xl mb-15">
       <div className="space-y-5 mb-4">

@@ -1,8 +1,9 @@
-import { getPageResource } from "@/features/page-builder/data/api/getPage";
-import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+
 import { ResourcesListHero } from "@/features/resources/client";
 import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
+import { getPageResource } from "@/features/resources/data/api/getResourceFeedPage";
+import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -76,7 +77,7 @@ export default async function ScienceResources() {
             /> */}
           </div>
         </div>
-        {/* <PageBuilder sections={data?.sections} /> */}
+        <PageBuilder sections={data?.sections} />
       </div>
     </div>
   );

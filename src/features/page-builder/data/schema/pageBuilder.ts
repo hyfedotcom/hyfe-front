@@ -7,7 +7,12 @@ import {
   CtaSchema,
   StatSchema,
 } from "./shared";
-import { MediaSchema, SeoRawSchema } from "@/features/resources";
+import {
+  MediaSchema,
+  SeoRawSchema,
+  SeoSchema,
+  ResourceFeedSectionSchema,
+} from "@/features/resources";
 
 export const SectionHeroStatsSchema = z
   .looseObject({
@@ -21,7 +26,7 @@ export const SectionHeroStatsSchema = z
     type: "hero-stats" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
-    ctas: res.ctas ?? res.ctas ?? undefined,
+    ctas: res.ctas ?? undefined,
     stats: res.stats,
   }));
 
@@ -127,20 +132,6 @@ export const TabbedResourceFeedSectionSchema = z
     cards: res.cards,
   }));
 
-export const ResourceFeedSectionSchema = z
-  .looseObject({
-    __component: z.literal("resource.resource-feed"),
-    title: z.string(),
-    paragraph: z.string().nullable(),
-    cards: CardsFeedMaybeListSchema.nullable(),
-  })
-  .transform((res) => ({
-    type: "resource-feed" as const,
-    title: res.title,
-    paragraph: res.paragraph ?? undefined,
-    cards: res.cards && res.cards.flatMap((e) => e.cards),
-  }));
-
 export const PageSectionsSchema = z.array(
   z.discriminatedUnion("__component", [
     SectionHeroStatsSchema,
@@ -167,23 +158,11 @@ export const PageRawSchema = z
     title: res.title ?? undefined,
     paragraph: res.paragraph ?? undefined,
     slug: res.slug ?? undefined,
-    seo: res.seo
-      ? {
-          title: res.seo.meta_title ?? undefined,
-          description: res.seo.meta_description ?? undefined,
-          keywords: res.seo.keywords ?? undefined,
-          robots: res.seo.meta_robots ?? undefined,
-          canonical: res.seo.canonical_URL ?? undefined,
-          structuredData: res.seo.structured_data ?? undefined,
-          image: res.seo.meta_image
-            ? MediaSchema.parse(res.seo.meta_image)
-            : undefined,
-        }
-      : undefined,
+    seo: res.seo ? SeoSchema.parse(res.seo) : undefined,
     sections: res.sections ?? undefined,
   }));
 
-export const StrapiCollectionSchema = z
+export const PageCollectionSchema = z
   .object({
     title: z.string().nullable().optional(),
     paragraph: z.string().nullable().optional(),
@@ -204,4 +183,3 @@ export type CTASectionSchemaType = z.infer<typeof CTASectionSchema>;
 export type TabbedResourceFeedSectionType = z.infer<
   typeof TabbedResourceFeedSectionSchema
 >;
-export type ResourceFeedSectionType = z.infer<typeof ResourceFeedSectionSchema>;

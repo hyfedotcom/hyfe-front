@@ -10,6 +10,7 @@ import { DropdownPanel } from "./components/DropdownPanel";
 import { MegaPanel } from "./components/MegaPanel";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BigCardsPanel } from "./components/BigCardsPanel";
+import { CtaNavItem } from "@/features/header/type/header.type";
 
 export function Header() {
   const isDown = useIsScrollingDown(10);

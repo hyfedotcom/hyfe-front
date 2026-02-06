@@ -10,7 +10,7 @@ import type {
   ResourceCardType,
   ResourceDetail,
   ResourceType,
-  ResourcBlockType,
+  ResourceBlockType,
 } from "@/features/resources/data/resources.types";
 import React, { JSX } from "react";
 import { ResourceIFrame } from "./detailsRender/ResourceIFrame";
@@ -19,7 +19,7 @@ import { ResourceAdditionalInfo } from "./detailsRender/ResourceAdditionalInfo/R
 import { ResourceImage } from "./ResourceImage";
 
 type RelatedBlock = Extract<
-  ResourcBlockType,
+  ResourceBlockType,
   { type: "resource.related-resources" }
 >;
 
@@ -78,7 +78,7 @@ export async function ResourceDetails({
 }
 
 async function renderBlock(
-  block: ResourcBlockType,
+  block: ResourceBlockType,
   index: number,
   resourceType: ResourceType,
 ): Promise<JSX.Element | undefined> {

@@ -5,7 +5,7 @@ import {
   StrapiCollectionSchema,
 } from "@/features/shared/schema/strapi.schema";
 import {
-  CareersPageRawSchema,
+  CareersPageSchema,
   VacanciesSchema,
 } from "../schema/careers.schema";
 import { careersQuery, vacanciesQuery } from "./careers.query";
@@ -25,7 +25,7 @@ export default async function getCareers() {
   ]);
 
   const landing = parseOrThrow(
-    StrapiCollectionSchema(CareersPageRawSchema),
+    StrapiCollectionSchema(CareersPageSchema),
     landingRaw,
   );
 

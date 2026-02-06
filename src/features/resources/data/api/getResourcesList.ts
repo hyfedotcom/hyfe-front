@@ -1,5 +1,5 @@
 import { resourceLanding, resourceList } from "@/features/resources";
-import StrapiFetch from "@/strapi/strapiFetch";
+import StrapiFetch from "@/core/strapi/strapiFetch";
 import { LandingSchema, ListSchema, parseOrThrow } from "@/features/resources";
 
 export async function getResourcesList({ type }: { type: string }) {
@@ -9,7 +9,7 @@ export async function getResourcesList({ type }: { type: string }) {
       query: resourceLanding,
       tags: [`resource:${type}-landing`],
     });
-
+    
     if (type === "news") type = "news-items";
     if (type === "cough-news") type = "cough-news-items";
     const listData = await StrapiFetch<unknown>({

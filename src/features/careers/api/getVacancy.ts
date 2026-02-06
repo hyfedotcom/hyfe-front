@@ -12,7 +12,6 @@ export default async function getVacancy(slug: string) {
     query: vacancyQuery(slug),
     tags: [`vacancy:${slug}`, "careers:vacancies:all"],
   });
-  console.log(vacancyRaw);
   const vacancy = parseOrThrow(
     StrapiCollectionSchema(VacanciesSchema),
     vacancyRaw,

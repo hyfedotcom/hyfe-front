@@ -5,7 +5,7 @@ import {
   StrapiCollectionSchema,
 } from "@/features/shared/schema/strapi.schema";
 import {
-  AdvisorMemberForBuidSchema,
+  AdvisorMemberForBuildSchema,
   AdvisorsLandingForBuildSchema,
 } from "../schema/advisors.schema";
 
@@ -27,12 +27,10 @@ export async function getAdvisors() {
     StrapiCollectionSchema(AdvisorsLandingForBuildSchema),
     landingRaw,
   );
-  console.log(membersRaw);
   const advisors = parseOrThrow(
-    StrapiCollectionSchema(AdvisorMemberForBuidSchema),
+    StrapiCollectionSchema(AdvisorMemberForBuildSchema),
     membersRaw,
   );
-  console.log(membersRaw);
   if (!advisors || !landing) {
     return null;
   }

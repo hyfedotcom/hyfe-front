@@ -1,18 +1,35 @@
+"use client";
+
 import { Button } from "@/components/ui/buttons/Button";
 import { SolutionsHeroType } from "@/features/solutions/schema/hero/strapi.schema";
 import Image from "next/image";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "@/framer";
 
 export function Hero({ section }: { section: SolutionsHeroType }) {
   const { ctas, paragraph, title } = section;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const ctasY = useTransform(scrollYProgress, [0, 1], [0, 0]);
+  const tabletY = useTransform(scrollYProgress, [0, 1], [200, 0]);
+  const watchY = useTransform(scrollYProgress, [0, 1], [-100, 0]);
+
   return (
-    <main className="relative bg-primary-100 overflow-hidden">
+    <main
+      ref={sectionRef}
+      className="relative bg-primary-100 overflow-hidden"
+    >
       <svg
         width="1920"
         height="1911"
         viewBox="0 0 1920 1911"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute -bottom-1/2 z-0 w-screen"
+        className="absolute right-[-20%] -bottom-1/2 z-0 w-[2400px] max-w-none"
       >
         <g filter="url(#filter0_f_1028_25466)">
           <path
@@ -64,7 +81,10 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
           <h1 className="md:text-[50px]! lg:text-[70px]!">{title}</h1>
           <p className="body-large text-balance">{paragraph}</p>
         </div>
-        <div className="flex gap-5 flex-col md:flex-row items-center justify-center mb-[90px]">
+        <motion.div
+          style={{ y: ctasY }}
+          className="flex gap-5 flex-col md:flex-row items-center justify-center "
+        >
           {ctas?.map((c, i) => (
             <Button
               key={i}
@@ -74,14 +94,29 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
               color={i > 0 ? "black" : "white"}
             />
           ))}
+        </motion.div>
+        <div className="relative mx-auto w-full max-w-[1254px] h-[800px]">
+          <motion.div style={{ y: tabletY }} className="relative z-10">
+            <Image
+              className="w-full h-auto translate-x-[100px]"
+              src="/image/tablet.png"
+              width={1254}
+              height={807}
+              alt="cough monitor and dashboard"
+            />
+          </motion.div>
+          <motion.div
+            style={{ y: watchY }}
+            className="absolute left-0 bottom-0 z-20 translate-x-[-10%] md:left-[4%] md:translate-x-[-20%] lg:left-[6%]"
+          >
+            <Image
+              src="/image/watch.png"
+              width={293}
+              height={425}
+              alt="cough monitor and dashboard"
+            />
+          </motion.div>
         </div>
-        <Image
-          className="mx-auto"
-          src="/solution/dashboard.png"
-          width={1179}
-          height={681}
-          alt="cough monitor and dashboard"
-        />
       </div>
     </main>
   );

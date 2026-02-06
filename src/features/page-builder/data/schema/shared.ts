@@ -1,13 +1,10 @@
-import { MediaRawSchema, MediaSchema, TagSchema } from "@/features/resources";
+import {
+  MediaRawSchema,
+  MediaSchema,
+  TagSchema,
+  ResourceRelatedTypeSchema,
+} from "@/features/resources";
 import { z } from "zod";
-
-const ResourceRelatedTypeSchema = z.enum([
-  "insights",
-  "publications",
-  "news",
-  "white-papers",
-  "cough-news",
-]);
 
 export const CtaSchema = z.looseObject({
   label: z.string(),

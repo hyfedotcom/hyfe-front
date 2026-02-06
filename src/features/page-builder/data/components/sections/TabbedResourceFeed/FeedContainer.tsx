@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceCard } from "@/features/resources/client";
-import {  ResourcesTypes } from "../../../schema/shared";
+import { ResourcesTypes } from "../../../schema/shared";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
@@ -17,7 +17,6 @@ export function FeedContainer({
   resources: ResourcesLists;
   type: ResourceTypes;
 }) {
-  // console.log(type);
   const [activeResource, setActiveResource] = useState(0);
   const [spanParametrs, setSpanParametrs] = useState({
     width: 0,
@@ -44,7 +43,6 @@ export function FeedContainer({
   }, []);
 
   if (!resources) return null;
-  
 
   return (
     <div className="space-y-10 md:space-y-15">

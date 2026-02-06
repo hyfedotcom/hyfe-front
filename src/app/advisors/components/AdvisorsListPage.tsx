@@ -8,7 +8,7 @@ export default async function AdvisorsListPage() {
   if (!team) return notFound();
   const { paragraph, advisors, title } = team;
   return (
-    <div className="px-4 md:px-10 lg:px-20">
+    <div className="px-4 md:px-10 lg:px-20  pb-[100px] md:pb-[140px]">
       <div className="max-w-[1220px] mx-auto">
         <main className="pt-[240px] pb-[100px] space-y-5">
           <h1 className="mx-auto">{title}</h1>

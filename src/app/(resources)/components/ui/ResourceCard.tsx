@@ -33,7 +33,7 @@ export function ResourceCard({
           </div>
 
           {/* вот тут главное */}
-          <div className="flex flex-col flex-1 min-h-0 space-y-2">
+          <div className="flex flex-col flex-1 min-h-0 ">
             <h4 className={`${excerpt && "mb-2"} line-clamp-2`}>{title}</h4>
 
             {excerpt && (
@@ -41,7 +41,7 @@ export function ResourceCard({
             )}
 
             {/* дата прижмётся вниз */}
-            <div className="body-small mt-auto pt-8">{date}</div>
+            <div className="body-small mt-auto pt-8 pb-6 leading-[100%]!">{date}</div>
           </div>
         </div>
       </div>

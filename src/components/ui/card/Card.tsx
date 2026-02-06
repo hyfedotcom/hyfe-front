@@ -4,7 +4,7 @@ import Image from "next/image";
 export function Card({ card }: { card: CardType }) {
   const { image, description, title } = card;
   return (
-    <div className="rounded-[20px] overflow-hidden bg-card flex-1">
+    <div className="rounded-[20px] overflow-hidden bg-card flex-1 w-[90vw] md:max-w-[30vw]">
       <Image
         src={image.url}
         alt={image.alt ?? "image of card"}

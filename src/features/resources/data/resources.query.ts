@@ -120,3 +120,36 @@ export const resourceBySlug = (slug: string, draftMode: boolean) => ({
   },
   status: `${draftMode ? "draft" : "published"}`,
 });
+
+export const pageBuilderResourceRelation = {
+  fields: ["title", "paragraph"],
+  populate: {
+    sections: {
+      on: {
+        "resource.resource-feed": {
+          fields: ["title", "paragraph", "type"],
+          populate: {
+            tag: {
+              fields: ["tag"],
+            },
+          },
+        },
+      },
+    },
+    seo: {
+      fields: [
+        "meta_title",
+        "meta_description",
+        "keywords",
+        "meta_robots",
+        "canonical_URL",
+        "structured_data",
+      ],
+      populate: {
+        meta_image: {
+          fields: ["url", "alternativeText", "width", "height"],
+        },
+      },
+    },
+  },
+};

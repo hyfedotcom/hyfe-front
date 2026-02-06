@@ -1,4 +1,4 @@
-type BaseLink = {
+export type BaseLink = {
   id: string;
   label: string;
   description?: string;
@@ -10,29 +10,29 @@ type BaseLink = {
   };
 };
 
-type DropdownNavItem = {
+export type DropdownNavItem = {
   id: string;
   label: string;
   kind: "dropdown";
   items: BaseLink[];
 };
 
-type CardNavItem = {
+export type CardNavItem = {
   id: string;
   label: string;
   kind: "card";
   items: BaseLink[];
 };
 
-type MegaSection = {
+export type MegaSection = {
   id: string;
   title: string;
   description?: string;
-  allHref?: string; // "All Science Resources"
+  allHref?: string; 
   items: BaseLink[];
 };
 
-type MegaNavItem = {
+export type MegaNavItem = {
   id: string;
   label: string;
   kind: "mega";
@@ -40,7 +40,7 @@ type MegaNavItem = {
   quickLinks?: BaseLink[];
 };
 
-type SimpleNavItem = {
+export type SimpleNavItem = {
   id: string;
   label: string;
   kind: "link";
@@ -48,7 +48,7 @@ type SimpleNavItem = {
   external?: boolean;
 };
 
-type CtaNavItem = {
+export type CtaNavItem = {
   id: string;
   label: string;
   kind: "cta";
@@ -56,7 +56,7 @@ type CtaNavItem = {
   external?: boolean;
 };
 
-type NavItem =
+export type NavItem =
   | DropdownNavItem
   | MegaNavItem
   | SimpleNavItem

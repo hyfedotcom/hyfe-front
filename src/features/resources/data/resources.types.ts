@@ -1,12 +1,8 @@
 import { z } from "zod";
 
 import {
-  ResourceSlugDomainSchema,
   ResourceBlockContentSchema,
-  ResourceListRawSchema,
-  ResourceBlockSchema,
   ListSchema,
-  ResourceBlockCtaSchema,
   ResourceCtaBlockDomainSchema,
   LandingSchema,
   ResourceBlockDomainSchema,
@@ -21,7 +17,7 @@ import type { getResource } from "./api/getResource";
 export type ResourceCardListType = z.infer<typeof ListSchema>;
 export type ResourceCardType = ResourceCardListType[number];
 
-export type ResourcBlockType = z.infer<typeof ResourceBlockDomainSchema>;
+export type ResourceBlockType = z.infer<typeof ResourceBlockDomainSchema>;
 
 export type ResourceBlocksType = z.infer<typeof ResourceBlockDomainSchema>;
 
@@ -51,4 +47,4 @@ export type AdditionlInfoType = z.infer<
   typeof ResourceAdditionalBlockDomainSchema
 >;
 
-export type Resourceimage = z.infer<typeof ResourceImageBlockDomainSchema >;
+export type ResourceImageType = z.infer<typeof ResourceImageBlockDomainSchema>;
