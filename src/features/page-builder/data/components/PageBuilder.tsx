@@ -1,17 +1,16 @@
 import { pageBuilderRegistry } from "./pageBuilder.registry";
-import type { PageBuilderComponent, PageBuilderSection } from "./pageBuilder.types";
+import type {
+  PageBuilderComponent,
+  PageBuilderSection,
+} from "./pageBuilder.types";
 
 const NO_OVERFLOW_TYPES = new Set<PageBuilderSection["type"]>([
   "cards-grid",
   "feature-cards-right",
-  "hero-stats"
+  "hero-stats",
 ]);
 
-export function PageBuilder({
-  sections,
-}: {
-  sections?: PageBuilderSection[];
-}) {
+export function PageBuilder({ sections }: { sections?: PageBuilderSection[] }) {
   if (!sections?.length) return null;
   return (
     <>
@@ -22,7 +21,8 @@ export function PageBuilder({
           section: typeof section;
         }>;
         const shouldRoundTop =
-          i > 0 && sections[i - 1]?.type === "hero" || "hero-stats"
+          (i > 0 && sections[i - 1]?.type === "hero") ||
+          (i > 0 && sections[i - 1]?.type === "hero-stats");
         const shouldClip =
           shouldRoundTop && !NO_OVERFLOW_TYPES.has(section.type);
         const wrapperClass = shouldRoundTop
