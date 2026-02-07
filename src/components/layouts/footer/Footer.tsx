@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="px-4 md:px-10 lg:px-20 pt-20 pb-10 rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] bg-white space-y-[60px]">
       <div
-        className=" space-y-8 mt-2  text-center! w-max mx-auto"
+        className=" space-y-8 mt-2  text-center! mx-auto"
         aria-labelledby="news-subscription-title"
       >
         <div className="space-y-3">
@@ -29,7 +29,7 @@ export function Footer() {
         </div>
 
         <form
-          className="space-y-5 w-max mx-auto"
+          className="space-y-5 md:w-max mx-auto"
           method="post"
           action="/api/hubspot/submitEmail"
         >
@@ -110,7 +110,7 @@ export function Footer() {
         </form>
       </div>
       <div className="w-[70vw] mx-auto h-[1px] bg-[#D5D7DD]"></div>
-      <div className="flex w-full justify-evenly">
+      <div className="grid grid-cols-2 gap-10 md:flex w-full justify-evenly">
         {headerNav.map((items, i) => (
           <React.Fragment key={i}>
             {items.kind === "card" ? (
@@ -173,11 +173,11 @@ export function Footer() {
       <div className="w-full flex flex-col items-center justify-center space-y-[80px]">
         <p>© 2025 Hyfe Inc. All Rights Reserved.</p>
         <svg
-          width="636"
-          height="172"
+       
           viewBox="0 0 636 172"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          className="max-w-[635px]"
         >
           <path
             opacity="0.4"

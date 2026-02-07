@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function MemberCard({ member }: { member: MemberType }) {
   return (
-    <div className="w-full py-10 px-5 bg-card flex flex-col items-center justify-center rounded-[20px] border-border border-1 hover:border-primary cursor-pointer space-y-5">
+    <div className="w-full h-[320px] md:h-full py-10 px-5 bg-card flex flex-col items-center justify-center rounded-[20px] border-border border-1 hover:border-primary cursor-pointer space-y-5">
       <Image
         src={member.image.url}
         alt={member.name}

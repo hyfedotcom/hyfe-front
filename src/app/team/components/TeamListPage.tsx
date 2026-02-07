@@ -18,9 +18,14 @@ export default async function TeamListPage() {
           {sections.map((section) => (
             <div className="space-y-5" key={section.title}>
               {section.title && <h3>{section.title}</h3>}
-              <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
+              <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 md:mx-0 md:pb-0 md:grid md:gap-5 md:grid-cols-3 lg:grid-cols-4 md:overflow-visible">
                 {section.members?.map((item, index) => (
-                  <Link key={index} href={`/team/${item.slug}`}>
+                  <Link
+                    key={index}
+                    href={`/team/${item.slug}`}
+                    scroll={false}
+                    className="block flex-none w-[70vw] max-w-[280px] h-full first:ml-4 last:mr-4 md:w-auto md:max-w-none md:first:ml-0 md:last:mr-0"
+                  >
                     <MemberCard member={item} />
                   </Link>
                 ))}

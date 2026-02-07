@@ -10,7 +10,7 @@ export default function ContentImageSplit({
   const { ctas, content, title, type, image } = section;
   return (
     <SectionContainer>
-      <div className="flex items-center">
+      <div className="flex items-center flex-col-reverse md:flex-row">
         <div className="md:w-1/2 space-y-6">
           <h2>{title}</h2>
           {content && (

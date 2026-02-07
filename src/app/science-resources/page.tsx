@@ -1,4 +1,3 @@
-
 import { ResourcesListHero } from "@/features/resources/client";
 import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
@@ -30,17 +29,21 @@ export default async function ScienceResources() {
         }}
       />
       <div>
-        <div className="flex mt-10 flex-col-reverse  gap-5 md:flex-row w-full justify-between py-5 px-4 md:px-10 lg:px-20 sticky top-0 bg-white/20 border-b-2 border-[#EEEEEE]/40 backdrop-blur-[40px]">
-          <div className="flex gap-3 w-full overflow-x-scroll">
+        <div className="flex mt-10 flex-col-reverse  gap-5 md:flex-row w-full justify-between py-5 px-4 md:px-10 lg:px-20 sticky top-0 bg-white/20 border-b-2 border-[#EEEEEE]/40 backdrop-blur-[40px] z-100000">
+          <div className="flex gap-3 w-full overflow-x-scroll ">
             {resourceTypes.map((t) => (
-              <ResourceButton
+              <div
+                className="hover:border-primary-600 rounded-full border-transparent border-2 hover:shadow-active"
                 key={t}
-                label={t}
-                url={`#${t}`}
-                active
-                tag="Link"
-                classNameProp="bg-white! rounded-full border-border border-1"
-              />
+              >
+                <ResourceButton
+                  label={t}
+                  url={`#${t}`}
+                  active
+                  tag="Link"
+                  classNameProp="bg-white! rounded-full border-border border-1"
+                />{" "}
+              </div>
             ))}
           </div>
 

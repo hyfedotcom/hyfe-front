@@ -8,6 +8,7 @@ import { FeatureCardsRight } from "./sections/featureCardsRight/FeatureCardsRigh
 import { Cta } from "./sections/cta/Cta";
 import { TabbedResourceFeed } from "./sections/TabbedResourceFeed/TabbedResourceFeed";
 import { ResourceFeed } from "./sections/resourceFeed/ResourceFeed";
+import { ResourceFeedMany } from "./sections/resourceFeedMany/ResourceFeedMany";
 import { Accordion } from "@/features/solutions/components/sections/accordion/Accordion";
 import { ProblemInsightSolution } from "@/features/solutions/components/sections/problemInsightSolution/ProblemInsightSolution";
 import { Hero } from "@/features/solutions/components/sections/hero/Hero";
@@ -26,6 +27,7 @@ export const pageBuilderRegistry: PageBuilderRegistry = {
   cta: Cta,
   "tabbed-resource-feed": TabbedResourceFeed,
   "resource-feed": ResourceFeed,
+  "resource-feed-many": ResourceFeedMany,
   accordion: Accordion,
   "problem-insight-solution": ProblemInsightSolution,
   hero: Hero,

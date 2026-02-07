@@ -32,7 +32,7 @@ export function ResourceButton({
 
   const content = (
     <span
-      className={`flex ${classNameProp} items-center gap-2.5 px-6 py-3 text-[20px] leading-[100%] capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
+      className={`flex ${classNameProp}  items-center gap-2.5 px-6 py-3 text-[20px] leading-[100%] capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
     >
       {Icon && (
         <Icon
@@ -50,6 +50,6 @@ export function ResourceButton({
       </Link>
     );
   } else {
-    return <button className=" cursor-pointer">{content}</button>;
+    return <button className="cursor-pointer">{content}</button>;
   }
 }

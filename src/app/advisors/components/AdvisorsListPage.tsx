@@ -16,9 +16,14 @@ export default async function AdvisorsListPage() {
         </main>
         <div className="space-y-20">
           <div className="space-y-5">
-            <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid gap-4 md:gap-5 md:grid-cols-3 lg:grid-cols-4">
               {advisors.map((item, index) => (
-                <Link key={index} href={`/advisors/${item.slug}`}>
+                <Link
+                  key={index}
+                  href={`/advisors/${item.slug}`}
+                  scroll={false}
+                  className="block h-full"
+                >
                   <MemberCard member={item} />
                 </Link>
               ))}

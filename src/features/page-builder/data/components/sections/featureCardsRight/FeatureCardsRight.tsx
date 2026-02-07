@@ -22,7 +22,7 @@ export function FeatureCardsRight({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full lg:max-w-[60%] justify-end">
           {section.cards.map((c, i) => (
-            <Card key={i} card={c} />
+            <Card width="w-full" key={i} card={c} />
           ))}
         </div>
       </div>

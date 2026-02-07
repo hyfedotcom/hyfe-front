@@ -33,7 +33,7 @@ export function TabSlider({ card }: { card: CardType[] }) {
                   : "bg-gray-50 md:bg-transparent hover:bg-gray-50 ",
               )}
             >
-              <button type="button" className="cursor-pointer">
+              <button type="button" className="cursor-pointer w-full">
                 <div className="flex items-center gap-3 md:gap-5">
                   <span
                     className={`w-13 min-w-13 h-13 min-h-13 transition-colors duration-400 ${

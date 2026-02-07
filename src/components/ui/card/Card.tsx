@@ -1,10 +1,16 @@
 import { CardType } from "@/features/page-builder/data/schema/shared";
 import Image from "next/image";
 
-export function Card({ card }: { card: CardType }) {
+export function Card({
+  card,
+  width = "w-[90vw] md:max-w-[30vw]",
+}: {
+  card: CardType;
+  width?: string;
+}) {
   const { image, description, title } = card;
   return (
-    <div className="rounded-[20px] overflow-hidden bg-card flex-1 w-[90vw] md:max-w-[30vw]">
+    <div className={`rounded-[20px] overflow-hidden bg-card flex-1 ${width}`}>
       <Image
         src={image.url}
         alt={image.alt ?? "image of card"}

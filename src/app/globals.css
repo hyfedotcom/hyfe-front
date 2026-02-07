@@ -79,7 +79,7 @@ html {
 
 h1 {
   /* 42px → 80px */
-  @apply text-[clamp(42px,6vw+18px,80px)] leading-[126%] font-semibold text-heading;
+  @apply text-[32px] md:text-[42px] lg:text-[52px] xl:text-[60px] 2xl:text-[60px] leading-[126%] font-semibold text-heading;
 }
 
 h2 {

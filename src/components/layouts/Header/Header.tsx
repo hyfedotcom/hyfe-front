@@ -8,14 +8,33 @@ import Link from "next/link";
 import { TriggerButton } from "./components/TriggerButton";
 import { DropdownPanel } from "./components/DropdownPanel";
 import { MegaPanel } from "./components/MegaPanel";
-import { useCallback, useEffect, useRef, useState } from "react";
+import type { ComponentType } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { BigCardsPanel } from "./components/BigCardsPanel";
-import { CtaNavItem } from "@/features/header/type/header.type";
+import BriefeCaseIcon from "@/shared/icons/company/BriefeCaseIcon";
+import CompassIcon from "@/shared/icons/company/CompassIcon";
+import GraduationCapIcon from "@/shared/icons/company/GraduationCapIcon";
+import QuestionIcon from "@/shared/icons/company/QuestionIcon";
+import UsersIcon from "@/shared/icons/company/UsersIcon";
+import LifeScienceIcon from "@/shared/icons/solutions/LifeScienceIcon";
+import ResearchIcon from "@/shared/icons/solutions/ResearchIcon";
+import VirtualCareIcon from "@/shared/icons/solutions/VirtualCareIcon";
+import CoughNewsIcon from "@/shared/icons/resources/CoughNewsIcon";
+import InsightsIcon from "@/shared/icons/resources/InsightsIcon";
+import NewsIcon from "@/shared/icons/resources/NewsIcon";
+import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
+import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
+import {
+  BaseLink,
+  CtaNavItem,
+  NavItem,
+} from "@/features/header/type/header.type";
 
 export function Header() {
   const isDown = useIsScrollingDown(10);
 
   const [openId, setOpenId] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => setOpenId(null), []);
@@ -49,7 +68,7 @@ export function Header() {
 
   const scheduleClose = () => {
     if (closeT.current) window.clearTimeout(closeT.current);
-    closeT.current = window.setTimeout(() => setOpenId(null), 500);
+    closeT.current = window.setTimeout(() => setOpenId(null), 50000);
   };
 
   const cancelClose = () => {
@@ -58,7 +77,10 @@ export function Header() {
 
   // Close on route change (basic)
   useEffect(() => {
-    const onPop = () => close();
+    const onPop = () => {
+      close();
+      setMobileOpen(false);
+    };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, [close]);
@@ -67,19 +89,28 @@ export function Header() {
     <header
       ref={headerRef}
       className={cx(
-        "fixed top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur",
+        "fixed top-0 left-0 right-0 z-[20000] bg-white/90 backdrop-blur",
+        mobileOpen ? "h-[100dvh]" : "h-[84px]",
         "border-b border-black/10",
-        "transition-transform duration-200",
-        isDown && openId === null && "-translate-y-full",
+        "transition-[transform,height] duration-300",
+        isDown && openId === null && !mobileOpen && "-translate-y-full",
       )}
     >
       <div className="mx-auto flex h-[84px] items-center justify-between px-4 md:px-10 lg:px-20">
         {/* Logo */}
-        <Link href="/" className="shrink-0">
+        <Link
+          href="/"
+          className={cx(
+            "shrink-0 transition-opacity duration-300",
+            mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100",
+          )}
+          aria-hidden={mobileOpen}
+          tabIndex={mobileOpen ? -1 : 0}
+        >
           <Image
             src="/general/logo.svg"
-            width={157}
-            height={57}
+            width={120}
+            height={36}
             alt="Hyfe"
             priority
           />
@@ -181,7 +212,11 @@ export function Header() {
           })()}
 
           {/* Mobile menu button */}
-          {/* <MobileMenu nav={headerNav} /> */}
+          <MobileMenu
+            nav={headerNav}
+            open={mobileOpen}
+            onOpenChange={setMobileOpen}
+          />
         </div>
       </div>
     </header>
@@ -190,232 +225,416 @@ export function Header() {
 
 /* ------------------------------ Mobile Menu ------------------------------ */
 
-// function MobileMenu({ nav }: { nav: NavItem[] }) {
-//   const [open, setOpen] = useState(false);
+function MobileMenu({
+  nav,
+  open,
+  onOpenChange,
+}: {
+  nav: NavItem[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
+  const closeMenu = useCallback(() => {
+    setOpenAccordionId(null);
+    onOpenChange(false);
+  }, [onOpenChange]);
+  const openMenu = useCallback(() => {
+    setOpenAccordionId(null);
+    onOpenChange(true);
+  }, [onOpenChange]);
 
-//   useEffect(() => {
-//     if (!open) return;
-//     const prev = document.body.style.overflow;
-//     document.body.style.overflow = "hidden";
-//     return () => {
-//       document.body.style.overflow = prev;
-//     };
-//   }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
-//   return (
-//     <>
-//       <button
-//         type="button"
-//         className={cx(
-//           "lg:hidden inline-flex items-center justify-center",
-//           "h-11 w-11 rounded-full border border-black/10",
-//           "hover:bg-black/5",
-//         )}
-//         aria-label="Open menu"
-//         onClick={() => setOpen(true)}
-//       >
-//         <span className="text-xl leading-none">≡</span>
-//       </button>
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMenu();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, closeMenu]);
 
-//       {open && (
-//         <div className="fixed inset-0 z-11000 bg-black/40">
-//           <div className="absolute right-0 top-0 h-full w-[92vw] max-w-[420px] bg-white shadow-2xl">
-//             <div className="flex items-center justify-between p-4 border-b border-black/10">
-//               <div className="text-sm font-semibold">Menu</div>
-//               <button
-//                 className="h-10 w-10 rounded-full hover:bg-black/5"
-//                 onClick={() => setOpen(false)}
-//                 aria-label="Close menu"
-//               >
-//                 ✕
-//               </button>
-//             </div>
+  const cta = nav.find((x) => x.kind === "cta") as CtaNavItem | undefined;
+  const mainItems = nav.filter((x) => x.kind !== "cta");
+  const dropdownMeta = {
+    "Life Sciences": { Icon: LifeScienceIcon },
+    Research: { Icon: ResearchIcon },
+    "Virtual Care": { Icon: VirtualCareIcon },
+    Team: { Icon: UsersIcon },
+    Careers: { Icon: BriefeCaseIcon },
+    Advisors: { Icon: GraduationCapIcon },
+    About: { Icon: CompassIcon },
+  } as const;
+  const megaMeta = {
+    News: { Icon: NewsIcon },
+    Publications: { Icon: PublicationIcon },
+    Insights: { Icon: InsightsIcon },
+    "Cough News": { Icon: CoughNewsIcon },
+    "White Papers": { Icon: WhitePapersIcon },
+    FAQ: { Icon: QuestionIcon },
+  } as const;
+  type DropdownMetaKey = keyof typeof dropdownMeta;
+  type MegaMetaKey = keyof typeof megaMeta;
+  const isDropdownMeta = (label: string): label is DropdownMetaKey =>
+    label in dropdownMeta;
+  const isMegaMeta = (label: string): label is MegaMetaKey => label in megaMeta;
 
-//             <div className="p-4 space-y-3 overflow-y-auto h-[calc(100%-64px)]">
-//               {nav.map((item) => {
-//                 if (item.kind === "cta") {
-//                   return (
-//                     <a
-//                       key={item.id}
-//                       href={item.href}
-//                       target={item.external ? "_blank" : undefined}
-//                       rel={item.external ? "noreferrer" : undefined}
-//                       className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-blue-600 text-white h-12 font-medium"
-//                     >
-//                       {item.label}
-//                     </a>
-//                   );
-//                 }
+  return (
+    <>
+      <button
+        type="button"
+        className={cx(
+          "lg:hidden inline-flex items-center justify-center ",
+          "h-11 w-11 rounded-full border border-black/10",
+          "hover:bg-black/5",
+        )}
+        aria-label="Open menu"
+        aria-expanded={open}
+        aria-controls="mobile-menu"
+        onClick={openMenu}
+      >
+        <span className="text-xl leading-none">≡</span>
+      </button>
 
-//                 if (item.kind === "link") {
-//                   return (
-//                     <NavLink
-//                       key={item.id}
-//                       href={item.href}
-//                       external={item.external}
-//                       onClick={() => setOpen(false)}
-//                       className="block rounded-[16px] px-4 py-3 hover:bg-black/5"
-//                     >
-//                       {item.label}
-//                     </NavLink>
-//                   );
-//                 }
+      <div
+        className={cx(
+          "fixed inset-0 z-[20010] lg:hidden transition-opacity duration-300 ease-out",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+        )}
+      >
+        <button
+          className={cx(
+            "absolute inset-0 bg-black/30 transition-opacity duration-300",
+            open ? "opacity-100" : "opacity-0",
+          )}
+          aria-label="Close menu"
+          onClick={closeMenu}
+        />
 
-//                 return (
-//                   <MobileAccordion
-//                     key={item.id}
-//                     label={item.label}
-//                     render={() => {
-//                       if (item.kind === "dropdown") {
-//                         return (
-//                           <div className="pt-2 space-y-1">
-//                             {item.items.map((it) => (
-//                               <NavLink
-//                                 key={it.id}
-//                                 href={it.href}
-//                                 external={it.external}
-//                                 onClick={() => setOpen(false)}
-//                                 className="block rounded-[14px] px-4 py-2 hover:bg-black/5"
-//                               >
-//                                 <div className="text-sm font-medium text-black">
-//                                   {it.label} {it.external ? "↗" : ""}
-//                                 </div>
-//                                 {it.description && (
-//                                   <div className="text-xs text-black/55">
-//                                     {it.description}
-//                                   </div>
-//                                 )}
-//                               </NavLink>
-//                             ))}
-//                           </div>
-//                         );
-//                       }
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal={open}
+          aria-hidden={!open}
+          aria-labelledby="mobile-menu-title"
+          className={cx(
+            "absolute right-0 top-0 h-full w-screen max-w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col",
+            "transition-transform duration-300 ease-out",
+            open ? "translate-x-0" : "translate-x-full",
+          )}
+        >
+          <div className="flex items-center justify-between px-4 py-4 border-b border-black/10">
+            <Link
+              href="/"
+              onClick={closeMenu}
+              id="mobile-menu-title"
+              className="shrink-0"
+              aria-label="Hyfe home"
+            >
+              <Image
+                src="/general/logo.svg"
+                width={120}
+                height={36}
+                alt="Hyfe"
+              />
+            </Link>
+            <button
+              className="h-10 w-10 rounded-full hover:bg-black/5"
+              onClick={closeMenu}
+              aria-label="Close menu"
+              autoFocus={open}
+            >
+              ✕
+            </button>
+          </div>
 
-//                       // mega
-//                       return (
-//                         <div className="pt-2 space-y-4">
-//                           {item.sections.map((sec) => (
-//                             <div key={sec.id}>
-//                               <div className="px-4">
-//                                 <div className="text-sm font-semibold">
-//                                   {sec.title}
-//                                 </div>
-//                                 {sec.description && (
-//                                   <div className="text-xs text-black/55">
-//                                     {sec.description}
-//                                   </div>
-//                                 )}
-//                                 {sec.allHref && (
-//                                   <NavLink
-//                                     href={sec.allHref}
-//                                     onClick={() => setOpen(false)}
-//                                     className="mt-2 inline-flex text-xs rounded-full bg-black/5 px-3 py-1.5"
-//                                   >
-//                                     View all →
-//                                   </NavLink>
-//                                 )}
-//                               </div>
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+              {mainItems.map((item) => {
+                if (item.kind === "link") {
+                  return (
+                    <NavLink
+                      key={item.id}
+                      href={item.href}
+                      external={item.external}
+                      onClick={closeMenu}
+                      className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
+                    >
+                      <span>
+                        {item.label}
+                        {item.external ? " ↗" : ""}
+                      </span>
+                    </NavLink>
+                  );
+                }
 
-//                               <div className="mt-2 space-y-1">
-//                                 {sec.items.map((it) => (
-//                                   <NavLink
-//                                     key={it.id}
-//                                     href={it.href}
-//                                     external={it.external}
-//                                     onClick={() => setOpen(false)}
-//                                     className="block rounded-[14px] px-4 py-2 hover:bg-black/5"
-//                                   >
-//                                     <div className="text-sm font-medium text-black">
-//                                       {it.label} {it.external ? "↗" : ""}
-//                                     </div>
-//                                     {it.description && (
-//                                       <div className="text-xs text-black/55">
-//                                         {it.description}
-//                                       </div>
-//                                     )}
-//                                   </NavLink>
-//                                 ))}
-//                               </div>
-//                             </div>
-//                           ))}
+                if (item.kind === "dropdown") {
+                  return (
+                    <MobileAccordion
+                      key={item.id}
+                      label={item.label}
+                      open={openAccordionId === item.id}
+                      onToggle={() =>
+                        setOpenAccordionId((prev) =>
+                          prev === item.id ? null : item.id,
+                        )
+                      }
+                    >
+                      <div className="space-y-1 pb-2">
+                        {item.items.map((it) => {
+                          const meta =
+                            it.label && isDropdownMeta(it.label)
+                              ? dropdownMeta[it.label]
+                              : null;
+                          const Icon = meta?.Icon;
+                          return (
+                            <MobileLinkItem
+                              key={it.id}
+                              item={it}
+                              onClick={closeMenu}
+                              Icon={Icon}
+                              showArrow
+                            />
+                          );
+                        })}
+                      </div>
+                    </MobileAccordion>
+                  );
+                }
 
-//                           {/* {item.quickLinks?.length ? (
-//                             <div className="mt-2 rounded-[18px] bg-black/[0.03] p-3">
-//                               <div className="px-2 pb-2 text-sm font-semibold">
-//                                 Quick links
-//                               </div>
-//                               <div className="space-y-1">
-//                                 {item.quickLinks.map((it) => (
-//                                   <NavLink
-//                                     key={it.id}
-//                                     href={it.href}
-//                                     external={it.external}
-//                                     onClick={() => setOpen(false)}
-//                                     className="block rounded-[14px] px-3 py-2 hover:bg-black/5"
-//                                   >
-//                                     <div className="text-sm font-medium">
-//                                       {it.label} {it.external ? "↗" : ""}
-//                                     </div>
-//                                     {it.description && (
-//                                       <div className="text-xs text-black/55">
-//                                         {it.description}
-//                                       </div>
-//                                     )}
-//                                   </NavLink>
-//                                 ))}
-//                               </div>
-//                             </div>
-//                           ) : null} */}
-//                         </div>
-//                       );
-//                     }}
-//                   />
-//                 );
-//               })}
-//             </div>
-//           </div>
+                if (item.kind === "card") {
+                  return (
+                    <MobileAccordion
+                      key={item.id}
+                      label={item.label}
+                      open={openAccordionId === item.id}
+                      onToggle={() =>
+                        setOpenAccordionId((prev) =>
+                          prev === item.id ? null : item.id,
+                        )
+                      }
+                    >
+                      <div className="space-y-1 pb-2">
+                        {item.items.map((it) => (
+                          <MobileLinkItem
+                            key={it.id}
+                            item={it}
+                            onClick={closeMenu}
+                            showImage
+                          />
+                        ))}
+                      </div>
+                    </MobileAccordion>
+                  );
+                }
 
-//           <button
-//             className="absolute inset-0"
-//             aria-label="Close overlay"
-//             onClick={() => setOpen(false)}
-//           />
-//         </div>
-//       )}
-//     </>
-//   );
-// }
+                return (
+                  <MobileAccordion
+                    key={item.id}
+                    label={item.label}
+                    open={openAccordionId === item.id}
+                    onToggle={() =>
+                      setOpenAccordionId((prev) =>
+                        prev === item.id ? null : item.id,
+                      )
+                    }
+                  >
+                    <div className="space-y-4 pb-2">
+                      {item.sections.map((sec) => (
+                        <div key={sec.id} className="space-y-2">
+                          <div className="px-0">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
+                              {sec.title}
+                            </div>
+                            {sec.description && (
+                              <div className="text-xs text-black/55">
+                                {sec.description}
+                              </div>
+                            )}
+                            {sec.allHref && (
+                              <NavLink
+                                href={sec.allHref}
+                                onClick={closeMenu}
+                                className="mt-2 inline-flex text-xs rounded-full bg-black/5 px-3 py-1.5"
+                              >
+                                View all →
+                              </NavLink>
+                            )}
+                          </div>
 
-// function MobileAccordion({
-//   label,
-//   render,
-// }: {
-//   label: string;
-//   render: () => React.ReactNode;
-// }) {
-//   const [open, setOpen] = useState(false);
+                          <div className="space-y-1">
+                            {sec.items.map((it) => {
+                              const meta =
+                                it.label && isMegaMeta(it.label)
+                                  ? megaMeta[it.label]
+                                  : null;
+                              const Icon = meta?.Icon;
+                              return (
+                                <MobileLinkItem
+                                  key={it.id}
+                                  item={it}
+                                  onClick={closeMenu}
+                                  Icon={Icon}
+                                  showArrow
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </MobileAccordion>
+                );
+              })}
+            </div>
 
-//   return (
-//     <div className="rounded-[18px] border border-black/10 overflow-hidden">
-//       <button
-//         type="button"
-//         onClick={() => setOpen((v) => !v)}
-//         className="w-full flex items-center justify-between px-4 py-3 hover:bg-black/5"
-//       >
-//         <span className="text-sm font-medium">{label}</span>
-//         <span className={cx("transition-transform", open && "rotate-45")}>
-//           +
-//         </span>
-//       </button>
+            {cta ? (
+              <div className="px-4 pb-5 pt-2 border-t border-black/10">
+                <NavLink
+                  href={cta.href}
+                  external={cta.external}
+                  onClick={closeMenu}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors"
+                >
+                  {cta.label}
+                </NavLink>
+              </div>
+            ) : null}
+        </div>
+      </div>
+    </>
+  );
+}
 
-//       <div
-//         className={cx(
-//           "grid transition-[grid-template-rows] duration-200 ease-out",
-//           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-//         )}
-//       >
-//         <div className="overflow-hidden">{render()}</div>
-//       </div>
-//     </div>
-//   );
-// }
+function MobileLinkItem({
+  item,
+  onClick,
+  showImage = false,
+  Icon,
+  showArrow = false,
+}: {
+  item: BaseLink;
+  onClick: () => void;
+  showImage?: boolean;
+  Icon?: ComponentType<{ className?: string }>;
+  showArrow?: boolean;
+}) {
+  return (
+    <NavLink
+      href={item.href}
+      external={item.external}
+      onClick={onClick}
+      className="block rounded-[14px] py-3 hover:bg-black/5"
+    >
+      <div className="flex items-start gap-3 w-full">
+        {showImage && item.image?.url ? (
+          <Image
+            src={item.image.url}
+            width={44}
+            height={44}
+            alt={item.image.alt ?? item.label}
+            className="h-11 w-11 rounded-[12px] border border-black/10 object-cover"
+          />
+        ) : Icon ? (
+          <Icon className="text-primary min-w-5 min-h-5 mt-0.5" />
+        ) : null}
+        <div className="min-w-0 grow">
+          <div className="text-sm font-medium text-black">
+            {item.label} {item.external ? "↗" : ""}
+          </div>
+          {item.description && (
+            <div className="text-xs text-black/55">{item.description}</div>
+          )}
+        </div>
+        {showArrow ? (
+          <span className="mt-1 text-black/60 shrink-0">
+            <svg
+              width="20"
+              height="12"
+              viewBox="0 0 25 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden
+            >
+              <path
+                d="M24.7071 8.07136C25.0976 7.68084 25.0976 7.04768 24.7071 6.65715L18.3431 0.29319C17.9526 -0.0973344 17.3195 -0.0973344 16.9289 0.29319C16.5384 0.683714 16.5384 1.31688 16.9289 1.7074L22.5858 7.36426L16.9289 13.0211C16.5384 13.4116 16.5384 14.0448 16.9289 14.4353C17.3195 14.8259 17.9526 14.8259 18.3431 14.4353L24.7071 8.07136ZM24 7.36426V6.36426H0V7.36426V8.36426H24V7.36426Z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+        ) : null}
+      </div>
+    </NavLink>
+  );
+}
+
+function MobileAccordion({
+  label,
+  children,
+  open,
+  onToggle,
+}: {
+  label: string;
+  children: React.ReactNode;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const id = useId();
+
+  return (
+    <div className="rounded-[18px] border border-black/10 overflow-hidden bg-black/[0.02]">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-black/5"
+        aria-expanded={open}
+        aria-controls={`${id}-panel`}
+        id={`${id}-button`}
+      >
+        <span className="text-sm font-medium">{label}</span>
+        <span
+          className={cx(
+            "transition-transform duration-200",
+            open && "rotate-180",
+          )}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden
+          >
+            <path
+              d="M3 5.25L7 9.25L11 5.25"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </button>
+
+      <div
+        id={`${id}-panel`}
+        role="region"
+        aria-labelledby={`${id}-button`}
+        className={cx(
+          "grid transition-[grid-template-rows] duration-200 ease-out",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden px-4">{children}</div>
+      </div>
+    </div>
+  );
+}

@@ -69,13 +69,13 @@ export function RecourcesList({
 
   return (
     <section className="relative space-y-10">
-      <div className="flex flex-col-reverse  gap-5 md:flex-row w-full justify-between py-5 px-4 md:px-10 lg:px-20 sticky top-0 bg-white/20 border-b-2 border-[#EEEEEE]/40 backdrop-blur-[40px]">
+      <div className="flex flex-col-reverse  gap-5 md:flex-row w-full justify-between py-5 px-4 md:px-10 lg:px-20 sticky top-0 bg-white/20 border-b-2 border-[#EEEEEE]/40 backdrop-blur-[40px] z-100000">
         {uniqueTags.length > 0 && (
           <div className="flex gap-3 w-full overflow-x-scroll">
             {hasFilters && (
               <button
                 onClick={() => (setActiveTags([]), setSearch(""))}
-                className="bg-bg-150 px-2.5 border-[1.5px] rounded-full border-border hover:border-primary py-2.5 cursor-pointer "
+                className="bg-bg-150  border-[1.5px] rounded-full border-border hover:border-primary p-1.5 md:p-2.5 cursor-pointer "
               >
                 {cross}
               </button>

@@ -77,7 +77,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
       </svg>
       <div className="relative z-1">
         {" "}
-        <div className="space-y-5 pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 ">
+        <div className="space-y-5 pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 px-4 md:px-10 lg:px-20">
           <h1 className="md:text-[50px]! lg:text-[70px]!">{title}</h1>
           <p className="body-large text-balance">{paragraph}</p>
         </div>
@@ -95,11 +95,11 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
             />
           ))}
         </motion.div>
-        <div className="relative mx-auto w-full max-w-[1254px] h-[800px] translate-x-[-5%]">
+        <div className="relative min-w-[800px] mx-auto w-full max-w-[1254px] h-[600px] md:h-[800px] translate-x-[-5%]">
           <motion.div style={{ y: tabletY }} className="relative z-10">
             <Image
-              className="w-full h-auto translate-x-[100px]"
-              src="/image/tablet.png"
+              className="w-full h-auto md:translate-x-[100px]"
+              src="/image/tablet-hero.png"
               width={1254}
               height={807}
               alt="cough monitor and dashboard"
@@ -107,13 +107,14 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
           </motion.div>
           <motion.div
             style={{ y: watchY }}
-            className="absolute left-0 bottom-0 z-20 translate-x-[-10%] md:left-[4%] md:translate-x-[-20%] lg:left-[6%]"
+            className="absolute left-0 bottom-0 z-20 md:translate-x-[-10%] md:left-[4%] md:translate-x-[-20%] lg:left-[6%]"
           >
             <Image
-              src="/image/watch.png"
+              src="/image/watch-hero.png"
               width={293}
               height={425}
               alt="cough monitor and dashboard"
+              className="w-[25vh] md:w-[293px]"
             />
           </motion.div>
         </div>

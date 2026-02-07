@@ -12,6 +12,8 @@ import {
   SeoRawSchema,
   SeoSchema,
   ResourceFeedSectionSchema,
+  ResourceRelatedTypeSchema,
+  TagSchema,
 } from "@/features/resources";
 
 export const SectionHeroStatsSchema = z
@@ -132,6 +134,30 @@ export const TabbedResourceFeedSectionSchema = z
     cards: res.cards,
   }));
 
+const ResourceFeedManyItemSchema = z
+  .looseObject({
+    title: z.string(),
+    paragraph: z.string().nullable(),
+    type: ResourceRelatedTypeSchema,
+    tag: TagSchema.nullish(),
+  })
+  .transform((res) => ({
+    title: res.title,
+    paragraph: res.paragraph ?? undefined,
+    typeResource: res.type,
+    tag: res.tag?.tag ?? undefined,
+  }));
+
+export const ResourceFeedManySectionSchema = z
+  .looseObject({
+    __component: z.literal("resource.resource-feed-many"),
+    resource_list: z.array(ResourceFeedManyItemSchema),
+  })
+  .transform((res) => ({
+    type: "resource-feed-many" as const,
+    resourceList: res.resource_list,
+  }));
+
 export const PageSectionsSchema = z.array(
   z.discriminatedUnion("__component", [
     SectionHeroStatsSchema,
@@ -142,6 +168,7 @@ export const PageSectionsSchema = z.array(
     FeatureCardsRightSectionSchema,
     CTASectionSchema,
     TabbedResourceFeedSectionSchema,
+    ResourceFeedManySectionSchema,
     ResourceFeedSectionSchema,
   ]),
 );
@@ -182,4 +209,7 @@ export type FeatureCardsRightSectionType = z.infer<
 export type CTASectionSchemaType = z.infer<typeof CTASectionSchema>;
 export type TabbedResourceFeedSectionType = z.infer<
   typeof TabbedResourceFeedSectionSchema
+>;
+export type ResourceFeedManySectionType = z.infer<
+  typeof ResourceFeedManySectionSchema
 >;

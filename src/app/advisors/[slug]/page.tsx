@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Props }) {
     robots: { index: false, follow: false },
   };
 
-  const member = await getMember(slug);
+  const member = await getAdvisorMember(slug);
   if (!member?.seo) return fallback;
   console.log(member.seo);
   return getSeoMetadata(member.seo);
@@ -56,9 +56,9 @@ export default async function Member({ params }: { params: Props }) {
           />
         </div>
         <div className="space-y-10">
-          <div className="space-y-3 mb-10">
+          <div className="space-y-1 mb-10">
             <h1 className="text-[28px]! md:text-[52px]!">{name}</h1>
-            <h4>{job}</h4>
+            <p className="body-large text-black! font-medium!">{job}</p>
           </div>
           {location && <LocationsType location_type={location} />}
           <RichText blocks={biography.content} />

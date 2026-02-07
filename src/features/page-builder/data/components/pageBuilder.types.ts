@@ -13,10 +13,16 @@ import type {
 import type {
   ResourceFeedSectionType,
   ResourceCardType,
+  ResourceCardListType,
 } from "@/features/resources";
+import type { ResourceFeedManySectionType } from "../schema/pageBuilder";
 
 export type ResourceFeedSectionRenderable = ResourceFeedSectionType & {
   cards?: ResourceCardType[];
+};
+
+export type ResourceFeedManySectionRenderable = ResourceFeedManySectionType & {
+  resources?: ResourceCardListType[];
 };
 
 type PageBuilderBaseSection =
@@ -32,12 +38,13 @@ type PageBuilderBaseSection =
 
 type NonResourceFeedSection = Exclude<
   PageBuilderBaseSection,
-  { type: "resource-feed" }
+  { type: "resource-feed" } | { type: "resource-feed-many" }
 >;
 
 export type PageBuilderSection =
   | NonResourceFeedSection
-  | ResourceFeedSectionRenderable;
+  | ResourceFeedSectionRenderable
+  | ResourceFeedManySectionRenderable;
 
 export type PageBuilderSectionType = PageBuilderSection["type"];
 

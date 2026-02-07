@@ -102,6 +102,18 @@ export const pageBuilder = {
             },
           },
         },
+        "resource.resource-feed-many": {
+          populate: {
+            resource_list: {
+              fields: ["title", "paragraph", "type"],
+              populate: {
+                tag: {
+                  fields: ["tag"],
+                },
+              },
+            },
+          },
+        },
 
         // "resource.tabbed-resource-feed": {
         //   fields: ["title", "paragraph"],
