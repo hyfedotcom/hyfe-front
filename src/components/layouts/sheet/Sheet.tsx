@@ -61,9 +61,8 @@ export function Sheet({
           "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-15",
           "transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
-          "max-h-[100dvh] overflow-y-auto overscroll-contain",
-          "rounded-t-[28px] md:rounded-t-[40px] overflow-hidden",
-          "flex flex-col",
+          "max-h-[100dvh] rounded-t-[28px] md:rounded-t-[40px]",
+          "overflow-hidden flex flex-col",
         ].join(" ")}
       >
         <button
@@ -85,7 +84,9 @@ export function Sheet({
             />
           </svg>
         </button>
-        {children}
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+          {children}
+        </div>
       </div>
     </div>
   );
