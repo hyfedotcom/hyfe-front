@@ -4,6 +4,7 @@ import { ResourceDetailsHero } from "@/app/(resources)/components/details/Resour
 import { draftMode } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { buildResourceDetailsBlocks } from "@/features/resources/utils/ResourceDetailsBuilder";
 
 type Params = {
   type: string;
@@ -19,6 +20,10 @@ export default async function Page({ params }: { params: Params }) {
   const resource = await getResource({ type, slug, isDraft });
 
   if (!resource) return notFound();
+  const blocks = await buildResourceDetailsBlocks({
+    blocks: resource.blocks,
+    resourceType: type as ResourceType,
+  });
 
   return (
     <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[260px] px-4 md:px-10 z-10000 relative">
@@ -35,7 +40,7 @@ export default async function Page({ params }: { params: Params }) {
       </div>
       <ResourceDetailsHero data={resource} type={type} />
       <ResourceDetails
-        data={resource.blocks}
+        data={blocks}
         resourceType={type as ResourceType}
       />
     </div>

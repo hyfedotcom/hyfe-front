@@ -3,14 +3,13 @@ import { Sheet } from "@/components/layouts/sheet/Sheet";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
 import { getSlugs } from "@/features/shared/api/getSlugs";
-import { getMember } from "@/features/team/api/getMembers";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAdvisorMember } from "@/features/advisors/api/getAdvisorMembers";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 type Props = {
   slug: string;
@@ -31,7 +30,6 @@ export async function generateMetadata({ params }: { params: Props }) {
 
   const member = await getAdvisorMember(slug);
   if (!member?.seo) return fallback;
-  console.log(member.seo);
   return getSeoMetadata(member.seo);
 }
 
@@ -39,9 +37,6 @@ export default async function Member({ params }: { params: Props }) {
   const { slug } = await params;
   const member = await getAdvisorMember(slug);
   if (!member) notFound();
-  const slugs = await getSlugs("teams");
-
-  console.log(slugs.map((s) => ({ slugs: s })));
   const { biography, image, job, linkedin, location, name, twitter } = member;
   return (
     <Sheet returnPath="/team">

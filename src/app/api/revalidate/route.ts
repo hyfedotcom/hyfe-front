@@ -42,13 +42,6 @@ export async function POST(req: Request) {
     const uid = body.uid;
     const slug = typeof entry?.slug === "string" ? entry.slug : body?.slug;
 
-    console.log(
-      "Upcoming webbhook",
-      body,
-      "model:" + model,
-      "slug" + slug,
-      "entry:" + entry,
-    );
 
     // 1.0 CAREERS LANDING
     if (
@@ -114,10 +107,6 @@ export async function POST(req: Request) {
       (uid && RESOURCE_UID_MAP[uid]) || RESOURCE_MODEL_MAP[model];
 
     if (resourceModel) {
-      console.log(
-        `🌍 Resource updated: ${uid ?? model}${slug ? ` | ${slug}` : ""}`,
-      );
-
       if (slug) {
         revalidateTag(`resource:${resourceModel}-${slug}`, "max");
       }

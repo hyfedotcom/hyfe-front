@@ -3,7 +3,6 @@
 import { ButtonArrow } from "@/components/ui/buttons/ButtonArrow";
 import { ResourceBlockCtaType } from "@/features/resources/data/resources.types";
 import SmartLink from "@/shared/utils/SmartLink";
-import Link from "next/link";
 import { useState } from "react";
 
 export function ResourceCta({ block }: { block: ResourceBlockCtaType }) {
@@ -15,12 +14,12 @@ export function ResourceCta({ block }: { block: ResourceBlockCtaType }) {
         {block.cta.map((e: { url: string; label: string }, i: number) => (
           <span
             key={i}
-            className="p-4 md:p-5 w-full flex  h-[200px] text-black! bg-primary-100 border border-border hover:bg-primary-200 hover:border-primary duration-300 rounded-[20px] overflow-hidden"
+            className="p-4 md:p-5 w-full flex  h-[200px] text-black! bg-primary-100 border border-border hover:bg-primary-200 hover:border-primary duration-300 rounded-[20px] hover:shadow-hover"
             onMouseEnter={() => setIsHover(i)}
             onMouseLeave={() => setIsHover(null)}
           >
-            <SmartLink href={e.url}>
-              <div className="flex flex-col justify-between flex-1 h-full w-full">
+            <SmartLink href={e.url} >
+              <div className="flex flex-col justify-between flex-1 h-full w-full ">
                 <span className="text-balance text-[16px] md:text-[20px] font-semibold! ">{e.label}</span>
                 <ButtonArrow
                   isActive={isHover === i}

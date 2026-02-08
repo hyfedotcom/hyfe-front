@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
-import type { PageSectionsType } from "../schema/pageBuilder";
+import type {
+  PageSectionsType,
+  TabbedResourceFeedSectionType,
+} from "../schema/pageBuilder";
 import type {
   AccordionType,
   CardProductStepsType,
@@ -25,6 +28,11 @@ export type ResourceFeedManySectionRenderable = ResourceFeedManySectionType & {
   resources?: ResourceCardListType[];
 };
 
+export type TabbedResourceFeedSectionRenderable =
+  TabbedResourceFeedSectionType & {
+    resources?: ResourceCardListType[];
+  };
+
 type PageBuilderBaseSection =
   | PageSectionsType[number]
   | SectionsType[number]
@@ -38,13 +46,16 @@ type PageBuilderBaseSection =
 
 type NonResourceFeedSection = Exclude<
   PageBuilderBaseSection,
-  { type: "resource-feed" } | { type: "resource-feed-many" }
+  | { type: "resource-feed" }
+  | { type: "resource-feed-many" }
+  | { type: "tabbed-resource-feed" }
 >;
 
 export type PageBuilderSection =
   | NonResourceFeedSection
   | ResourceFeedSectionRenderable
-  | ResourceFeedManySectionRenderable;
+  | ResourceFeedManySectionRenderable
+  | TabbedResourceFeedSectionRenderable;
 
 export type PageBuilderSectionType = PageBuilderSection["type"];
 

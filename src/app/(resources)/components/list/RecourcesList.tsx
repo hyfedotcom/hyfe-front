@@ -134,6 +134,7 @@ export function RecourcesList({
             className="w-full"
             href={`/${type}/${c.slug}`}
             key={c.title}
+            scroll={false}
           >
             {" "}
             <ResourceCard card={c} />

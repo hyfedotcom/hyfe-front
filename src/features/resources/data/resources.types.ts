@@ -41,6 +41,19 @@ export type ResourceRelatedType = z.infer<
 
 export type ResourceType = z.infer<typeof ResourceRelatedTypeSchema>;
 
+type RelatedBlock = Extract<
+  ResourceBlockType,
+  { type: "resource.related-resources" }
+>;
+
+export type ResourceRelatedBlockRenderable = RelatedBlock & {
+  resolvedCards: ResourceCardType[];
+};
+
+export type ResourceBlockRenderable =
+  | Exclude<ResourceBlockType, RelatedBlock>
+  | ResourceRelatedBlockRenderable;
+
 export type GetResourceResult = Awaited<ReturnType<typeof getResource>>;
 export type ResourceDetail = NonNullable<GetResourceResult>;
 export type AdditionlInfoType = z.infer<

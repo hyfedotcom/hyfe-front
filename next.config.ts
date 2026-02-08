@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   images: {
-    dangerouslyAllowLocalIP: true, // ✅ разрешить 127.0.0.1 / локалку (только для dev)
+    dangerouslyAllowLocalIP: isDev, // ✅ только для dev
     remotePatterns: [
       { protocol: "https", hostname: "*.strapiapp.com" },
       {

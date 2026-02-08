@@ -2,6 +2,7 @@ import { MemberCard } from "./MemberCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAdvisors } from "@/features/advisors/api/getAdvisors";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 
 export default async function AdvisorsListPage() {
   const team = await getAdvisors();
@@ -9,6 +10,7 @@ export default async function AdvisorsListPage() {
   const { paragraph, advisors, title } = team;
   return (
     <div className="px-4 md:px-10 lg:px-20  pb-[100px] md:pb-[140px]">
+      <SeoStructuredData seo={team.seo} id="advisors-seo-jsonld" />
       <div className="max-w-[1220px] mx-auto">
         <main className="pt-[240px] pb-[100px] space-y-5">
           <h1 className="mx-auto">{title}</h1>

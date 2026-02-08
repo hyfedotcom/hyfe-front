@@ -1,17 +1,20 @@
 import { ResourceDetails } from "@/app/(resources)/components/details/ResourceDetails";
-import { ResourceButtonBack } from "@/app/(resources)/components/ui/ResourceButtonBack";
 import {
   getResource,
   getResourcesList,
   ResourceType,
 } from "@/features/resources";
+import { buildResourceDetailsBlocks } from "@/features/resources/utils/ResourceDetailsBuilder";
 import { ResourceDetailsHero } from "@/app/(resources)/components/details/ResourceDetailsHero";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { Metadata } from "next";
 import { Sheet } from "@/components/layouts/sheet/Sheet";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
+import { buildArticleJsonLd } from "@/components/seo/jsonLdBuilders";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 type PageProps = {
   params: { slug: string; type: string };
@@ -79,19 +82,32 @@ export default async function ResourceSingle({ params }: PageProps) {
   const { slug, type } = await params;
 
   const resource = await getResource({ type, slug });
+  const blocks = await buildResourceDetailsBlocks({
+    blocks: resource.blocks,
+    resourceType: type as ResourceType,
+  });
 
   return (
-    <Sheet returnPath={type}>
-      <div className="w-full relative overflow-hidden">
-        {/* <ResourceButtonBack label={`All ${type}`} url={`/${type}`} /> */}
-        <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
-          <ResourceDetailsHero data={resource} type={type} />
-          <ResourceDetails
-            data={resource.blocks}
-            resourceType={type as ResourceType}
-          />
+    <>
+      <JsonLd
+        data={buildArticleJsonLd({
+          resource,
+          type: type as ResourceType,
+        })}
+        id="resource-article-jsonld"
+      />
+      <SeoStructuredData seo={resource.seo} id="resource-seo-jsonld" />
+      <Sheet returnPath={type}>
+        <div className="w-full relative overflow-hidden">
+          <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
+            <ResourceDetailsHero data={resource} type={type} />
+            <ResourceDetails
+              data={blocks}
+              resourceType={type as ResourceType}
+            />
+          </div>
         </div>
-      </div>
-    </Sheet>
+      </Sheet>
+    </>
   );
 }

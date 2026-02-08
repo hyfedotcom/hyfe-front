@@ -11,14 +11,14 @@ import { getSlugs } from "@/features/shared/api/getSlugs";
 import getVacancy from "@/features/careers/api/getVacancy";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 type Props = {
   slug: string;
 };
 
 export async function generateStaticParams() {
-  const slugs = await getSlugs("teams");
+  const slugs = await getSlugs("vacancies-items");
   return slugs.map((s) => ({ slug: s }));
 }
 

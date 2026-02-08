@@ -3,9 +3,10 @@ import { getPage } from "@/features/page-builder/data/api/getPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,5 +32,10 @@ export default async function Home() {
   const page = await getPage({ slug: "home" });
   if (!page?.sections) return notFound();
 
-  return <PageBuilder sections={page?.sections} />;
+  return (
+    <>
+      <SeoStructuredData seo={page.seo} id="home-seo-jsonld" />
+      <PageBuilder sections={page?.sections} />
+    </>
+  );
 }

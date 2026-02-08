@@ -3,7 +3,7 @@ import { getResourcesList } from "@/features/resources";
 import { Metadata } from "next";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 type Params = { type: string };
 

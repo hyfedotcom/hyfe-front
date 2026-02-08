@@ -3,7 +3,7 @@ import { getTeam } from "@/features/team/api/getTeam";
 import { Metadata } from "next";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 export async function generateMetadata() {
   const fallback: Metadata = {
@@ -14,7 +14,6 @@ export async function generateMetadata() {
 
   const team = await getTeam();
   if (!team?.seo) return fallback;
-  console.log(team.seo);
   return getSeoMetadata(team.seo);
 }
 

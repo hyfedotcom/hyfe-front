@@ -5,7 +5,7 @@ import { getPageResource } from "@/features/resources/data/api/getResourceFeedPa
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 export default async function ScienceResources() {
   const data = await getPageResource({ slug: "science-and-research-resource" });

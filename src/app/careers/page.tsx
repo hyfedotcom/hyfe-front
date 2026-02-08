@@ -3,7 +3,7 @@ import getCareers from "@/features/careers/api/getCareers";
 import { Metadata } from "next";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 export async function generateMetadata() {
   const fallback: Metadata = {
@@ -14,7 +14,6 @@ export async function generateMetadata() {
 
   const team = await getCareers();
   if (!team?.seo) return fallback;
-  console.log(team.seo);
   return getSeoMetadata(team.seo);
 }
 

@@ -1,6 +1,7 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
 import { resourceBySlug } from "../resources.query";
 import { parseOrThrow, SlugSchema } from "../resources.schema";
+import { resolveResourceItemsType } from "./resourceType";
 
 export async function getResource({
   type,
@@ -11,12 +12,11 @@ export async function getResource({
   slug: string;
   isDraft?: boolean;
 }) {
-  if (type === "news") type = "news-items";
-  if (type === "cough-news") type = "cough-news-items";
+  const itemsType = resolveResourceItemsType(type);
   const resourceData = await StrapiFetch<unknown>({
-    path: `/api/${type}`,
+    path: `/api/${itemsType}`,
     query: resourceBySlug(slug, isDraft),
-    tags: [`resource:${type}-${slug}`],
+    tags: [`resource:${itemsType}-${slug}`],
     isDraft: isDraft ?? undefined,
   });
 

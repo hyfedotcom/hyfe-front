@@ -9,7 +9,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 86400;
 
 type Props = {
   slug: string;
@@ -30,7 +30,6 @@ export async function generateMetadata({ params }: { params: Props }) {
 
   const member = await getMember(slug);
   if (!member?.seo) return fallback;
-  console.log(member.seo);
   return getSeoMetadata(member.seo);
 }
 
@@ -38,9 +37,6 @@ export default async function Member({ params }: { params: Props }) {
   const { slug } = await params;
   const member = await getMember(slug);
   if (!member) notFound();
-  const slugs = await getSlugs("teams");
-
-  console.log(slugs.map((s) => ({ slugs: s })));
   const { biography, image, job, linkedin, location, name, twitter } = member;
   return (
     <Sheet returnPath="/team">

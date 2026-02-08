@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import Link from "next/link";
 import { VacancyItem } from "./VacancyItem";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 
 export default async function CareersPage() {
   const careers = await getCareers();
@@ -12,6 +13,7 @@ export default async function CareersPage() {
   const { images, paragraph, title, vacancies } = careers;
   return (
     <div className="mx-auto w-full max-w-[950px] px-4 md:px-10 pb-[100px] md:pb-[140px]">
+      <SeoStructuredData seo={careers.seo} id="careers-seo-jsonld" />
       <main className="space-y-11  pb-[100px] ">
         <div className="pt-[240px] text-center space-y-6">
           <h1>{title}</h1>

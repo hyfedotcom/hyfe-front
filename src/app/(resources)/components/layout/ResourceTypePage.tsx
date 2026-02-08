@@ -2,9 +2,10 @@ import { RecourcesList, ResourcesListHero } from "@/features/resources/client";
 import { getResourcesList } from "@/features/resources";
 import { ResourcesNavTabs } from "@/app/(resources)/components/navigation/ResourcesNavTabs";
 import { notFound } from "next/navigation";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 
 export const dynamic = "force-static";
-export const revalidate = false;;
+export const revalidate = 86400;;
 
 export async function generateStaticParams() {
   return ["publications", "insights", "white-papers", "news", "cough-news"].map(
@@ -22,6 +23,7 @@ export default async function ResourceTypePage({ type }: { type: string }) {
 
   return (
     <div className="w-full  space-y-10 relative pb-[100px] md:pb-[140px]">
+      <SeoStructuredData seo={landing.seo} id="resource-type-seo-jsonld" />
       <div className=" mx-auto space-y-10">
         <ResourcesListHero
           data={{ ...landing, paragraph: landing.paragraph ?? null }}

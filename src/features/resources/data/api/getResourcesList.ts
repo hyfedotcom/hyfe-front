@@ -1,21 +1,21 @@
 import { resourceLanding, resourceList } from "@/features/resources";
 import StrapiFetch from "@/core/strapi/strapiFetch";
 import { LandingSchema, ListSchema, parseOrThrow } from "@/features/resources";
+import { resolveResourceItemsType } from "./resourceType";
 
 export async function getResourcesList({ type }: { type: string }) {
   try {
+    const itemsType = resolveResourceItemsType(type);
     const landingData = await StrapiFetch<unknown>({
       path: `/api/${type}-landing`,
       query: resourceLanding,
       tags: [`resource:${type}-landing`],
     });
-    
-    if (type === "news") type = "news-items";
-    if (type === "cough-news") type = "cough-news-items";
+
     const listData = await StrapiFetch<unknown>({
-      path: `/api/${type}`,
+      path: `/api/${itemsType}`,
       query: resourceList,
-      tags: [`resource:${type}-list`],
+      tags: [`resource:${itemsType}-list`],
     });
 
     const landing = parseOrThrow(LandingSchema, landingData);

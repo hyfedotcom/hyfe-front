@@ -209,7 +209,6 @@ function renderInline(
       // const isUnderline = Boolean((n as any).underline);
 
       let out: React.ReactNode = t;
-      // console.log(isBold);
 
       if (isBold) {
         out = <strong className="font-semibold text-black!">{out}</strong>;
@@ -224,7 +223,6 @@ function renderInline(
 
 function spaceClass(prev: Block | undefined, cur: Block, next?: Block) {
   const t = cur.type;
-  // console.log(cur);
   if (!next) return "mb-15";
 
   if (t === "paragraph") {

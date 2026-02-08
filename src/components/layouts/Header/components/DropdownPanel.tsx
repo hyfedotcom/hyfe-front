@@ -42,7 +42,6 @@ export function DropdownPanel({
       {items.map((it) => {
         const meta = it.label && isMetaKey(it.label) ? META[it.label] : null;
         const Icon = meta?.Icon;
-        console.log(it.label);
         return (
           <NavLink
             key={it.id}
