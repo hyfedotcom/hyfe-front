@@ -13,7 +13,7 @@ export function ResourceDetailsHero({
   const { date, tags, title, cover } = data;
 
   return (
-    <div className=" w-full space-y-10 md:space-y-15 pb-10 md:pb-20">
+    <div className=" w-full md:space-y-10 md:space-y-15 pb-10 md:pb-20">
       <div className="space-y-5 md:space-y-8">
         <div>
           {" "}

@@ -50,8 +50,20 @@ export function NavLink({
       </a>
     );
   }
+
+  const handleClick = () => {
+    if (onClick) onClick();
+    if (!href.startsWith("#")) {
+      const root = document.documentElement;
+      const prevBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      root.style.scrollBehavior = prevBehavior;
+    }
+  };
+
   return (
-    <Link href={href} scroll={true} onClick={onClick} className={className}>
+    <Link href={href} scroll={true} onClick={handleClick} className={className}>
       {children}
     </Link>
   );

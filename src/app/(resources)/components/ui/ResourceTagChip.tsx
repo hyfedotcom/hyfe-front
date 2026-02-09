@@ -28,11 +28,11 @@ export default function TagPlate({
   return (
     <span
       className={clsx(
-        "bg-white body-small leading-[100%]! rounded-full overflow-hidden h-10 px-4 border flex gap-2 items-center justify-between border-gray-200 text-nowrap min-w-max ",
+        "bg-white max-[768px]:text-[12px]! body-small leading-[100%]! rounded-full overflow-hidden h-8 md:h-10 px-2.5 md:px-4 border flex gap-2 items-center justify-between border-gray-200 text-nowrap min-w-max ",
         type ? "" : "",
       )}
     >
-      {Icon && <Icon className="text-primary min-w-6 min-h-6" />}
+      {Icon && <Icon className="text-primary w-4 h-4 min-w-4 min-h-4 md:min-w-6 md:h-6 md:min-h-6 md:w-6" />}
       {text}
     </span>
   );

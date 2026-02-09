@@ -16,7 +16,7 @@ export function ResourcesListHero({
   
 
   return (
-    <main className="pt-55 px-4 md:px-10 lg:px-20 space-y-11">
+    <main className="pt-25 md:pt-40 lg:pt-55 px-4 md:px-10 lg:px-20 space-y-5">
       <ResourcesBreadcrumbs />
       <div className="space-y-5 nax-w-[70%]">
         <h1 className="text-balance">{title}</h1>

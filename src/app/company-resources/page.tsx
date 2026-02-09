@@ -14,9 +14,6 @@ export default async function ScienceResources() {
   const resourceTypes: Array<"news" | "insights"> = ["news", "insights"];
   return (
     <div className="relative">
-      {/* <div className="overflow-hidden w-screen absolute h-screen top-0  -z-1">
-        <div className="w-[1910px] h-[1910px] bg-[linear-gradient(180deg,#FF9D00_0%,#FFAE00_63%,#FFC800_30%,#FFCE1D_80%,#FFFFFF_10%)] rounded-full absolute -translate-y-[60%] -translate-x-1/2 left-1/2 blur-[200px]"></div>
-      </div> */}
       <ResourcesListHero
         type={"science-resources"}
         data={{
@@ -28,7 +25,10 @@ export default async function ScienceResources() {
         <div className="flex mt-10 flex-col-reverse  gap-5 md:flex-row w-full justify-between py-5 px-4 md:px-10 lg:px-20 sticky top-0 bg-white/20 border-b-2 border-[#EEEEEE]/40 backdrop-blur-[40px] z-100000">
           <div className="flex gap-3 w-full overflow-x-scroll">
             {resourceTypes.map((t) => (
-              <div className="hover:border-primary-600 rounded-full border-transparent border-2 hover:shadow-active" key={t}>
+              <div
+                className="hover:border-primary-600 rounded-full border-transparent border-2 hover:shadow-active"
+                key={t}
+              >
                 <ResourceButton
                   label={t}
                   url={`#${t}`}

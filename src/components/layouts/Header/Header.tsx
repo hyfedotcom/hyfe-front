@@ -89,15 +89,15 @@ export function Header() {
     <header
       ref={headerRef}
       className={cx(
-        "fixed top-0 left-0 right-0  bg-white/90 backdrop-blur",
-        mobileOpen ? "h-[100dvh]" : "h-[84px]",
+        "fixed top-0 left-0 right-0  bg-white/90 backdrop-blur flex items-center justify-between ",
+        mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
         isDown || openId != null ? "z-[200000]" : "z-[2000]" ,
         "border-b border-black/10",
         "transition-[transform,height] duration-300",
         isDown && openId === null && !mobileOpen && "-translate-y-full",
       )}
     >
-      <div className="mx-auto flex h-[84px] items-center justify-between px-4 md:px-10 lg:px-20">
+      <div className="mx-auto flex w-full items-center justify-between px-4 md:px-10 lg:px-20">
         {/* Logo */}
         <Link
           href="/"
@@ -294,7 +294,7 @@ function MobileMenu({
         type="button"
         className={cx(
           "lg:hidden inline-flex items-center justify-center ",
-          "h-11 w-11 rounded-full border border-black/10",
+          "h-[40px] w-11 rounded-full border border-black/10",
           "hover:bg-black/5",
         )}
         aria-label="Open menu"

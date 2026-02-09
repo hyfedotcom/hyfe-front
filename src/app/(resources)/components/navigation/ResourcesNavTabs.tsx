@@ -49,14 +49,14 @@ export function ResourcesNavTabs({ type }: Props) {
         />
       )}
 
-      <div className="md:hidden md:absolute fixed bottom-4 md:bottom-0 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-32px)] max-w-[560px]">
+      <div className="md:hidden md:absolute fixed bottom-4 md:bottom-0 right-4 z-40 w-max ">
         <div className="relative">
           {open && (
             <div
               id="resource-nav-list"
-              className="absolute bottom-full mb-3 w-full rounded-[24px] border border-white/50 bg-white/90 backdrop-blur-xl p-2 shadow-[0_20px_50px_rgba(15,23,42,0.18)]"
+              className="absolute bottom-full w-max mb-1 -right-1 rounded-3xl border border-white/50 bg-white/40 backdrop-blur-xl p-2 shadow-[0_20px_50px_rgba(15,23,42,0.18)]"
             >
-              <div className="space-y-1">
+              <div className="">
                 {tabs.map((label) => {
                   const labelKey = getResourceLabelKey(label);
                   const iconKey = getResourceIconKey(label);
@@ -69,7 +69,7 @@ export function ResourcesNavTabs({ type }: Props) {
                       href={`/${labelKey}`}
                       onClick={() => setOpen(false)}
                       className={clsx(
-                        "flex items-center justify-between gap-3 rounded-[18px] px-4 py-3 transition-colors",
+                        "flex items-center justify-between gap-3 rounded-[18px] px-3 py-3 transition-colors",
                         isActive
                           ? "bg-primary/10 text-primary"
                           : "text-body hover:bg-primary/5",
@@ -78,22 +78,17 @@ export function ResourcesNavTabs({ type }: Props) {
                       <span className="flex items-center gap-3">
                         <span
                           className={clsx(
-                            "flex h-9 w-9 items-center justify-center rounded-full border",
-                            isActive
-                              ? "border-primary/30 bg-white"
-                              : "border-border bg-white",
+                            "flex h-5 w-5 p-0.5 items-center justify-center rounded-full bg-white",
                           )}
                         >
                           <Icon
                             className={clsx(
                               "transition-colors",
-                              isActive
-                                ? "text-primary"
-                                : "text-body-secondary",
+                              isActive ? "text-primary" : "text-body-secondary",
                             )}
                           />
                         </span>
-                        <span className="body-medium">{label}</span>
+                        <span className="text-[12px] leading-[100%]">{label}</span>
                       </span>
                     </Link>
                   );
@@ -105,19 +100,21 @@ export function ResourcesNavTabs({ type }: Props) {
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
-            className="flex w-full items-center justify-between gap-3 rounded-full border border-white/60 bg-white/90 px-4 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="flex w-max items-center justify-between gap-3 ml-auto rounded-full border border-white/60 bg-white/40 px-3 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             aria-expanded={open}
             aria-controls="resource-nav-list"
           >
             <span className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white">
-                <ActiveIcon className="text-primary" />
+              <span className="flex h-6 w-6 p-0.5 items-center justify-center rounded-full border border-white/80 bg-white">
+                <ActiveIcon className="text-primary w-5 h-5" />
               </span>
-              <span className="body-medium text-body">{activeLabel}</span>
+              <span className="text-[12px] leading-[100%] text-body">
+                {activeLabel}
+              </span>
             </span>
             <span
               className={clsx(
-                "flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white text-body-secondary transition-transform",
+                "flex h-4 w-4 items-center justify-center rounded-full border border-white/70 bg-white text-body-secondary transition-transform",
                 open && "rotate-180",
               )}
             >

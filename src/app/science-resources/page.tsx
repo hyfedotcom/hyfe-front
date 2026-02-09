@@ -18,9 +18,6 @@ export default async function ScienceResources() {
   ];
   return (
     <div className="">
-      {/* <div className="overflow-hidden w-screen absolute h-screen top-0  -z-1">
-        <div className="w-[1910px] h-[1910px] bg-[linear-gradient(180deg,#FF9D00_0%,#FFAE00_63%,#FFC800_30%,#FFCE1D_80%,#FFFFFF_10%)] rounded-full absolute -translate-y-[60%] -translate-x-1/2 left-1/2 blur-[200px]"></div>
-      </div>{" "} */}
       <ResourcesListHero
         type={"science-resources"}
         data={{

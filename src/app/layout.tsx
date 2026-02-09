@@ -4,6 +4,7 @@ import { Header } from "@/components/layouts/Header/Header";
 import { Footer } from "@/components/layouts/footer/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildOrganizationJsonLd } from "@/components/seo/jsonLdBuilders";
+import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable}  antialiased`}>
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
+        <ScrollToTop />
         <Header />
         {children}
         <Footer />

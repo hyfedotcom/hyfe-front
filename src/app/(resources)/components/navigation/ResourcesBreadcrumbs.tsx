@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 
 export function ResourcesBreadcrumbs() {
   const activeClassName =
-    "body-medium text-body-main underline underline-offset-4 hover:opacity-70 duration-200 text-nowrap";
-  const anActiveClassName = "body-medium text-body-secondaty  ";
+    "text-[14px] md:text-[16px] text-body underline underline-offset-4 hover:opacity-70 duration-200 text-nowrap";
+  const anActiveClassName = "text-[14px] md:text-[16px] text-body-secondary  ";
 
   const path = usePathname();
   const segments = path.split("/").filter(Boolean);
@@ -46,10 +46,11 @@ export function ResourcesBreadcrumbs() {
           return (
             <Link
               key={i}
-              href={`${e.replace(/\s/g, "-").toLowerCase()}`}
+              href={`${e.replace(/\s/g, "").toLowerCase()}`}
               className={`${len === i + 1 ? anActiveClassName : activeClassName}`}
             >
-             / {e
+              /{" "}
+              {e
                 .replace(/^\/+/, "")
                 .replace(/-/g, " ")
                 .replace(/\b\p{L}/gu, (ch) => ch.toUpperCase())}
