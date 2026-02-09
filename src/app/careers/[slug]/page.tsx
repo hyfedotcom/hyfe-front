@@ -1,4 +1,3 @@
-import getCareers from "@/features/careers/api/getCareers";
 import { notFound } from "next/navigation";
 import { LocationsType } from "../components/LocationsType";
 import { TimeZone } from "../components/TimeZone";

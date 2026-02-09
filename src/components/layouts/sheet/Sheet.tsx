@@ -49,7 +49,7 @@ export function Sheet({
   };
 
   return (
-    <div className="fixed inset-0 z-1000000 ">
+    <div className="max-w-screen fixed inset-0 z-1000000 ">
       <button
         className="absolute inset-0 bg-black/40"
         onClick={() => close(returnPath)}

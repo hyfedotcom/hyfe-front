@@ -1,54 +1,52 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useActiveSection(ids: string[], topOffsetPx = 260) {
   const [activeId, setActiveId] = useState<string>(ids[0] ?? "");
+  const idsRef = useRef(ids);
 
-  const idSet = useMemo(() => new Set(ids), [ids]);
+  useEffect(() => {
+    idsRef.current = ids;
+    if (ids[0]) setActiveId(ids[0]);
+  }, [ids.join("|")]);
 
   useEffect(() => {
     if (!ids.length) return;
 
-    const els = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
+    let ticking = false;
+    const updateActive = () => {
+      ticking = false;
+      const currentIds = idsRef.current;
+      if (!currentIds.length) return;
 
-    if (!els.length) return;
-
-    // Чем больше "видно" — тем вероятнее, что это активная секция
-    const visible = new Map<string, number>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          const id = (e.target as HTMLElement).id;
-          if (!idSet.has(id)) continue;
-          visible.set(id, e.isIntersecting ? e.intersectionRatio : 0);
+      let nextId = currentIds[0];
+      for (const id of currentIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - topOffsetPx;
+        if (top <= 0) {
+          nextId = id;
+          continue;
         }
+        break;
+      }
 
-        // Берём секцию с максимальной видимостью
-        let bestId = activeId;
-        let best = -1;
-        for (const [id, ratio] of visible.entries()) {
-          if (ratio > best) {
-            best = ratio;
-            bestId = id;
-          }
-        }
-        if (bestId && bestId !== activeId) setActiveId(bestId);
-      },
-      {
-        // Важно: учитываем фиксированный верх (header/отступ)
-        // Верхняя граница "сдвигается" вниз на topOffsetPx
-        root: null,
-        rootMargin: `-${topOffsetPx}px 0px -25% 0px`,
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-      },
-    );
+      setActiveId((prev) => (prev === nextId ? prev : nextId));
+    };
 
-    els.forEach((el) => observer.observe(el));
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateActive);
+    };
 
-    return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, [ids.join("|"), topOffsetPx]);
 
   return { activeId, setActiveId };

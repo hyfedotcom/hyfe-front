@@ -89,8 +89,9 @@ export function Header() {
     <header
       ref={headerRef}
       className={cx(
-        "fixed top-0 left-0 right-0 z-[20000] bg-white/90 backdrop-blur",
+        "fixed top-0 left-0 right-0  bg-white/90 backdrop-blur",
         mobileOpen ? "h-[100dvh]" : "h-[84px]",
+        isDown || openId != null ? "z-[200000]" : "z-[2000]" ,
         "border-b border-black/10",
         "transition-[transform,height] duration-300",
         isDown && openId === null && !mobileOpen && "-translate-y-full",

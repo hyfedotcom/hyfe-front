@@ -1,34 +1,44 @@
 "use client";
 
-import isScienceType from "@/hooks/isScienceType";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function ResourcesBreadcrumbs({ type }: { type: string }) {
+export function ResourcesBreadcrumbs() {
   const activeClassName =
     "body-medium text-body-main underline underline-offset-4 hover:opacity-70 duration-200 text-nowrap";
-  const anActiveClassName = "body-medium text-body-secondaty  text-nowrap";
-  const rightType = isScienceType({ type })
-    ? "Science Resources"
-    : "Company Resources";
+  const anActiveClassName = "body-medium text-body-secondaty  ";
+
   const path = usePathname();
-  const paths = [];
-  if (
-    path === "/publications" ||
-    path === "/cough-news" ||
-    path === "/white-papers"
-  ) {
-    paths.push("/science-resources", path);
-  } else if (path === "/insights" || path === "/news") {
-    paths.push("/company-resources", path);
-  } else {
-    paths.push(path);
+  const segments = path.split("/").filter(Boolean);
+  const root = segments[0];
+  const paths: string[] = [];
+
+  if (root && ["publications", "cough-news", "white-papers"].includes(root)) {
+    paths.push("/ science-resources", `/ ${root}`);
+  } else if (root && ["insights", "news"].includes(root)) {
+    paths.push("/ company-resources", `/ ${root}`);
+  } else if (root) {
+    paths.push(`/${root}`);
   }
 
   return (
-    <span className="flex gap-1">
-      <Link href={"/"} className={`hidden md:block ${activeClassName}`}>
-        Home
+    <span className="flex gap-1 items-center">
+      <Link href={"/"} className={` ${activeClassName}`}>
+        <span className="hidden md:block">Home</span>
+        <span className=" md:hidden">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.28571 20.6699H9.03257V12.8434H14.9674V20.6699H19.7143V8.69876L12 2.66266L4.28571 8.69876V20.6699ZM3 22V8.0337L12 1L21 8.0337V22H13.6817V14.1735H10.3183V22H3Z"
+              fill="#2E3542"
+            />
+          </svg>
+        </span>
       </Link>
       {paths.length > 0 &&
         paths.map((e, i) => {
@@ -39,7 +49,8 @@ export function ResourcesBreadcrumbs({ type }: { type: string }) {
               href={`${e.replace(/\s/g, "-").toLowerCase()}`}
               className={`${len === i + 1 ? anActiveClassName : activeClassName}`}
             >
-              {e
+             / {e
+                .replace(/^\/+/, "")
                 .replace(/-/g, " ")
                 .replace(/\b\p{L}/gu, (ch) => ch.toUpperCase())}
             </Link>

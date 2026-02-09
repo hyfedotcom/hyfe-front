@@ -17,10 +17,10 @@ export function ResourcesListHero({
 
   return (
     <main className="pt-55 px-4 md:px-10 lg:px-20 space-y-11">
-      <ResourcesBreadcrumbs type={type} />
-      <div className="space-y-5">
-        <h1>{title}</h1>
-        {paragraph && <p className="body-medium">{paragraph}</p>}
+      <ResourcesBreadcrumbs />
+      <div className="space-y-5 nax-w-[70%]">
+        <h1 className="text-balance">{title}</h1>
+        {paragraph && <p className="body-medium text-balance">{paragraph}</p>}
       </div>
     </main>
   );

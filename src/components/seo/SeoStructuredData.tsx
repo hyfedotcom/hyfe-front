@@ -11,12 +11,14 @@ export function SeoStructuredData({
 }): ReactElement | null {
   if (!seo?.structuredData) return null;
 
+  let data: Record<string, unknown> | Array<Record<string, unknown>>;
   try {
-    const data = JSON.parse(seo.structuredData) as
+    data = JSON.parse(seo.structuredData) as
       | Record<string, unknown>
       | Array<Record<string, unknown>>;
-    return <JsonLd data={data} id={id} />;
   } catch {
     return null;
   }
+
+  return <JsonLd data={data} id={id} />;
 }
