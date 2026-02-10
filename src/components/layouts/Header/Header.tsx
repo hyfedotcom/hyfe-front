@@ -274,19 +274,35 @@ function MobileMenu({
     Advisors: { Icon: GraduationCapIcon },
     About: { Icon: CompassIcon },
   } as const;
-  const megaMeta = {
+  const megaMetaById: Record<
+    string,
+    { Icon: ComponentType<{ className?: string }> }
+  > = {
+    news: { Icon: NewsIcon },
+    publications: { Icon: PublicationIcon },
+    insights: { Icon: InsightsIcon },
+    "cough-news": { Icon: CoughNewsIcon },
+    whitepapers: { Icon: WhitePapersIcon },
+    "white-papers": { Icon: WhitePapersIcon },
+    faq: { Icon: QuestionIcon },
+  };
+  const megaMetaByLabel: Record<
+    string,
+    { Icon: ComponentType<{ className?: string }> }
+  > = {
     News: { Icon: NewsIcon },
     Publications: { Icon: PublicationIcon },
     Insights: { Icon: InsightsIcon },
     "Cough News": { Icon: CoughNewsIcon },
+    "Cough Science News": { Icon: CoughNewsIcon },
     "White Papers": { Icon: WhitePapersIcon },
     FAQ: { Icon: QuestionIcon },
-  } as const;
+  };
   type DropdownMetaKey = keyof typeof dropdownMeta;
-  type MegaMetaKey = keyof typeof megaMeta;
   const isDropdownMeta = (label: string): label is DropdownMetaKey =>
     label in dropdownMeta;
-  const isMegaMeta = (label: string): label is MegaMetaKey => label in megaMeta;
+  const getMegaIcon = (id: string, label: string) =>
+    megaMetaById[id]?.Icon ?? megaMetaByLabel[label]?.Icon;
 
   return (
     <>
@@ -472,11 +488,7 @@ function MobileMenu({
 
                           <div className="space-y-1">
                             {sec.items.map((it) => {
-                              const meta =
-                                it.label && isMegaMeta(it.label)
-                                  ? megaMeta[it.label]
-                                  : null;
-                              const Icon = meta?.Icon;
+                              const Icon = getMegaIcon(it.id, it.label);
                               return (
                                 <MobileLinkItem
                                   key={it.id}

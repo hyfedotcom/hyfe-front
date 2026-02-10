@@ -2,6 +2,7 @@ import {
   FeedBuilder,
   getResourceFeedKey,
 } from "@/features/resources/utils/FeedBuilder";
+import { getHeaderStats } from "@/features/stats/api/getHeaderStats";
 import type {
   PageSectionsType,
   ResourceFeedManySectionType,
@@ -19,6 +20,9 @@ import {
 export async function hydratePageSections(
   sections: PageSectionsType,
 ): Promise<PageBuilderSection[]> {
+  const heroStatsSections = sections.filter(
+    (section) => section.type === "hero-stats",
+  );
   const feedSections = sections.filter(isResourceFeed);
   const feedManyEntries = sections
     .map((section, index) =>
@@ -41,11 +45,27 @@ export async function hydratePageSections(
         Boolean(entry),
     );
 
-  if (!feedSections.length && !feedManyEntries.length && !tabbedEntries.length) {
+  if (
+    !heroStatsSections.length &&
+    !feedSections.length &&
+    !feedManyEntries.length &&
+    !tabbedEntries.length
+  ) {
     return sections;
   }
 
   let nextSections = sections as PageBuilderSection[];
+
+  if (heroStatsSections.length) {
+    const headerStats = await getHeaderStats();
+    if (headerStats?.length) {
+      nextSections = nextSections.map((section) =>
+        section.type === "hero-stats"
+          ? { ...section, stats: headerStats }
+          : section,
+      );
+    }
+  }
 
   if (feedSections.length) {
     const built = await FeedBuilder({ sections: feedSections });

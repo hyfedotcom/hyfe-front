@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ResourceTag } from "@/app/(resources)/components/ui/ResourceTag";
 import type { ResourceCardType } from "../../../../features/resources/data/resources.types";
 import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
+import { formatResourceTypeLabel } from "@/shared/utils/formatResourceTypeLabel";
 
 export function ResourceDetailsHero({
   data,
@@ -12,6 +13,7 @@ export function ResourceDetailsHero({
   type: string;
 }) {
   const { date, tags, title, cover } = data;
+  const typeLabel = formatResourceTypeLabel(type);
 
   return (
     <div className=" w-full md:space-y-10 md:space-y-15 pb-10 md:pb-20">
@@ -19,7 +21,7 @@ export function ResourceDetailsHero({
         <div>
           {" "}
           <Link href={`/${type}`} className="h4-class text-primary-700!">
-            {type}
+            {typeLabel}
           </Link>
         </div>
         <h1 className="text-[28px]! md:text-[52px]! text-balance">{title}</h1>

@@ -280,6 +280,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, kind: "solution", slug });
     }
 
+    // 5.1 GENERAL (shared newsletter form data)
+    if (uid === "api::general.general" || model === "general") {
+      revalidateTag("general:newsletter", "max");
+      revalidatePath("/");
+      return NextResponse.json({ ok: true, kind: "general" });
+    }
+
     // 6.0 PAGE BUILDER TAGS (home + resource feed pages)
     const pageConfig = PAGE_REVALIDATE_BY_UID[uid] || PAGE_REVALIDATE_BY_MODEL[model];
     if (pageConfig) {

@@ -36,14 +36,20 @@ export function Sheet({
     };
   }, [open]);
 
+  const normalizeInternalPath = (url: string) => {
+    if (!url) return "/";
+    return url.startsWith("/") ? url : `/${url}`;
+  };
+
   const close = (url: string) => {
     setOpen(false);
+    const fallbackPath = normalizeInternalPath(url);
 
     setTimeout(() => {
       if (hasInternalBack()) {
         router.back(); // пришёл изнутри — назад
       } else {
-        router.replace(url); // deep link — уходим на fallback без лишней записи
+        router.replace(fallbackPath); // deep link — уходим на fallback без лишней записи
       }
     }, 300);
   };

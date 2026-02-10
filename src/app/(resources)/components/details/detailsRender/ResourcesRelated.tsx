@@ -10,11 +10,21 @@ import type {
 import { ButtonArrow } from "@/components/ui/buttons/ButtonArrow";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/buttons/Button";
+import { formatResourceTypeLabel } from "@/shared/utils/formatResourceTypeLabel";
 
 type RelatedBlock = Extract<
   ResourceBlockType,
   { type: "resource.related-resources" }
 >;
+
+const RELATED_RESOURCE_CTA_COPY: Record<ResourceType, string> = {
+  "cough-news":
+    "See what you've been missing. Explore past editions of Cough Science News",
+  publications: "Dive into the science. Explore our publications.",
+  "white-papers": "See what you've been missing. Browse our latest white papers",
+  insights: "Fresh perspectives on cough. Read our latest insights.",
+  news: "See what's happening. Read the latest from Hyfe.",
+};
 
 export function ResourcesRelated({
   block,
@@ -26,6 +36,8 @@ export function ResourcesRelated({
   cards: ResourceCardType[];
 }) {
   const { paragraph, title } = block;
+  const resourceTypeLabel = formatResourceTypeLabel(resourceType);
+  const relatedCtaCopy = RELATED_RESOURCE_CTA_COPY[resourceType];
   const cardsRef = useRef<Array<HTMLAnchorElement | null>>([]);
   const cardsContainerRef = useRef<HTMLDivElement | null>(null);
   const [activButton, setActivButton] = useState<"left" | "right" | null>(null);
@@ -46,7 +58,7 @@ export function ResourcesRelated({
     <div className="space-y-10 mt-20">
       <div className="flex gap-5 flex-col md:flex-row justify-between">
         <div className="space-y-6 md:block">
-          <h2>{title ?? `Latest ${resourceType}`}</h2>
+          <h2>{title ?? `Latest in ${resourceTypeLabel}`}</h2>
           {paragraph && <p className="body-small">{paragraph}</p>}
         </div>
         <div className="flex gap-3">
@@ -99,7 +111,7 @@ export function ResourcesRelated({
             href={`/${resourceType}`}
           >
             <h3 className="text-black group-hover:text-primary! font-medium!  duration-300 transition-colors">
-              Read more exciting content like this in our {resourceType}
+              {relatedCtaCopy}
             </h3>
             <Button
               tag="button"

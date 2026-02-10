@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
 
 export function Button({
   label,
@@ -19,6 +20,9 @@ export function Button({
   classNameProp?: string;
   type?: "button" | "submit";
 }) {
+  const hrefNormalized = normalizeHref(url);
+  const isInternal = isInternalHref(url);
+
   const className = `${classNameProp} h-max uppercase border border-transparent group/cta ${arrow && "flex"} gap-5 items-center duration-300 transition-colors px-5 py-3.5 rounded-[20px] hover:shadow-hover leading-[120%] text-[18px] font-semibold cursor-pointer hover:border-primary ${
     version === "black" ? "bg-black hover:bg-white" : "bg-white hover:bg-black"
   } ${
@@ -64,15 +68,41 @@ export function Button({
   }
 
   if (tag === "a") {
+    if (isInternal) {
+      return (
+        <Link href={hrefNormalized} className={className}>
+          {content}
+        </Link>
+      );
+    }
+
     return (
-      <a href={url} target="_blank" className={className}>
+      <a
+        href={hrefNormalized}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  if (!isInternal) {
+    return (
+      <a
+        href={hrefNormalized}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
         {content}
       </a>
     );
   }
 
   return (
-    <Link href={url} className={className}>
+    <Link href={hrefNormalized} className={className}>
       {content}
     </Link>
   );

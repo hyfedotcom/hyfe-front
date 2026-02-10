@@ -32,7 +32,7 @@ function ScrollRevealItem({
 }
 
 export function HeroStats({ section }: { section: HeroStatsSectionType }) {
-  const { title, paragraph, ctas, stats, type } = section;
+  const { title, paragraph, ctas, stats } = section;
   const sectionRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -148,7 +148,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
           </div>
         </div>
       </div>
-      {stats && (
+      {stats.length > 0 && (
         <div className="relative min-h-[120vh] md:min-h-[150vh]">
           <div className="sticky top-1/2 -translate-y-1/2">
             <div className="flex flex-col lg:flex-row gap-3 px-4 lg:px-20 pb-20 md:pb-[329px]">

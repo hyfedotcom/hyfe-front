@@ -9,31 +9,25 @@ export const headerNav: NavItem[] = [
       {
         id: "prod-a",
         label: "CoughMonitor",
-        description: "Short description about Product A.",
+        description: "Objective cough monitoring for trials.",
         href: "https://coughmonitor.com",
-        image: {
-          url: "/header/cm.png",
-        },
+        image: { url: "/header/cm.png" },
         external: true,
       },
       {
         id: "prod-b",
         label: "Resolve DTx",
-        description: "Short description about Product B.",
+        description: "Digital therapeutic for chronic cough.",
         href: "https://resolvedtx.com",
-        image: {
-          url: "/header/resolve.png",
-        },
+        image: { url: "/header/resolve.png" },
         external: true,
       },
       {
         id: "prod-c",
-        label: "Product C",
-        description: "Short description about Product C.",
+        label: "CoughPro",
+        description: "Track and manage chronic cough.",
         href: "https://coughpro.com",
-        image: {
-          url: "/header/coughpro.png",
-        },
+        image: { url: "/header/coughpro.png" },
         external: true,
       },
     ],
@@ -78,8 +72,8 @@ export const headerNav: NavItem[] = [
         items: [
           {
             id: "cough-news",
-            label: "Cough News",
-            description: "Curated cough-related news feed.",
+            label: "Cough Science News",
+            description: "urated cough-related news.",
             href: "/cough-news",
           },
           {

@@ -7,27 +7,25 @@ import NewsIcon from "@/shared/icons/resources/NewsIcon";
 import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
 import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
 
-const META = {
-  News: { label: "News", Icon: NewsIcon },
-  Publications: {
-    label: "Publications",
-    Icon: PublicationIcon,
-  },
-  Insights: { label: "Insights", Icon: InsightsIcon },
-  "Cough News": {
-    label: "Cough News",
-    Icon: CoughNewsIcon,
-  },
-  "White Papers": {
-    label: "White Papers",
-    Icon: WhitePapersIcon,
-  },
-  FAQ: { Icon: QuestionIcon },
+const META_BY_ID = {
+  news: { Icon: NewsIcon },
+  publications: { Icon: PublicationIcon },
+  insights: { Icon: InsightsIcon },
+  "cough-news": { Icon: CoughNewsIcon },
+  whitepapers: { Icon: WhitePapersIcon },
+  "white-papers": { Icon: WhitePapersIcon },
+  faq: { Icon: QuestionIcon },
 } as const;
 
-type MetaKey = keyof typeof META;
-
-const isMetaKey = (label: string): label is MetaKey => label in META;
+const META_BY_LABEL = {
+  News: { Icon: NewsIcon },
+  Publications: { Icon: PublicationIcon },
+  Insights: { Icon: InsightsIcon },
+  "Cough News": { Icon: CoughNewsIcon },
+  "Cough Science News": { Icon: CoughNewsIcon },
+  "White Papers": { Icon: WhitePapersIcon },
+  FAQ: { Icon: QuestionIcon },
+} as const;
 
 export function MegaPanel({
   sections,
@@ -95,9 +93,9 @@ export function MegaPanel({
 
                 <div className="space-y-1">
                   {sec.items.map((it) => {
-                    const meta =
-                      it.label && isMetaKey(it.label) ? META[it.label] : null;
-                    const Icon = meta?.Icon;
+                    const Icon =
+                      META_BY_ID[it.id as keyof typeof META_BY_ID]?.Icon ??
+                      META_BY_LABEL[it.label as keyof typeof META_BY_LABEL]?.Icon;
                     return (
                       <NavLink
                         key={it.id}

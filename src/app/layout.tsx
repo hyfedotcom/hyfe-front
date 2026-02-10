@@ -5,6 +5,7 @@ import { Footer } from "@/components/layouts/footer/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildOrganizationJsonLd } from "@/components/seo/jsonLdBuilders";
 import { ScrollToTop } from "@/components/navigation/ScrollToTop";
+import { getNewsletterForm } from "@/features/newsletter";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -14,9 +15,11 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const newsletter = await getNewsletterForm();
+
   return (
     <html lang="en">
       <body className={`${poppins.variable}  antialiased`}>
@@ -27,7 +30,7 @@ export default function RootLayout({
         </div>
         {children}
         <div data-site-footer>
-          <Footer />
+          <Footer newsletter={newsletter} />
         </div>
       </body>
     </html>

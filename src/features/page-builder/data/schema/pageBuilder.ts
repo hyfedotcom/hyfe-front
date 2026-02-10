@@ -22,14 +22,14 @@ export const SectionHeroStatsSchema = z
     title: z.string(),
     paragraph: z.string().nullable(),
     ctas: z.array(CtaSchema).nullable(),
-    stats: z.array(StatSchema),
+    stats: z.array(StatSchema).optional(),
   })
   .transform((res) => ({
     type: "hero-stats" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ?? undefined,
-    stats: res.stats,
+    stats: res.stats ?? [],
   }));
 
 export const SectionCardsGridSchema = z

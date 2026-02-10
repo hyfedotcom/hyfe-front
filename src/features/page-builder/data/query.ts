@@ -22,7 +22,6 @@ export const pageBuilder = {
           fields: ["title", "paragraph"],
           populate: {
             ctas: { fields: ["label", "url"] },
-            stats: { fields: ["value", "label"] },
           },
         },
         "shared.cards-grid": {
