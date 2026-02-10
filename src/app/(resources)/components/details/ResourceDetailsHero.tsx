@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ResourceTag } from "@/app/(resources)/components/ui/ResourceTag";
 import type { ResourceCardType } from "../../../../features/resources/data/resources.types";
+import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
 
 export function ResourceDetailsHero({
   data,
@@ -30,7 +31,9 @@ export function ResourceDetailsHero({
               </Link>
             ))}
           </div>
-          <p className="body-medium text-body-secondary!">{date}</p>
+          <p className="body-medium text-body-secondary!">
+            {formatDateWithDots(date)}
+          </p>
         </div>
       </div>
       <Image

@@ -22,9 +22,13 @@ export default function RootLayout({
       <body className={`${poppins.variable}  antialiased`}>
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
         <ScrollToTop />
-        <Header />
+        <div data-site-header>
+          <Header />
+        </div>
         {children}
-        <Footer />
+        <div data-site-footer>
+          <Footer />
+        </div>
       </body>
     </html>
   );

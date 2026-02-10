@@ -2,14 +2,7 @@ import type { MetadataRoute } from "next";
 import { publicEnv } from "@/core/env.public";
 import { getSlugs } from "@/features/shared/api/getSlugs";
 import { getResourceSlugs } from "@/features/resources/data/api/getResourceSlugs";
-
-const RESOURCE_TYPES = [
-  "publications",
-  "insights",
-  "white-papers",
-  "news",
-  "cough-news",
-] as const;
+import { RESOURCE_TYPES } from "@/features/resources/data/api/resourceType";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = publicEnv.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
@@ -28,19 +21,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const resourceTypePaths = RESOURCE_TYPES.map((type) => `/${type}`);
 
-  const [resourceSlugGroups, teamSlugs, advisorSlugs, careerSlugs, solutionSlugs] =
-    await Promise.all([
-      Promise.all(
-        RESOURCE_TYPES.map(async (type) => ({
-          type,
-          slugs: await getResourceSlugs(type),
-        })),
-      ),
-      getSlugs("teams"),
-      getSlugs("advisors"),
-      getSlugs("vacancies-items"),
-      getSlugs("solutions"),
-    ]);
+  const [
+    resourceSlugGroups,
+    teamSlugs,
+    advisorSlugs,
+    careerSlugs,
+    solutionSlugs,
+    privacyTermSlugs,
+  ] = await Promise.all([
+    Promise.all(
+      RESOURCE_TYPES.map(async (type) => ({
+        type,
+        slugs: await getResourceSlugs(type),
+      })),
+    ),
+    getSlugs("teams"),
+    getSlugs("advisors"),
+    getSlugs("vacancies-items"),
+    getSlugs("solutions"),
+    getSlugs("privacy-term-items"),
+  ]);
 
   const resourceDetailPaths = resourceSlugGroups.flatMap(({ type, slugs }) =>
     slugs.map((slug) => `/${type}/${slug}`),
@@ -51,6 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...advisorSlugs.map((slug) => `/advisors/${slug}`),
     ...careerSlugs.map((slug) => `/careers/${slug}`),
     ...solutionSlugs.map((slug) => `/solutions/${slug}`),
+    ...privacyTermSlugs.map((slug) => `/${slug}`),
   ];
 
   const allPaths = [

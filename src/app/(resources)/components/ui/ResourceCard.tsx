@@ -2,6 +2,7 @@
 import Image from "next/image";
 import TagPlate from "./ResourceTagChip";
 import { ResourceCardType } from "../../../../features/resources/data/resources.types";
+import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
 
 export function ResourceCard({
   card,
@@ -40,7 +41,9 @@ export function ResourceCard({
             )}
 
        
-            <div className="max-[768px]:text-[12px]! body-small mt-auto pt-4 md:pt-6 pb-4 md:pb-6 leading-[100%]!">{date}</div>
+            <div className="max-[768px]:text-[12px]! body-small mt-auto pt-4 md:pt-6 pb-4 md:pb-6 leading-[100%]!">
+              {formatDateWithDots(date)}
+            </div>
           </div>
         </div>
       </div>

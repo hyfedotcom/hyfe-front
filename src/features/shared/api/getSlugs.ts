@@ -10,7 +10,8 @@ export async function getSlugs(slug: string) {
   const raw = await StrapiFetch({
     path: `/api/${slug}`,
     query: SlugsQuery,
-    tags: ["team:slugs"],
+    // keep legacy broad tag + add per-collection tag for precise invalidation
+    tags: ["team:slugs", `slugs:${slug}`],
   });
 
   const items = parseOrThrow(StrapiCollectionSchema(SlugsSchema), raw);
