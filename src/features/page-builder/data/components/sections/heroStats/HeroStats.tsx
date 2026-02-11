@@ -68,18 +68,27 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
             height="1798"
             viewBox="0 0 1920 1798"
             fill="none"
-            className="absolute left-1/2 -translate-x-1/2 translate-y-[32%] w-full max-w-none -top-200 md:-top-140"
+            className="absolute left-1/2 -translate-x-1/2 translate-y-[32%] w-full max-w-none -top-200 md:-top-140 overflow-visible"
             preserveAspectRatio="xMidYMin slice"
           >
-            <g filter="url(#filter0_f_327_2267)">
+            <g className="svg-blur-filter" filter="url(#hero_stats_blur_filter)">
               <path
                 d="M-388 531.555C-204.407 531.555 -206.5 828.554 -63 531.555C80.5 234.556 305 808.553 466 531.555C627 254.557 733.5 939.053 1030 531.555C1326.5 124.057 1330.73 531.555 1488 531.555C1614.81 531.555 1750 10.5563 1884 531.555C2018 1052.55 2158.82 531.555 2309 531.555V1497.56H-388V531.555Z"
-                fill="url(#paint0_linear_327_2267)"
+                fill="url(#hero_stats_blur_gradient)"
+              />
+            </g>
+            <g
+              className="svg-blur-fallback"
+              filter="url(#hero_stats_blur_filter_fallback)"
+            >
+              <path
+                d="M-388 531.555C-204.407 531.555 -206.5 828.554 -63 531.555C80.5 234.556 305 808.553 466 531.555C627 254.557 733.5 939.053 1030 531.555C1326.5 124.057 1330.73 531.555 1488 531.555C1614.81 531.555 1750 10.5563 1884 531.555C2018 1052.55 2158.82 531.555 2309 531.555V1497.56H-388V531.555Z"
+                fill="url(#hero_stats_blur_gradient)"
               />
             </g>
             <defs>
               <filter
-                id="filter0_f_327_2267"
+                id="hero_stats_blur_filter"
                 x="-688"
                 y="0"
                 width="3297"
@@ -99,8 +108,19 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
                   result="effect1_foregroundBlur_327_2267"
                 />
               </filter>
+              <filter
+                id="hero_stats_blur_filter_fallback"
+                x="-1100"
+                y="-500"
+                width="4200"
+                height="2800"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+              >
+                <feGaussianBlur stdDeviation="150" />
+              </filter>
               <linearGradient
-                id="paint0_linear_327_2267"
+                id="hero_stats_blur_gradient"
                 x1="982"
                 y1="457.5"
                 x2="1046.08"
@@ -115,7 +135,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
               </linearGradient>
             </defs>
           </svg>
-          <div className="sticky top-0 h-[100vh] flex items-end justify-center">
+          <div className="sticky top-0 h-[100vh] flex items-end justify-center overflow-hidden">
             <motion.div style={{ y: mapY, scale }} className="w-screen">
               <Image
                 src="/home/mappoints.png"

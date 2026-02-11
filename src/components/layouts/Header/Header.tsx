@@ -69,7 +69,7 @@ export function Header() {
 
   const scheduleClose = () => {
     if (closeT.current) window.clearTimeout(closeT.current);
-    closeT.current = window.setTimeout(() => setOpenId(null), 50000);
+    closeT.current = window.setTimeout(() => setOpenId(null), 500);
   };
 
   const cancelClose = () => {

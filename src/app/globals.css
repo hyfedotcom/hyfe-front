@@ -103,3 +103,17 @@ body {
   color: var(--foreground);
   font-family: var(--font-poppins), Helvetica, sans-serif;
 }
+
+.svg-blur-fallback {
+  display: none;
+}
+
+@supports ((-webkit-touch-callout: none) or (font: -apple-system-body)) {
+  .svg-blur-filter {
+    display: none;
+  }
+
+  .svg-blur-fallback {
+    display: block;
+  }
+}

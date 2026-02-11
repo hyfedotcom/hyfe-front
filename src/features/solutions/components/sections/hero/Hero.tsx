@@ -29,17 +29,26 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
         viewBox="0 0 1920 1911"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute right-[-20%] -bottom-1/2 z-0 w-[2400px] max-w-none"
+        className="absolute right-[-20%] -bottom-1/2 z-0 w-[2400px] max-w-none overflow-visible"
       >
-        <g filter="url(#filter0_f_1028_25466)">
+        <g className="svg-blur-filter" filter="url(#hero_simple_blur_filter)">
           <path
             d="M-388 553.49C-204.407 553.49 -206.5 878.624 -63 553.49C80.5 228.357 305 856.729 466 553.49C627 250.252 733.5 999.591 1030 553.49C1326.5 107.389 1330.73 553.49 1488 553.49C1614.81 553.49 1750 -16.8628 1884 553.49C2018 1123.84 2158.82 553.49 2309 553.49V1611H-388V553.49Z"
-            fill="url(#paint0_linear_1028_25466)"
+            fill="url(#hero_simple_blur_gradient)"
+          />
+        </g>
+        <g
+          className="svg-blur-fallback"
+          filter="url(#hero_simple_blur_filter_fallback)"
+        >
+          <path
+            d="M-388 553.49C-204.407 553.49 -206.5 878.624 -63 553.49C80.5 228.357 305 856.729 466 553.49C627 250.252 733.5 999.591 1030 553.49C1326.5 107.389 1330.73 553.49 1488 553.49C1614.81 553.49 1750 -16.8628 1884 553.49C2018 1123.84 2158.82 553.49 2309 553.49V1611H-388V553.49Z"
+            fill="url(#hero_simple_blur_gradient)"
           />
         </g>
         <defs>
           <filter
-            id="filter0_f_1028_25466"
+            id="hero_simple_blur_filter"
             x="-688"
             y="0"
             width="3297"
@@ -59,8 +68,19 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
               result="effect1_foregroundBlur_1028_25466"
             />
           </filter>
+          <filter
+            id="hero_simple_blur_filter_fallback"
+            x="-1100"
+            y="-500"
+            width="4200"
+            height="3200"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feGaussianBlur stdDeviation="150" />
+          </filter>
           <linearGradient
-            id="paint0_linear_1028_25466"
+            id="hero_simple_blur_gradient"
             x1="982"
             y1="472.42"
             x2="1058.73"

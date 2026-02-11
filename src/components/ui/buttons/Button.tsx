@@ -61,7 +61,6 @@ export function Button({
           <LinkIndicator
             href={hrefNormalized}
             className={svgClassName}
-            forceInternal={tag === "button"}
             internalClassName={indicatorInternalClassName}
             externalClassName={indicatorExternalClassName}
           />

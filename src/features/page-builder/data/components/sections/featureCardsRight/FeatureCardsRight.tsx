@@ -1,7 +1,6 @@
 import { ContentContainer } from "@/components/content/ContentContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { FeatureCardsRightSectionType } from "../../../schema/pageBuilder";
-import { CardsGrid } from "../CardsGrid";
 import { Card } from "@/components/ui/card/Card";
 
 export function FeatureCardsRight({

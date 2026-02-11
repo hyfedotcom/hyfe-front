@@ -14,7 +14,7 @@ export function TabbedResourceFeed({
 
   return (
     <SectionContainer>
-      <div className="space-y-10 ">
+      <div className="space-y-8 md:space-y-10">
         <ContentContainer content={section} classContainer="text-left" />
         <FeedContainer
           resources={resources}
