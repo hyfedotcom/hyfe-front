@@ -41,9 +41,9 @@ export function ResourceDetailsHero({
       <Image
         src={cover.url}
         alt={cover.alt ?? title}
-        width={1034}
-        height={714}
-        className="w-full h-[400px] md:h-[700px] object-cover border-border border-2 rounded-[20px]"
+        width={cover.width}
+        height={cover.height}
+        className="w-full max-h-[400px] md:max-h-[700px] object-cover border-border border-2 rounded-[20px]"
       ></Image>
     </div>
   );

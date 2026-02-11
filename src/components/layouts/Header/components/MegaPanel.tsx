@@ -6,6 +6,7 @@ import InsightsIcon from "@/shared/icons/resources/InsightsIcon";
 import NewsIcon from "@/shared/icons/resources/NewsIcon";
 import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
 import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
+import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 
 const META_BY_ID = {
   news: { Icon: NewsIcon },
@@ -69,25 +70,17 @@ export function MegaPanel({
                     href={sec.allHref}
                     onClick={close}
                     className={cx(
-                      "mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs",
+                      "mb-3 inline-flex items-center gap-3 rounded-full px-3 py-1.5 text-xs group",
                       "bg-black/5 hover:bg-black/10 text-black/80",
                     )}
                   >
                     View all
-                    <span className={` scale-55`}>
-                      <svg
-                        width="25"
-                        height="15"
-                        viewBox="0 0 25 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M24.7071 8.07136C25.0976 7.68084 25.0976 7.04768 24.7071 6.65715L18.3431 0.29319C17.9526 -0.0973344 17.3195 -0.0973344 16.9289 0.29319C16.5384 0.683714 16.5384 1.31688 16.9289 1.7074L22.5858 7.36426L16.9289 13.0211C16.5384 13.4116 16.5384 14.0448 16.9289 14.4353C17.3195 14.8259 17.9526 14.8259 18.3431 14.4353L24.7071 8.07136ZM24 7.36426V6.36426H0V7.36426V8.36426H24V7.36426Z"
-                          fill="#2E3542"
-                        />
-                      </svg>
-                    </span>
+                    <LinkIndicator
+                      href={sec.allHref}
+                      className="text-black/70 opacity-100 transition-opacity duration-200 group-hover:opacity-100"
+                      internalClassName="w-2 h-3"
+                      externalClassName="w-3.5 h-3.5"
+                    />
                   </NavLink>
                 )}
 
@@ -100,46 +93,34 @@ export function MegaPanel({
                       <NavLink
                         key={it.id}
                         href={it.href}
-                        external={it.external}
                         onClick={close}
                         className={cx(
-                          "block rounded-[18px] px-3 py-2 group hover:bg-black/5 relative flex items-center gap-3",
+                          "relative block rounded-[18px] px-3 py-2 group hover:bg-black/5",
                         )}
                       >
-                        {Icon && (
-                          <Icon className="text-primary min-w-7 min-h-7" />
-                        )}
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <div className="font-medium text-sm text-black">
-                              {it.label}
+                        <div className="flex items-start gap-3 w-full pr-8">
+                          {Icon && (
+                            <Icon className="text-primary min-w-7 min-h-7" />
+                          )}
+                          <div className="min-w-0 grow">
+                            <div className="flex items-center gap-2">
+                              <div className="font-medium text-sm text-black">
+                                {it.label}
+                              </div>
                             </div>
-                            {it.external && (
-                              <span className="text-black/40 text-xs">↗</span>
+                            {it.description && (
+                              <div className="text-xs text-black/55 leading-relaxed">
+                                {it.description}
+                              </div>
                             )}
                           </div>
-                          {it.description && (
-                            <div className="text-xs text-black/55 leading-relaxed">
-                              {it.description}
-                            </div>
-                          )}
+                          <LinkIndicator
+                            href={it.href}
+                            className="text-black/65 opacity-0 transition-opacity duration-200 group-hover:opacity-100 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                            internalClassName="w-2 h-4"
+                            externalClassName="w-4 h-4"
+                          />
                         </div>
-                        <span
-                          className={`absolute opacity-0 group-hover:opacity-100 right-3 -translate-y-1/2 top-1/2 scale-65`}
-                        >
-                          <svg
-                            width="25"
-                            height="15"
-                            viewBox="0 0 25 15"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M24.7071 8.07136C25.0976 7.68084 25.0976 7.04768 24.7071 6.65715L18.3431 0.29319C17.9526 -0.0973344 17.3195 -0.0973344 16.9289 0.29319C16.5384 0.683714 16.5384 1.31688 16.9289 1.7074L22.5858 7.36426L16.9289 13.0211C16.5384 13.4116 16.5384 14.0448 16.9289 14.4353C17.3195 14.8259 17.9526 14.8259 18.3431 14.4353L24.7071 8.07136ZM24 7.36426V6.36426H0V7.36426V8.36426H24V7.36426Z"
-                              fill="#2E3542"
-                            />
-                          </svg>
-                        </span>
                       </NavLink>
                     );
                   })}
@@ -149,34 +130,6 @@ export function MegaPanel({
           </div>
         </div>
 
-        {/* {quickLinks && (
-          <div className="col-span-4 p-6 bg-black/[0.03]">
-            <div className="mb-3 text-sm font-semibold text-black">Quick links</div>
-            <div className="space-y-1">
-              {quickLinks.map((it) => (
-                <NavLink
-                  key={it.id}
-                  href={it.href}
-                  external={it.external}
-                  onClick={close}
-                  className={cx(
-                    "flex items-start gap-3 rounded-[18px] px-3 py-2 hover:bg-black/5",
-                  )}
-                >
-                  <span className="text-black/50 mt-0.5">↗</span>
-                  <div className="min-w-0">
-                    <div className="text-sm font-medium text-black">{it.label}</div>
-                    {it.description && (
-                      <div className="text-xs text-black/55 leading-relaxed">
-                        {it.description}
-                      </div>
-                    )}
-                  </div>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-        )} */}
       </div>
     </div>
   );

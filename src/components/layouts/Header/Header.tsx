@@ -29,6 +29,7 @@ import {
   CtaNavItem,
   NavItem,
 } from "@/features/header/type/header.type";
+import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 
 export function Header() {
   const isDown = useIsScrollingDown(10);
@@ -68,7 +69,7 @@ export function Header() {
 
   const scheduleClose = () => {
     if (closeT.current) window.clearTimeout(closeT.current);
-    closeT.current = window.setTimeout(() => setOpenId(null), 500);
+    closeT.current = window.setTimeout(() => setOpenId(null), 50000);
   };
 
   const cancelClose = () => {
@@ -127,10 +128,17 @@ export function Header() {
                 <NavLink
                   key={item.id}
                   href={item.href}
-                  external={item.external}
-                  className="rounded-full px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-black/5"
+                  className="group rounded-full px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-black/5"
                 >
-                  {item.label}
+                  <span className="inline-flex items-center gap-2">
+                    {item.label}
+                    <LinkIndicator
+                      href={item.href}
+                      className="text-black/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                      internalClassName="w-2 h-4"
+                      externalClassName="w-3.5 h-3.5"
+                    />
+                  </span>
                 </NavLink>
               );
             }
@@ -200,14 +208,21 @@ export function Header() {
             return (
               <NavLink
                 href={cta.href}
-                external={cta.external}
                 className={cx(
-                  "hidden sm:inline-flex items-center justify-center",
+                  "hidden sm:inline-flex items-center justify-center group",
                   "rounded-full px-5 h-11 text-sm font-medium",
                   "bg-black text-white hover:bg-primary-600 transition-colors",
                 )}
               >
-                {cta.label}
+                <span className="inline-flex items-center gap-2">
+                  {cta.label}
+                  <LinkIndicator
+                    href={cta.href}
+                    className="text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    internalClassName="w-2 h-4"
+                    externalClassName="w-3.5 h-3.5"
+                  />
+                </span>
               </NavLink>
             );
           })()}
@@ -380,13 +395,17 @@ function MobileMenu({
                     <NavLink
                       key={item.id}
                       href={item.href}
-                      external={item.external}
                       onClick={closeMenu}
                       className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
                     >
-                      <span>
+                      <span className="inline-flex items-center gap-2">
                         {item.label}
-                        {item.external ? " ↗" : ""}
+                        <LinkIndicator
+                          href={item.href}
+                          className="text-black/70"
+                          internalClassName="w-2 h-4"
+                          externalClassName="w-4 h-4"
+                        />
                       </span>
                     </NavLink>
                   );
@@ -417,7 +436,6 @@ function MobileMenu({
                               item={it}
                               onClick={closeMenu}
                               Icon={Icon}
-                              showArrow
                             />
                           );
                         })}
@@ -479,9 +497,15 @@ function MobileMenu({
                               <NavLink
                                 href={sec.allHref}
                                 onClick={closeMenu}
-                                className="mt-2 inline-flex text-xs rounded-full bg-black/5 px-3 py-1.5"
+                                className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
                               >
-                                View all →
+                                View all
+                                <LinkIndicator
+                                  href={sec.allHref}
+                                  className="text-black/70"
+                                  internalClassName="w-2 h-4"
+                                  externalClassName="w-3.5 h-3.5"
+                                />
                               </NavLink>
                             )}
                           </div>
@@ -495,7 +519,6 @@ function MobileMenu({
                                   item={it}
                                   onClick={closeMenu}
                                   Icon={Icon}
-                                  showArrow
                                 />
                               );
                             })}
@@ -512,11 +535,16 @@ function MobileMenu({
               <div className="px-4 pb-5 pt-2 border-t border-black/10">
                 <NavLink
                   href={cta.href}
-                  external={cta.external}
                   onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
                 >
                   {cta.label}
+                  <LinkIndicator
+                    href={cta.href}
+                    className="text-white"
+                    internalClassName="w-2 h-4"
+                    externalClassName="w-4 h-4"
+                  />
                 </NavLink>
               </div>
             ) : null}
@@ -531,18 +559,15 @@ function MobileLinkItem({
   onClick,
   showImage = false,
   Icon,
-  showArrow = false,
 }: {
   item: BaseLink;
   onClick: () => void;
   showImage?: boolean;
   Icon?: ComponentType<{ className?: string }>;
-  showArrow?: boolean;
 }) {
   return (
     <NavLink
       href={item.href}
-      external={item.external}
       onClick={onClick}
       className="block rounded-[14px] py-3 hover:bg-black/5"
     >
@@ -559,30 +584,19 @@ function MobileLinkItem({
           <Icon className="text-primary min-w-5 min-h-5 mt-0.5" />
         ) : null}
         <div className="min-w-0 grow">
-          <div className="text-sm font-medium text-black">
-            {item.label} {item.external ? "↗" : ""}
+          <div className="text-sm font-medium text-black inline-flex items-center gap-2">
+            {item.label}
+            <LinkIndicator
+              href={item.href}
+              className="text-black/70"
+              internalClassName="w-2 h-4"
+              externalClassName="w-4 h-4"
+            />
           </div>
           {item.description && (
             <div className="text-xs text-black/55">{item.description}</div>
           )}
         </div>
-        {showArrow ? (
-          <span className="mt-1 text-black/60 shrink-0">
-            <svg
-              width="20"
-              height="12"
-              viewBox="0 0 25 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden
-            >
-              <path
-                d="M24.7071 8.07136C25.0976 7.68084 25.0976 7.04768 24.7071 6.65715L18.3431 0.29319C17.9526 -0.0973344 17.3195 -0.0973344 16.9289 0.29319C16.5384 0.683714 16.5384 1.31688 16.9289 1.7074L22.5858 7.36426L16.9289 13.0211C16.5384 13.4116 16.5384 14.0448 16.9289 14.4353C17.3195 14.8259 17.9526 14.8259 18.3431 14.4353L24.7071 8.07136ZM24 7.36426V6.36426H0V7.36426V8.36426H24V7.36426Z"
-                fill="currentColor"
-              />
-            </svg>
-          </span>
-        ) : null}
       </div>
     </NavLink>
   );

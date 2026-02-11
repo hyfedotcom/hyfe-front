@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
 
 export function cx(...v: Array<string | false | null | undefined>) {
   return v.filter(Boolean).join(" ");
@@ -26,21 +27,22 @@ export function useIsScrollingDown(threshold = 10) {
 
 export function NavLink({
   href,
-  external,
   children,
   className,
   onClick,
 }: {
   href: string;
-  external?: boolean;
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
 }) {
-  if (external) {
+  const hrefNormalized = normalizeHref(href);
+  const isInternal = isInternalHref(hrefNormalized);
+
+  if (!isInternal) {
     return (
       <a
-        href={href}
+        href={hrefNormalized}
         target="_blank"
         rel="noreferrer"
         onClick={onClick}
@@ -53,7 +55,7 @@ export function NavLink({
 
   const handleClick = () => {
     if (onClick) onClick();
-    if (!href.startsWith("#")) {
+    if (!hrefNormalized.startsWith("#")) {
       const root = document.documentElement;
       const prevBehavior = root.style.scrollBehavior;
       root.style.scrollBehavior = "auto";
@@ -63,7 +65,12 @@ export function NavLink({
   };
 
   return (
-    <Link href={href} scroll={true} onClick={handleClick} className={className}>
+    <Link
+      href={hrefNormalized}
+      scroll={true}
+      onClick={handleClick}
+      className={className}
+    >
       {children}
     </Link>
   );

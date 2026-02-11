@@ -16,8 +16,10 @@ export function ProductCard({ card }: { card: CardCtaType }) {
         <Button
           label={cta[0].label}
           url={cta[0].url}
-          classNameProp="w-max "
+          classNameProp="w-max"
           tag="button"
+          arrow={true}
+          indicatorInternalClassName="w-[7px] h-[13px]"
         />
       </div>
       <div className="relative w-full max-w-[680px] h-[300px] md:h-[500px] ">

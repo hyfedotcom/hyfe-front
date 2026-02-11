@@ -58,13 +58,17 @@ export async function hydratePageSections(
 
   if (heroStatsSections.length) {
     const headerStats = await getHeaderStats();
-    if (headerStats?.length) {
-      nextSections = nextSections.map((section) =>
-        section.type === "hero-stats"
-          ? { ...section, stats: headerStats }
-          : section,
-      );
-    }
+    nextSections = nextSections.map((section) => {
+      if (section.type !== "hero-stats") return section;
+
+      const apiStats = headerStats?.length ? headerStats : section.stats;
+      const stats = [
+        ...apiStats,
+        ...(section.clinicalTrials ? [section.clinicalTrials] : []),
+      ];
+
+      return { ...section, stats };
+    });
   }
 
   if (feedSections.length) {

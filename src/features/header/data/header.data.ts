@@ -12,7 +12,6 @@ export const headerNav: NavItem[] = [
         description: "Objective cough monitoring for trials.",
         href: "https://coughmonitor.com",
         image: { url: "/header/cm.png" },
-        external: true,
       },
       {
         id: "prod-b",
@@ -20,7 +19,6 @@ export const headerNav: NavItem[] = [
         description: "Digital therapeutic for chronic cough.",
         href: "https://resolvedtx.com",
         image: { url: "/header/resolve.png" },
-        external: true,
       },
       {
         id: "prod-c",
@@ -28,7 +26,6 @@ export const headerNav: NavItem[] = [
         description: "Track and manage chronic cough.",
         href: "https://coughpro.com",
         image: { url: "/header/coughpro.png" },
-        external: true,
       },
     ],
   },
@@ -172,6 +169,5 @@ export const headerNav: NavItem[] = [
     label: "Request demo",
     kind: "cta",
     href: "https://community.hyfe.health/meetings/mindaugas-galvosas/talk-with-a-coughmonitor-suite-expert?uuid=ce645e69-712d-4e43-a8ca-9fdfa3bf2725",
-    external: true,
   },
 ];

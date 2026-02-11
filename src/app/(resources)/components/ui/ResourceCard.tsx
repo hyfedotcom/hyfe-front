@@ -24,7 +24,7 @@ export function ResourceCard({
         width={cover.width ?? 300}
         height={cover.height ?? 220}
         alt={cover.alt ?? `Image resource about ${title}}`}
-        className="w-full h-46 md:h-65 object-cover"
+        className={`${type === "publications" && "object-top-left"} w-full h-46 md:h-65 object-cover`}
       />
       <div className="px-4 md:px-5  h-full flex flex-col">
         <div className=" h-full flex flex-col">

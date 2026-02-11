@@ -3,11 +3,11 @@ import { BaseLink } from "@/features/header/type/header.type";
 import BriefeCaseIcon from "@/shared/icons/company/BriefeCaseIcon";
 import CompassIcon from "@/shared/icons/company/CompassIcon";
 import GraduationCapIcon from "@/shared/icons/company/GraduationCapIcon";
-import QuestionIcon from "@/shared/icons/company/QuestionIcon";
 import UsersIcon from "@/shared/icons/company/UsersIcon";
 import LifeScienceIcon from "@/shared/icons/solutions/LifeScienceIcon";
 import ResearchIcon from "@/shared/icons/solutions/ResearchIcon";
 import VirtualCareIcon from "@/shared/icons/solutions/VirtualCareIcon";
+import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 
 export function DropdownPanel({
   items,
@@ -46,20 +46,16 @@ export function DropdownPanel({
           <NavLink
             key={it.id}
             href={it.href}
-            external={it.external}
             onClick={close}
             className={cx(
-              "flex items-center gap-3 rounded-[18px] px-4 py-3",
+              "relative flex items-center gap-3 rounded-[18px] px-4 py-3 group",
               "hover:bg-black/5",
             )}
           >
             {Icon && <Icon className="text-primary min-w-5 min-h-5" />}
-            <div className="min-w-0">
+            <div className="min-w-0 pr-8">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-black">{it.label}</span>
-                {it.external && (
-                  <span className="text-black/40 text-xs">↗</span>
-                )}
               </div>
               {it.description && (
                 <div className="text-xs text-black/55 leading-relaxed">
@@ -67,6 +63,12 @@ export function DropdownPanel({
                 </div>
               )}
             </div>
+            <LinkIndicator
+              href={it.href}
+              className="text-black/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+              internalClassName="w-2 h-4"
+              externalClassName="w-3.5 h-3.5"
+            />
           </NavLink>
         );
       })}

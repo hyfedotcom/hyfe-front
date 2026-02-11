@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
+import { LinkIndicator } from "./LinkIndicator";
 
 export function Button({
   label,
@@ -10,6 +11,9 @@ export function Button({
   tag = "Link",
   classNameProp,
   type = "button",
+  indicatorInternalClassName,
+  indicatorExternalClassName,
+  disabled = false,
 }: {
   label: string;
   url: string;
@@ -19,41 +23,48 @@ export function Button({
   tag?: "Link" | "button" | "a";
   classNameProp?: string;
   type?: "button" | "submit";
+  indicatorInternalClassName?: string;
+  indicatorExternalClassName?: string;
+  disabled?: boolean;
 }) {
   const hrefNormalized = normalizeHref(url);
-  const isInternal = isInternalHref(url);
+  const isInternal = isInternalHref(hrefNormalized);
 
-  const className = `${classNameProp} h-max uppercase border border-transparent group/cta ${arrow && "flex"} gap-5 items-center duration-300 transition-colors px-5 py-3.5 rounded-[20px] hover:shadow-hover leading-[120%] text-[18px] font-semibold cursor-pointer hover:border-primary ${
-    version === "black" ? "bg-black hover:bg-white" : "bg-white hover:bg-black"
+  const className = `${classNameProp ?? ""} h-max uppercase border border-transparent group/cta ${
+    arrow ? "flex" : "inline-flex"
+  } gap-5 items-center px-5 py-3.5 rounded-[20px] leading-[120%] text-[18px] font-semibold touch-manipulation transition-[color,background-color,border-color,box-shadow,transform] duration-300 ${
+    disabled
+      ? "cursor-not-allowed opacity-65 pointer-events-none"
+      : "cursor-pointer hover:shadow-hover active:shadow-hover hover:border-primary active:border-primary active:scale-[0.98]"
+  } ${
+    version === "black"
+      ? "bg-black hover:bg-white active:bg-white"
+      : "bg-white hover:bg-black active:bg-black"
   } ${
     color === "white"
-      ? "text-white hover:text-black"
+      ? "text-white hover:text-black active:text-black"
       : color === "yellow"
         ? "text-primary"
-        : "text-black hover:text-white"
+        : "text-black hover:text-white active:text-white"
   }`;
 
-  const svgClassName = `${version === "black" ? "text-white group-hover/cta:text-black" : "text-black group-hover/cta:text-white"}  duration-300 transition-colors`;
+  const svgClassName = `${
+    version === "black"
+      ? "text-white group-hover/cta:text-black group-active/cta:text-black"
+      : "text-black group-hover/cta:text-white group-active/cta:text-white"
+  } duration-300 transition-colors`;
   const content = (
     <>
       {label}
       {arrow && (
-        <span>
-          <svg
-            width="8"
-            height="16"
-            viewBox="0 0 8 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        <span className="inline-flex" aria-hidden>
+          <LinkIndicator
+            href={hrefNormalized}
             className={svgClassName}
-          >
-            <path
-              d="M1 1L6.44218 7.34921C6.76317 7.7237 6.76317 8.2763 6.44218 8.65079L1 15"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+            forceInternal={tag === "button"}
+            internalClassName={indicatorInternalClassName}
+            externalClassName={indicatorExternalClassName}
+          />
         </span>
       )}
     </>
@@ -61,7 +72,7 @@ export function Button({
 
   if (tag === "button") {
     return (
-      <button type={type} className={className}>
+      <button type={type} className={className} disabled={disabled}>
         {content}
       </button>
     );

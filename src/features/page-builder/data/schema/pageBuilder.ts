@@ -23,6 +23,7 @@ export const SectionHeroStatsSchema = z
     paragraph: z.string().nullable(),
     ctas: z.array(CtaSchema).nullable(),
     stats: z.array(StatSchema).optional(),
+    clinical_trials: StatSchema.nullish(),
   })
   .transform((res) => ({
     type: "hero-stats" as const,
@@ -30,6 +31,7 @@ export const SectionHeroStatsSchema = z
     paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ?? undefined,
     stats: res.stats ?? [],
+    clinicalTrials: res.clinical_trials ?? undefined,
   }));
 
 export const SectionCardsGridSchema = z

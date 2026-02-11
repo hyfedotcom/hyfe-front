@@ -3,7 +3,6 @@ export type BaseLink = {
   label: string;
   description?: string;
   href: string;
-  external?: boolean;
   image?: {
     url: string;
     alt?: string;
@@ -45,7 +44,6 @@ export type SimpleNavItem = {
   label: string;
   kind: "link";
   href: string;
-  external?: boolean;
 };
 
 export type CtaNavItem = {
@@ -53,7 +51,6 @@ export type CtaNavItem = {
   label: string;
   kind: "cta";
   href: string;
-  external?: boolean;
 };
 
 export type NavItem =

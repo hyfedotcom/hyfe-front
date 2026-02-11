@@ -16,7 +16,7 @@ export function FeatureCardsRight({
         <div className="">
           <ContentContainer
             content={section}
-            classContainer="lg:text-left sticky top-10 max-w-[700px] lg:w-full"
+            classContainer="lg:text-left sticky top-[30%]  max-w-[700px] lg:w-full"
             classCtas="lg:justify-start!"
           />
         </div>

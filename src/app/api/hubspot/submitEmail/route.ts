@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.redirect(new URL("/thanks", req.url), 303);
-  } catch (e) {
+    return NextResponse.json({ ok: true });
+  } catch {
     return NextResponse.json({ error: "submit failed" }, { status: 500 });
   }
 }

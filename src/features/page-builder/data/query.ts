@@ -22,6 +22,9 @@ export const pageBuilder = {
           fields: ["title", "paragraph"],
           populate: {
             ctas: { fields: ["label", "url"] },
+            clinical_trials: {
+              fields: ["value", "label"],
+            },
           },
         },
         "shared.cards-grid": {
