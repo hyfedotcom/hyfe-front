@@ -31,15 +31,9 @@ export function ResourcesNavTabs({ type }: Props) {
   return (
     <>
       <div className="pointer-events-none fixed bottom-4 translate-y-[45px] left-1/2 z-4000 hidden -translate-x-1/2 md:block">
-        <div className="relative isolate overflow-hidden rounded-[30px] border border-white/70 bg-gradient-to-b from-white/60 via-white/32 to-white/18 px-3 py-3 shadow-[0_22px_55px_rgba(15,23,42,0.18),0_2px_10px_rgba(255,255,255,0.45)_inset] ring-1 ring-black/5 backdrop-blur-[26px]">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/55 via-white/10 to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-5 top-[1px] h-px bg-gradient-to-r from-transparent via-white/95 to-transparent"
-          />
+        <div className="resources-glass-surface rounded-[30px] px-3 py-3">
+          <div aria-hidden="true" className="resources-glass-overlay" />
+          <div aria-hidden="true" className="resources-glass-highlight" />
           <div className="relative z-10 pointer-events-auto flex gap-2">
             {tabs.map((label) => (
               <ResourceTab
@@ -61,12 +55,12 @@ export function ResourcesNavTabs({ type }: Props) {
         />
       )}
 
-      <div className="md:hidden  fixed bottom-4 md:bottom-0 right-4 z-40 w-max ">
+      <div className="md:hidden fixed bottom-4 md:bottom-0 right-4 z-40 w-max">
         <div className="relative ">
           {open && (
             <div
               id="resource-nav-list"
-              className="absolute bottom-full w-max mb-1 -right-1 rounded-3xl border border-white/50 bg-white/40 backdrop-blur-xl p-2 shadow-[0_20px_50px_rgba(15,23,42,0.18)]"
+              className="resources-glass-mobile-panel absolute bottom-full w-max mb-1 -right-1 rounded-3xl p-2"
             >
               <div className="">
                 {tabs.map((label) => {
@@ -100,7 +94,7 @@ export function ResourcesNavTabs({ type }: Props) {
                             )}
                           />
                         </span>
-                        <span className="text-[12px] leading-[100%]">
+                        <span className="text-[13px] font-medium!  leading-[100%]">
                           {label}
                         </span>
                       </span>
@@ -114,7 +108,7 @@ export function ResourcesNavTabs({ type }: Props) {
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
-            className="flex w-max items-center justify-between gap-3 ml-auto rounded-full border border-white/60 bg-white/40 px-3 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="resources-glass-pill-surface resources-glass-pill-action flex w-max items-center justify-between gap-3 ml-auto px-3 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             aria-expanded={open}
             aria-controls="resource-nav-list"
           >
@@ -122,7 +116,7 @@ export function ResourcesNavTabs({ type }: Props) {
               <span className="flex h-6 w-6 p-0.5 items-center justify-center rounded-full border border-white/80 bg-white">
                 <ActiveIcon className="text-primary w-5 h-5" />
               </span>
-              <span className="text-[12px] leading-[100%] text-body">
+              <span className="text-[13px] font-medium! leading-[100%] text-body">
                 {activeLabel}
               </span>
             </span>

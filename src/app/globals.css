@@ -62,6 +62,217 @@ html {
     0 152px 61px rgb(254 198 0 / 1%);
 }
 
+@layer components {
+  .resources-glass-surface {
+    @apply relative overflow-hidden border;
+    border-color: rgb(0 0 0 / 0.12);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.56),
+      rgb(255 255 255 / 0.30),
+      rgb(255 255 255 / 0.16)
+    );
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    backdrop-filter: blur(28px) saturate(150%);
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.05),
+      0 12px 30px rgba(15, 23, 42, 0.12),
+      inset 0 1px 6px rgba(255, 255, 255, 0.45);
+  }
+
+  .resources-glass-surface-strong {
+    border-color: rgb(0 0 0 / 0.14);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.62),
+      rgb(255 255 255 / 0.36),
+      rgb(255 255 255 / 0.20)
+    );
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.05),
+      0 20px 48px rgba(15, 23, 42, 0.18),
+      inset 0 2px 10px rgba(255, 255, 255, 0.55);
+  }
+
+  .resources-glass-overlay {
+    @apply pointer-events-none absolute inset-0;
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.30),
+      rgb(255 255 255 / 0.10),
+      transparent
+    );
+  }
+
+  .resources-glass-highlight {
+    @apply pointer-events-none absolute inset-x-5 top-[1px] h-px;
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      rgb(255 255 255 / 0.70),
+      transparent
+    );
+  }
+
+  .resources-glass-pill-surface {
+    @apply rounded-full border;
+    border-color: rgb(0 0 0 / 0.15);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.96),
+      rgb(255 255 255 / 0.78)
+    );
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.11),
+      inset 0 1px 5px rgba(255, 255, 255, 0.60);
+  }
+
+  .resources-glass-pill-action {
+    @apply cursor-pointer text-black/75 transition-colors;
+  }
+
+  .resources-glass-pill-action:hover {
+    border-color: rgb(0 0 0 / 0.20);
+    color: rgb(0 0 0 / 1);
+  }
+
+  .resources-glass-search-shell {
+    @apply rounded-full border;
+    box-shadow:
+      0 8px 20px rgba(15, 23, 42, 0.11),
+      inset 0 1px 6px rgba(255, 255, 255, 0.55);
+  }
+
+  .resources-glass-search-open {
+    border-color: rgb(0 0 0 / 0.20);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.98),
+      rgb(255 255 255 / 0.82)
+    );
+  }
+
+  .resources-glass-search-idle {
+    border-color: rgb(0 0 0 / 0.12);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.90),
+      rgb(255 255 255 / 0.72)
+    );
+  }
+
+  .resources-glass-toggle-shell {
+    @apply rounded-full border transition-colors;
+  }
+
+  .resources-glass-toggle-active {
+    border-color: rgb(0 0 0 / 0.20);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.98),
+      rgb(255 255 255 / 0.82)
+    );
+  }
+
+  .resources-glass-toggle-idle {
+    border-color: rgb(0 0 0 / 0.12);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.90),
+      rgb(255 255 255 / 0.72)
+    );
+  }
+
+  .resources-glass-mobile-panel {
+    @apply border rounded-[22px];
+    border-color: rgb(0 0 0 / 0.15);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.96),
+      rgb(255 255 255 / 0.80)
+    );
+    box-shadow:
+      0 12px 30px rgba(15, 23, 42, 0.14),
+      inset 0 1px 6px rgba(255, 255, 255, 0.62);
+  }
+
+  .resources-glass-tab-base {
+    @apply relative flex items-center gap-2 rounded-[18px] border px-4 py-2.5 text-nowrap transition-[transform,box-shadow,background-color,border-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .resources-glass-tab-active {
+    border-color: rgb(0 0 0 / 0.20);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.98),
+      rgb(255 255 255 / 0.82)
+    );
+    box-shadow:
+      0 8px 20px rgba(15, 23, 42, 0.12),
+      inset 0 1px 6px rgba(255, 255, 255, 0.60);
+    color: rgb(0 0 0 / 1);
+  }
+
+  .resources-glass-tab-idle {
+    border-color: rgb(0 0 0 / 0.12);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.90),
+      rgb(255 255 255 / 0.72)
+    );
+    color: rgb(0 0 0 / 0.90);
+  }
+
+  .resources-glass-tab-idle:hover {
+    border-color: rgb(0 0 0 / 0.20);
+    transform: translateY(-1px);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.95),
+      rgb(255 255 255 / 0.80)
+    );
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.10),
+      inset 0 1px 4px rgba(255, 255, 255, 0.42);
+  }
+
+  .resources-glass-resource-pill {
+    @apply rounded-full border transition-[transform,border-color,box-shadow,background-color] duration-200;
+    border-color: rgb(0 0 0 / 0.12);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.90),
+      rgb(255 255 255 / 0.72)
+    );
+    box-shadow:
+      0 8px 18px rgba(15, 23, 42, 0.10),
+      inset 0 1px 5px rgba(255, 255, 255, 0.58);
+  }
+
+  .resources-glass-resource-pill:hover {
+    border-color: rgb(0 0 0 / 0.20);
+    transform: translateY(-1px);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.98),
+      rgb(255 255 255 / 0.82)
+    );
+    box-shadow:
+      0 10px 22px rgba(15, 23, 42, 0.12),
+      inset 0 1px 6px rgba(255, 255, 255, 0.64);
+  }
+
+  .resources-glass-sticky-wrap {
+    @apply sticky top-0 z-[100] w-full px-4 py-3 md:px-10 md:py-5 lg:px-20;
+  }
+
+  .resources-glass-bar-content {
+    @apply relative z-10 px-2 py-2 md:px-3 md:py-3;
+  }
+}
+
 .body-large {
   /* 18px → 20px */
   @apply text-[16px] md:text-[20px] leading-[1.4] text-body font-normal;

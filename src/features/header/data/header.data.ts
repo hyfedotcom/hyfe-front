@@ -37,19 +37,19 @@ export const headerNav: NavItem[] = [
     items: [
       {
         id: "sol-1",
-        label: "Life Sciences",
+        label: "For pharma",
         description: "Objective cough data for clinical development",
-        href: "/solutions/life-science",
+        href: "/solutions/life-sciences",
       },
       {
         id: "sol-2",
-        label: "Research",
+        label: "For academics",
         description: "Measure cough objectively, over time",
         href: "/solutions/research",
       },
       {
         id: "sol-3",
-        label: "Virtual Care",
+        label: "For Healthcare Providers",
         description: "Actionable cough insights for everyday care.",
         href: "/solutions/virtual-care",
       },

@@ -13,9 +13,10 @@ export async function getResource({
   isDraft?: boolean;
 }) {
   const itemsType = resolveResourceItemsType(type);
+  const isPublication = itemsType === "publications";
   const resourceData = await StrapiFetch<unknown>({
     path: `/api/${itemsType}`,
-    query: resourceBySlug(slug, isDraft),
+    query: resourceBySlug(slug, isDraft, isPublication),
     tags: [`resource:${itemsType}-${slug}`],
     isDraft: isDraft ?? undefined,
   });

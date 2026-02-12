@@ -16,8 +16,8 @@ export async function generateStaticParams() {
 export default async function ResourceTypePage({ type }: { type: string }) {
   const data = await getResourcesList({ type });
 
-  if (!data?.landing) notFound();
-  if (!data?.list) notFound();
+  if (!data) notFound();
+
   const { landing, list } = data;
 
   const tags = list.flatMap((l) => l.tags.map((t) => t.tag));

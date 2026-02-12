@@ -397,13 +397,14 @@ export const ResourceSlugDomainSchema = z.object({
   blocks: z.array(ResourceBlockDomainSchema),
   seo: SeoDomainSchema,
   type: ResourceRelatedTypeSchema,
+  citation: z.union([z.string(), z.undefined()]),
 });
 
 export const SlugSchema = ResourceSlugResponseRawSchema.transform(
   (res) => res.data[0],
 )
   .transform((data) => ({
-    cover: data.cover ? MediaSchema.parse(data.cover) : undefined,
+    cover: MediaSchema.parse(data.cover),
     title: data.title,
     date: data.date,
     excerpt: data.excerpt ?? undefined,
@@ -412,6 +413,7 @@ export const SlugSchema = ResourceSlugResponseRawSchema.transform(
     blocks: (data.blocks ?? []).map((b) => ResourceBlockSchema.parse(b)),
     seo: SeoSchema.parse(data.seo),
     type: data.type,
+    citation: data.citation ?? undefined,
   }))
   .pipe(ResourceSlugDomainSchema);
 

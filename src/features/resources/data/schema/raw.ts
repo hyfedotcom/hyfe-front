@@ -119,7 +119,9 @@ export const ResourceRelatedCardRawSchema = z.looseObject({
   slug: z.string().optional(),
 });
 
-export const ResourceRelatedCardsRawSchema = z.array(ResourceRelatedCardRawSchema);
+export const ResourceRelatedCardsRawSchema = z.array(
+  ResourceRelatedCardRawSchema,
+);
 
 export const ResourceQuoteRawSchema = z.looseObject({
   job: z.string().nullable(),
@@ -187,6 +189,7 @@ export const ResourceSlugRawSchema = z.looseObject({
   blocks: z.array(ResourceBlockRawSchema).optional(),
   seo: SeoRawSchema,
   type: ResourceRelatedTypeSchema,
+  citation: z.string().nullable().optional(),
 });
 
 /* ============================================================================

@@ -2,7 +2,6 @@
 
 import { headerNav } from "@/features/header/data/header.data";
 import { cx, NavLink } from "@/features/header/helpers/header.helpers";
-import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import Image from "next/image";
 import Link from "next/link";
 import { TriggerButton } from "./components/TriggerButton";
@@ -32,10 +31,9 @@ import {
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 
 export function Header() {
-  const isDown = useIsScrollingDown(10);
-
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHiddenOnScroll, setIsHiddenOnScroll] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => setOpenId(null), []);
@@ -86,19 +84,65 @@ export function Header() {
     return () => window.removeEventListener("popstate", onPop);
   }, [close]);
 
+  useEffect(() => {
+    let ticking = false;
+    let lastY = window.scrollY;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const diff = y - lastY;
+
+        if (y <= 8) {
+          setIsHiddenOnScroll(false);
+          lastY = y;
+          ticking = false;
+          return;
+        }
+
+        if (Math.abs(diff) >= 6) {
+          setIsHiddenOnScroll(diff > 0);
+          lastY = y;
+        }
+
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <header
       ref={headerRef}
       className={cx(
-        "fixed top-0 left-0 right-0  bg-white/90 backdrop-blur flex items-center justify-between ",
+        "fixed top-0 left-0 right-0 overflow-visible flex items-center justify-between",
         mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
-        isDown || openId != null ? "z-[200000]" : "z-[2000]",
-        "border-b border-black/10",
+        isHiddenOnScroll || openId != null ? "z-[200000]" : "z-[2000]",
+        mobileOpen
+          ? "bg-white/96 backdrop-blur-sm"
+          : "border-b border-black/[0.12] ring-1 ring-black/[0.05] bg-gradient-to-b from-white/56 via-white/30 to-white/16 backdrop-blur-[28px] backdrop-saturate-150 shadow-[0_12px_30px_rgba(15,23,42,0.12),0_1px_6px_rgba(255,255,255,0.45)_inset]",
         "transition-[transform,height] duration-300",
-        isDown && openId === null && !mobileOpen && "-translate-y-full",
+        isHiddenOnScroll && openId === null && !mobileOpen && "-translate-y-full",
       )}
     >
-      <div className="mx-auto flex w-full items-center justify-between px-4 md:px-10 lg:px-20">
+      {!mobileOpen && (
+        <>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-5 md:inset-x-10 top-[1px] h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+          />
+        </>
+      )}
+      <div className="relative z-10 mx-auto flex w-full items-center justify-between px-4 md:px-10 lg:px-20">
         {/* Logo */}
         <Link
           href="/"
@@ -183,7 +227,7 @@ export function Header() {
                   <div
                     onPointerEnter={cancelClose}
                     onPointerLeave={scheduleClose}
-                    className="mx-auto"
+                    className="mx-auto backdrop-blur-[20px]!"
                   >
                     <MegaPanel
                       sections={megaItem.sections}
@@ -320,7 +364,7 @@ function MobileMenu({
         className={cx(
           "lg:hidden inline-flex items-center justify-center ",
           "h-[40px] w-11 rounded-full border border-black/10",
-          "hover:bg-black/5",
+          "hover:bg-black/5 text-black",
         )}
         aria-label="Open menu"
         aria-expanded={open}
@@ -375,7 +419,7 @@ function MobileMenu({
               />
             </Link>
             <button
-              className="h-10 w-10 rounded-full hover:bg-black/5"
+              className="h-10 w-10 rounded-full hover:bg-black/5 text-black"
               onClick={closeMenu}
               aria-label="Close menu"
               autoFocus={open}
@@ -577,7 +621,7 @@ function MobileLinkItem({
             className="h-11 w-11 rounded-[12px] border border-black/10 object-cover"
           />
         ) : Icon ? (
-          <Icon className="text-primary min-w-5 min-h-5 mt-0.5" />
+          <Icon className="text-black min-w-5 min-h-5 mt-0.5" />
         ) : null}
         <div className="min-w-0 grow">
           <div className="text-sm font-medium text-black inline-flex items-center gap-2">

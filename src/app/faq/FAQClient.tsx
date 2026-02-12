@@ -7,12 +7,7 @@ import { useMemo } from "react";
 import { useActiveSection } from "./useActiveSection";
 
 export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
-  const slugify = (s: string) =>
-    s
-      .trim()
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}\s-]/gu, "")
-      .replace(/\s+/g, "-");
+  const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");
 
   const items = useMemo(
     () => sections.map((s) => ({ id: slugify(s.title), label: s.title })),
@@ -25,11 +20,13 @@ export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
   );
 
   const onSelect = (id: string) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - 200;
+
     setTimeout(() => setActiveId(id), 500);
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
     history.replaceState(null, "", `#${id}`);
   };
 

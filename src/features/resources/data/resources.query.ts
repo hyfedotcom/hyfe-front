@@ -41,9 +41,15 @@ export const resourceLanding = {
   },
 };
 
-export const resourceBySlug = (slug: string, draftMode: boolean) => ({
+export const resourceBySlug = (
+  slug: string,
+  draftMode: boolean,
+  isPublication: boolean,
+) => ({
   filters: { slug: { $eq: slug } },
-  fields: ["title", "slug", "date", "type"],
+  fields: isPublication
+    ? ["title", "slug", "date", "type", "citation"]
+    : ["title", "slug", "date", "type"],
   populate: {
     cover: { fields: ["url", "alternativeText", "width", "height"] },
     tags: { fields: ["tag"] },
