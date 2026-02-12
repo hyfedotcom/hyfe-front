@@ -1,5 +1,5 @@
 export const resourceList = {
-  // pagination: { page: 1, pageSize: 0 },
+  pagination: { page: 1, pageSize: 1000 },
   sort: ["date:desc"],
   fields: ["title", "slug", "date", "excerpt", "type"],
   populate: {

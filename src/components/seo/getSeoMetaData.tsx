@@ -11,31 +11,58 @@ export function getSeoMetadata(seo?: SeoType): Metadata {
     canonical,
     robots,
     // structuredData, // next Metadata не принимает это напрямую (нужно <script> в layout/page)
+    structuredData,
+    keywords,
   } = seo;
 
+  const hasText = (value?: string) => Boolean(value?.trim());
+
+  const titleValue = hasText(title) ? title : undefined;
+  const descriptionValue = hasText(description) ? description : undefined;
+  const keywordsValue = hasText(keywords) ? keywords : undefined;
+  const canonicalValue = hasText(canonical) ? canonical : undefined;
+  const robotsValue = hasText(robots) ? robots : undefined;
+  const hasImage = Boolean(image?.url?.trim());
+  const hasStructuredData = hasText(structuredData);
+
+  const isSeoEmpty =
+    !titleValue &&
+    !descriptionValue &&
+    !keywordsValue &&
+    !robotsValue &&
+    !canonicalValue &&
+    !hasImage &&
+    !hasStructuredData;
+
+  if (isSeoEmpty) {
+    return {
+      robots: { index: false, follow: false },
+    };
+  }
+
   return {
-    title,
-    description,
+    title: titleValue,
+    description: descriptionValue,
+    keywords: keywordsValue,
     alternates: {
-      canonical,
+      canonical: canonicalValue,
     },
     openGraph: {
-      title,
-      description,
+      title: titleValue,
+      description: descriptionValue,
       images: image?.url ? [{ url: image.url, alt: image.alt }] : undefined,
       type: "website",
     },
     twitter: {
       card: image?.url ? "summary_large_image" : "summary",
-      title,
-      description,
+      title: titleValue,
+      description: descriptionValue,
       images: image?.url ? [image.url] : undefined,
     },
-    robots: robots
+    robots: robotsValue
       ? {
-          // если у тебя robots строкой (например "noindex,nofollow") — лучше распарсить, но пока так:
-          index: !robots.includes("noindex"),
-          follow: !robots.includes("nofollow"),
+          index: !robotsValue.includes("noindex"),
+          follow: !robotsValue.includes("nofollow"),
         }
       : undefined,
   };

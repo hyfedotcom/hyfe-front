@@ -30,14 +30,26 @@ export function ResourcesNavTabs({ type }: Props) {
 
   return (
     <>
-      <div className="hidden md:flex mb-0! rounded-t-[28px] py-3 px-3 gap-2 left-1/2 -translate-x-1/2 fixed bottom-0 bg-white/20 backdrop-blur-2xl">
-        {tabs.map((label) => (
-          <ResourceTab
-            key={label}
-            label={label}
-            active={typeKey === getResourceLabelKey(label)}
+      <div className="pointer-events-none fixed bottom-4 translate-y-[45px] left-1/2 z-4000 hidden -translate-x-1/2 md:block">
+        <div className="relative isolate overflow-hidden rounded-[30px] border border-white/70 bg-gradient-to-b from-white/60 via-white/32 to-white/18 px-3 py-3 shadow-[0_22px_55px_rgba(15,23,42,0.18),0_2px_10px_rgba(255,255,255,0.45)_inset] ring-1 ring-black/5 backdrop-blur-[26px]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/55 via-white/10 to-transparent"
           />
-        ))}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-5 top-[1px] h-px bg-gradient-to-r from-transparent via-white/95 to-transparent"
+          />
+          <div className="relative z-10 pointer-events-auto flex gap-2">
+            {tabs.map((label) => (
+              <ResourceTab
+                key={label}
+                label={label}
+                active={typeKey === getResourceLabelKey(label)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       {open && (
@@ -49,8 +61,8 @@ export function ResourcesNavTabs({ type }: Props) {
         />
       )}
 
-      <div className="md:hidden md:absolute fixed bottom-4 md:bottom-0 right-4 z-40 w-max ">
-        <div className="relative">
+      <div className="md:hidden  fixed bottom-4 md:bottom-0 right-4 z-40 w-max ">
+        <div className="relative ">
           {open && (
             <div
               id="resource-nav-list"
@@ -88,7 +100,9 @@ export function ResourcesNavTabs({ type }: Props) {
                             )}
                           />
                         </span>
-                        <span className="text-[12px] leading-[100%]">{label}</span>
+                        <span className="text-[12px] leading-[100%]">
+                          {label}
+                        </span>
                       </span>
                     </Link>
                   );

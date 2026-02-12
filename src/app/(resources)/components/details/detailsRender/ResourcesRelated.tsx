@@ -21,7 +21,8 @@ const RELATED_RESOURCE_CTA_COPY: Record<ResourceType, string> = {
   "cough-news":
     "See what you've been missing. Explore past editions of Cough Science News",
   publications: "Dive into the science. Explore our publications.",
-  "white-papers": "See what you've been missing. Browse our latest white papers",
+  "white-papers":
+    "See what you've been missing. Browse our latest white papers",
   insights: "Fresh perspectives on cough. Read our latest insights.",
   news: "See what's happening. Read the latest from Hyfe.",
 };
@@ -115,7 +116,7 @@ export function ResourcesRelated({
             </h3>
             <Button
               tag="button"
-              label="REED MORE"
+              label="READ MORE"
               url={`/${resourceType}`}
               color="yellow"
               arrow={false}

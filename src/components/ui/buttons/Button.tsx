@@ -30,9 +30,9 @@ export function Button({
   const hrefNormalized = normalizeHref(url);
   const isInternal = isInternalHref(hrefNormalized);
 
-  const className = `${classNameProp ?? ""} h-max uppercase border border-transparent group/cta ${
+  const className = `${classNameProp ?? ""} h-max uppercase border border-transparent group/cta w-full md:w-max ${
     arrow ? "flex" : "inline-flex"
-  } gap-5 items-center px-5 py-3.5 rounded-[20px] leading-[120%] text-[18px] font-semibold touch-manipulation transition-[color,background-color,border-color,box-shadow,transform] duration-300 ${
+  } gap-5 items-center px-5 py-3.5 rounded-[20px] leading-[120%] text-[14px] md:text-[18px] font-semibold touch-manipulation transition-[color,background-color,border-color,box-shadow,transform] duration-300 ${
     disabled
       ? "cursor-not-allowed opacity-65 pointer-events-none"
       : "cursor-pointer hover:shadow-hover active:shadow-hover hover:border-primary active:border-primary active:scale-[0.98]"

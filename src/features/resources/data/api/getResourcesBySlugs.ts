@@ -18,7 +18,7 @@ export async function getResourcesBySlugs({
     query: {
       ...resourceList,
       filters: { slug: { $in: slugs } },
-      pagination: { pageSize: slugs.length },
+      pagination: { pageSize: 1000 },
     },
     tags: [`resource:${itemsType}-slugs`],
   });

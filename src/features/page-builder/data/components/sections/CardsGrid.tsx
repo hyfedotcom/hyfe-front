@@ -5,6 +5,7 @@ import { CardsGridSectionType } from "../../schema/pageBuilder";
 import { Card } from "@/components/ui/card/Card";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   const [sizes, setSizes] = useState({
@@ -13,10 +14,12 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   });
   const sectionRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const width = useWindowSize();
+  const isMobile = width <= 768;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["10% start", "90% end"],
   });
 
   useEffect(() => {
@@ -44,25 +47,20 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
     return () => observer.disconnect();
   }, []);
 
-  const scrollHeight = Math.max(section.cards.length, 1) * 400;
+  const scrollHeight =
+    Math.max(section.cards.length, 1) * (isMobile ? 600 : 600);
   const maxX = sizes.sectionWidth - sizes.containerWidth;
-  const x = useTransform(
-    scrollYProgress,
-    [0.1, 0.8],
-    [0, maxX],
-  );
+  const x = useTransform(scrollYProgress, [0.1, 0.8], [0, maxX]);
 
   return (
     <section
       ref={sectionRef}
-      // !!! тут НЕ должно быть overflow, иначе sticky может не работать
+
       className="relative py-[100px]  md:py-[140px]"
       style={{ height: scrollHeight }}
     >
-      <div className="space-y-10  sticky top-24">
-        <ContentContainer content={section} width="max-w-[1000px]" />
-
-        {/* вот тут режем X */}
+      <div className="space-y-6 md:space-y-10  sticky top-10 md:top-24">
+        <ContentContainer content={section} classContainer="px-4 md:px-10 lg:px-20 text-center mx-auto" width="max-w-[1200px]" />
         <div className="overflow-x-hidden">
           <motion.div
             ref={containerRef}

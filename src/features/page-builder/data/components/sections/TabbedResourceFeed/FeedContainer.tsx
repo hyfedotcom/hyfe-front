@@ -131,7 +131,7 @@ export function FeedContainer({
         />
       )}
 
-      <div className="relative w-full max-w-full">
+      <div className="relative w-max max-w-full">
         <div
           ref={tabListRef}
           role="tablist"
@@ -228,6 +228,7 @@ export function FeedContainer({
                     "flex items-center gap-2 text-[15px] leading-none md:text-[18px]",
                     isActive ? "font-medium text-body" : "font-normal text-body-secondary",
                     "transition-colors duration-200",
+                    "cursor-pointer"
                   )}
                 >
                   <meta.Icon
@@ -246,7 +247,7 @@ export function FeedContainer({
       </div>
 
       <div
-        className="relative transition-[min-height] duration-300"
+        className="relative  -mx-4 md:mx-0 transition-[min-height] duration-300"
         style={panelMinHeight ? { minHeight: panelMinHeight } : undefined}
       >
         {resources.map((resourceCards, index) => {
@@ -266,8 +267,8 @@ export function FeedContainer({
               aria-hidden={!isActive}
               className={cx(
                 "w-full transition-all duration-300 ease-out",
-                "flex gap-4 overflow-x-auto pb-2 px-4 -mx-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-                "md:mx-0 md:px-0 md:pb-0 md:grid md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
+                "flex gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+                "md:pb-0 md:pl-0 md:pr-0 md:grid md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
                 isActive
                   ? "relative z-10 opacity-100 translate-y-0 pointer-events-auto"
                   : "absolute inset-0 z-0 opacity-0 translate-y-2 pointer-events-none",
@@ -277,7 +278,7 @@ export function FeedContainer({
                 <Link
                   key={`${card.slug}-${cardIndex}`}
                   className={cx(
-                    "snap-start flex-none w-[82vw] max-w-[340px] first:ml-0 last:mr-0",
+                    "snap-start flex-none w-[82vw] max-w-[340px]",
                     "sm:w-[66vw] md:w-auto md:max-w-none",
                   )}
                   href={`/${card.type}/${card.slug}`}

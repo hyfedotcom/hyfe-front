@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   images: {
-    dangerouslyAllowLocalIP: isDev, // ✅ только для dev
+    dangerouslyAllowLocalIP: isDev, 
     remotePatterns: [
       { protocol: "https", hostname: "*.strapiapp.com" },
       {
@@ -33,6 +33,16 @@ const nextConfig: NextConfig = {
       {
         source: "/research",
         destination: "/solutions/research",
+        permanent: true,
+      },
+      {
+        source: "/life-sciences",
+        destination: "/solutions/life-sciences",
+        permanent: true,
+      },
+      {
+        source: "/virtual-care",
+        destination: "/solutions/virtual-care",
         permanent: true,
       },
     ];

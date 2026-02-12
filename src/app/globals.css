@@ -64,12 +64,12 @@ html {
 
 .body-large {
   /* 18px → 20px */
-  @apply text-[clamp(18px,0.6vw+16px,20px)] leading-[1.4] text-body font-normal;
+  @apply text-[16px] md:text-[20px] leading-[1.4] text-body font-normal;
 }
 
 .body-medium {
   /* 15px → 16px */
-  @apply text-[clamp(15px,0.45vw+14px,16px)] leading-[1.5] text-body font-normal;
+  @apply text-[16px] leading-[1.5] text-body font-normal;
 }
 
 .body-small {

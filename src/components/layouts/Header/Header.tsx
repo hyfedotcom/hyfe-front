@@ -92,7 +92,7 @@ export function Header() {
       className={cx(
         "fixed top-0 left-0 right-0  bg-white/90 backdrop-blur flex items-center justify-between ",
         mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
-        isDown || openId != null ? "z-[200000]" : "z-[2000]" ,
+        isDown || openId != null ? "z-[200000]" : "z-[2000]",
         "border-b border-black/10",
         "transition-[transform,height] duration-300",
         isDown && openId === null && !mobileOpen && "-translate-y-full",
@@ -216,12 +216,6 @@ export function Header() {
               >
                 <span className="inline-flex items-center gap-2">
                   {cta.label}
-                  <LinkIndicator
-                    href={cta.href}
-                    className="text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                    internalClassName="w-2 h-4"
-                    externalClassName="w-3.5 h-3.5"
-                  />
                 </span>
               </NavLink>
             );
@@ -339,7 +333,9 @@ function MobileMenu({
       <div
         className={cx(
           "fixed inset-0 z-[20010] lg:hidden transition-opacity duration-300 ease-out",
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+          open
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none",
         )}
       >
         <button
@@ -388,88 +384,30 @@ function MobileMenu({
             </button>
           </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {mainItems.map((item) => {
-                if (item.kind === "link") {
-                  return (
-                    <NavLink
-                      key={item.id}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        {item.label}
-                        <LinkIndicator
-                          href={item.href}
-                          className="text-black/70"
-                          internalClassName="w-2 h-4"
-                          externalClassName="w-4 h-4"
-                        />
-                      </span>
-                    </NavLink>
-                  );
-                }
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            {mainItems.map((item) => {
+              if (item.kind === "link") {
+                return (
+                  <NavLink
+                    key={item.id}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      {item.label}
+                      <LinkIndicator
+                        href={item.href}
+                        className="text-black/70"
+                        internalClassName="w-2 h-4"
+                        externalClassName="w-4 h-4"
+                      />
+                    </span>
+                  </NavLink>
+                );
+              }
 
-                if (item.kind === "dropdown") {
-                  return (
-                    <MobileAccordion
-                      key={item.id}
-                      label={item.label}
-                      open={openAccordionId === item.id}
-                      onToggle={() =>
-                        setOpenAccordionId((prev) =>
-                          prev === item.id ? null : item.id,
-                        )
-                      }
-                    >
-                      <div className="space-y-1 pb-2">
-                        {item.items.map((it) => {
-                          const meta =
-                            it.label && isDropdownMeta(it.label)
-                              ? dropdownMeta[it.label]
-                              : null;
-                          const Icon = meta?.Icon;
-                          return (
-                            <MobileLinkItem
-                              key={it.id}
-                              item={it}
-                              onClick={closeMenu}
-                              Icon={Icon}
-                            />
-                          );
-                        })}
-                      </div>
-                    </MobileAccordion>
-                  );
-                }
-
-                if (item.kind === "card") {
-                  return (
-                    <MobileAccordion
-                      key={item.id}
-                      label={item.label}
-                      open={openAccordionId === item.id}
-                      onToggle={() =>
-                        setOpenAccordionId((prev) =>
-                          prev === item.id ? null : item.id,
-                        )
-                      }
-                    >
-                      <div className="space-y-1 pb-2">
-                        {item.items.map((it) => (
-                          <MobileLinkItem
-                            key={it.id}
-                            item={it}
-                            onClick={closeMenu}
-                            showImage
-                          />
-                        ))}
-                      </div>
-                    </MobileAccordion>
-                  );
-                }
-
+              if (item.kind === "dropdown") {
                 return (
                   <MobileAccordion
                     key={item.id}
@@ -481,73 +419,131 @@ function MobileMenu({
                       )
                     }
                   >
-                    <div className="space-y-4 pb-2">
-                      {item.sections.map((sec) => (
-                        <div key={sec.id} className="space-y-2">
-                          <div className="px-0">
-                            <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
-                              {sec.title}
-                            </div>
-                            {sec.description && (
-                              <div className="text-xs text-black/55">
-                                {sec.description}
-                              </div>
-                            )}
-                            {sec.allHref && (
-                              <NavLink
-                                href={sec.allHref}
-                                onClick={closeMenu}
-                                className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
-                              >
-                                View all
-                                <LinkIndicator
-                                  href={sec.allHref}
-                                  className="text-black/70"
-                                  internalClassName="w-2 h-4"
-                                  externalClassName="w-3.5 h-3.5"
-                                />
-                              </NavLink>
-                            )}
-                          </div>
+                    <div className="space-y-1 pb-2">
+                      {item.items.map((it) => {
+                        const meta =
+                          it.label && isDropdownMeta(it.label)
+                            ? dropdownMeta[it.label]
+                            : null;
+                        const Icon = meta?.Icon;
+                        return (
+                          <MobileLinkItem
+                            key={it.id}
+                            item={it}
+                            onClick={closeMenu}
+                            Icon={Icon}
+                          />
+                        );
+                      })}
+                    </div>
+                  </MobileAccordion>
+                );
+              }
 
-                          <div className="space-y-1">
-                            {sec.items.map((it) => {
-                              const Icon = getMegaIcon(it.id, it.label);
-                              return (
-                                <MobileLinkItem
-                                  key={it.id}
-                                  item={it}
-                                  onClick={closeMenu}
-                                  Icon={Icon}
-                                />
-                              );
-                            })}
-                          </div>
-                        </div>
+              if (item.kind === "card") {
+                return (
+                  <MobileAccordion
+                    key={item.id}
+                    label={item.label}
+                    open={openAccordionId === item.id}
+                    onToggle={() =>
+                      setOpenAccordionId((prev) =>
+                        prev === item.id ? null : item.id,
+                      )
+                    }
+                  >
+                    <div className="space-y-1 pb-2">
+                      {item.items.map((it) => (
+                        <MobileLinkItem
+                          key={it.id}
+                          item={it}
+                          onClick={closeMenu}
+                          showImage
+                        />
                       ))}
                     </div>
                   </MobileAccordion>
                 );
-              })}
-            </div>
+              }
 
-            {cta ? (
-              <div className="px-4 pb-5 pt-2 border-t border-black/10">
-                <NavLink
-                  href={cta.href}
-                  onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
+              return (
+                <MobileAccordion
+                  key={item.id}
+                  label={item.label}
+                  open={openAccordionId === item.id}
+                  onToggle={() =>
+                    setOpenAccordionId((prev) =>
+                      prev === item.id ? null : item.id,
+                    )
+                  }
                 >
-                  {cta.label}
-                  <LinkIndicator
-                    href={cta.href}
-                    className="text-white"
-                    internalClassName="w-2 h-4"
-                    externalClassName="w-4 h-4"
-                  />
-                </NavLink>
-              </div>
-            ) : null}
+                  <div className="space-y-4 pb-2">
+                    {item.sections.map((sec) => (
+                      <div key={sec.id} className="space-y-2">
+                        <div className="px-0">
+                          <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
+                            {sec.title}
+                          </div>
+                          {sec.description && (
+                            <div className="text-xs text-black/55">
+                              {sec.description}
+                            </div>
+                          )}
+                          {sec.allHref && (
+                            <NavLink
+                              href={sec.allHref}
+                              onClick={closeMenu}
+                              className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
+                            >
+                              View all
+                              <LinkIndicator
+                                href={sec.allHref}
+                                className="text-black/70"
+                                internalClassName="w-2 h-4"
+                                externalClassName="w-3.5 h-3.5"
+                              />
+                            </NavLink>
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          {sec.items.map((it) => {
+                            const Icon = getMegaIcon(it.id, it.label);
+                            return (
+                              <MobileLinkItem
+                                key={it.id}
+                                item={it}
+                                onClick={closeMenu}
+                                Icon={Icon}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </MobileAccordion>
+              );
+            })}
+          </div>
+
+          {cta ? (
+            <div className="px-4 pb-5 pt-2 border-t border-black/10">
+              <NavLink
+                href={cta.href}
+                onClick={closeMenu}
+                className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
+              >
+                {cta.label}
+                <LinkIndicator
+                  href={cta.href}
+                  className="text-white"
+                  internalClassName="w-2 h-4"
+                  externalClassName="w-4 h-4"
+                />
+              </NavLink>
+            </div>
+          ) : null}
         </div>
       </div>
     </>

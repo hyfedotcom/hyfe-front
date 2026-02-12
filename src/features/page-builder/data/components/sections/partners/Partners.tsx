@@ -22,7 +22,7 @@ export function Partners({ section }: { section: PartnersSectionType }) {
       <div className="space-y-10 md:space-y-15 bg-white">
         <ContentContainer content={section} width="max-w-[900px]" />
         <div
-          className={`${getCols(logos.length)} grid items-center gap-5 w-full mx-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 `}
+          className={`${getCols(logos.length)} grid items-center justify-center gap-3 md:gap-5 w-full mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 `}
         >
           {logos.map((p, i) => (
             <PartnersCard key={i} partner={p} />

@@ -28,8 +28,8 @@ export function ContentContainer({
 }) {
   const { ctas, paragraph, title } = content;
   return (
-    <div className={`${classContainer} ${width}  space-y-11 text-balance`}>
-      <div className="space-y-5">
+    <div className={`${classContainer} ${width} space-y-6 md:space-y-11 text-balance`}>
+      <div className="space-y-4 md:space-y-5">
         {title && <h2 className={`${classH} text-balance`}>{title}</h2>}
         {paragraph && <p className={`${classP} text-balance `}>{paragraph}</p>}
       </div>
