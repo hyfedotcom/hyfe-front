@@ -82,6 +82,11 @@ export default async function ResourceSingle({ params }: PageProps) {
   const { slug, type } = await params;
 
   const resource = await getResource({ type, slug });
+  const citationForShare =
+    type === "publications" && resource.citation?.trim()
+      ? resource.citation.trim()
+      : undefined;
+
   const blocks = await buildResourceDetailsBlocks({
     blocks: resource.blocks,
     resourceType: type as ResourceType,
@@ -97,7 +102,12 @@ export default async function ResourceSingle({ params }: PageProps) {
         id="resource-article-jsonld"
       />
       <SeoStructuredData seo={resource.seo} id="resource-seo-jsonld" />
-      <Sheet returnPath={`/${type}`}>
+      <Sheet
+        returnPath={`/${type}`}
+        share={{
+          citation: citationForShare,
+        }}
+      >
         <div className="max-w-screen relative overflow-hidden">
           <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
             <ResourceDetailsHero data={resource} type={type} />

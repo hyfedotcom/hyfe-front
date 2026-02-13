@@ -3,6 +3,7 @@
 import { AdditionlInfoType } from "@/features/resources/data/resources.types";
 import { AddtionalInfoCard } from "./AddtionalInfoCard";
 import { useRef } from "react";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export function ResourceAdditionalInfo({
   block,
@@ -11,6 +12,7 @@ export function ResourceAdditionalInfo({
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
+  const width = useWindowSize()
 
   function moveCards(dir: "left" | "right") {
     const container = containerRef.current;
@@ -37,7 +39,7 @@ export function ResourceAdditionalInfo({
         {block.title && <h4 className="pl-5">{block.title}</h4>}
 
         <div
-          className={`${block.title} ${block.info_links.length === 3 ? "md:hidden " : block.info_links.length === 2 ? "hidden" : ""} ml-auto flex gap-3 items-center`}
+          className={`${block.title} ${block.info_links.length <= 3 && width >= 768 ? "hidden " : block.info_links.length <= 2 && width <= 768 ? "hidden" : ""} ml-auto flex gap-3 items-center`}
         >
           <svg
             width="30"

@@ -15,7 +15,6 @@ export default async function ScienceResources() {
   return (
     <div className="relative">
       <ResourcesListHero
-        type={"science-resources"}
         data={{
           title: data.title ?? "Resources",
           paragraph: data.paragraph,

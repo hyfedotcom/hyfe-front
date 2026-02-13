@@ -6,9 +6,10 @@ import { resolveResourceItemsType } from "./resourceType";
 export async function getResourcesList({ type }: { type: string }) {
   try {
     const itemsType = resolveResourceItemsType(type);
+    const isPublication = type === "publications";
     const landingData = await StrapiFetch<unknown>({
       path: `/api/${type}-landing`,
-      query: resourceLanding,
+      query: resourceLanding(isPublication),
       tags: [`resource:${type}-landing`],
     });
 
@@ -21,6 +22,7 @@ export async function getResourcesList({ type }: { type: string }) {
     const landing = parseOrThrow(LandingSchema, landingData);
     const list = parseOrThrow(ListSchema, listData);
     if (!landingData || !listData) return undefined;
+
     return { landing, list };
   } catch (e) {
     console.error(e);

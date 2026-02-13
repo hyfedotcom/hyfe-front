@@ -89,3 +89,48 @@ export const TestimonialsFeedRawSchema = z.looseObject({
     )
     .optional(),
 });
+
+export const InputTypeRawSchema = z.enum([
+  "name",
+  "email",
+  "number",
+  "message",
+  "custom",
+]);
+
+export const InputRawSchema = z.looseObject({
+  label: z.string(),
+  type: InputTypeRawSchema,
+  required: z.boolean(),
+});
+
+export const ConsentRawShema = z.looseObject({
+  label: z.string(),
+  required: z.boolean(),
+  privacy_link: z.boolean(),
+});
+
+export const FormRawSchema = z.looseObject({
+  inputs: z.array(InputRawSchema),
+  consent: z.array(ConsentRawShema),
+  cta_label: z.string(),
+  cough_news_subscription: z.boolean(),
+});
+
+export const FormContainerRawSchema = z.looseObject({
+  __component: z.literal("form.form-container"),
+  title: z.string(),
+  paragraph: z.string().nullable(),
+  list: z
+    .array(
+      z.looseObject({
+        label: z.string(),
+      }),
+    )
+    .nullable(),
+  form: FormRawSchema,
+});
+
+export type FormType = z.infer<typeof FormRawSchema>;
+export type InputType = z.infer<typeof InputRawSchema>;
+export type ConsentType = z.infer<typeof InputRawSchema>;

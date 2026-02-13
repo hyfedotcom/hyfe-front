@@ -167,6 +167,14 @@ export const ResourceLandingRawSchema = z.looseObject({
   title: z.string(),
   paragraph: z.string().nullable(),
   seo: SeoRawSchema,
+  stats: z
+    .array(
+      z.looseObject({
+        label: z.string(),
+        value: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export const ResourceListRawSchema = z.looseObject({

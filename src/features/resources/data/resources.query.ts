@@ -22,7 +22,7 @@ export const resourceList = {
   },
 };
 
-export const resourceLanding = {
+export const resourceLanding = (isPublication: boolean) => ({
   fields: ["title", "paragraph"],
   populate: {
     seo: {
@@ -38,8 +38,15 @@ export const resourceLanding = {
         meta_image: { fields: ["url", "alternativeText", "width", "height"] },
       },
     },
+    ...(isPublication
+      ? {
+          stats: {
+            fields: ["value", "label"],
+          },
+        }
+      : {}),
   },
-};
+});
 
 export const resourceBySlug = (
   slug: string,

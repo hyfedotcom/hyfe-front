@@ -16,7 +16,7 @@ export function Button({
   disabled = false,
 }: {
   label: string;
-  url: string;
+  url?: string;
   version?: "black" | "white";
   color?: "white" | "black" | "yellow";
   arrow?: boolean;
@@ -27,7 +27,7 @@ export function Button({
   indicatorExternalClassName?: string;
   disabled?: boolean;
 }) {
-  const hrefNormalized = normalizeHref(url);
+  const hrefNormalized = normalizeHref(url ?? "/");
   const isInternal = isInternalHref(hrefNormalized);
 
   const className = `${classNameProp ?? ""} h-max uppercase border border-transparent group/cta w-full md:w-max ${

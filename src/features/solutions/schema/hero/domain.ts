@@ -13,6 +13,7 @@ import { StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
 import {
   CardProductStepsRawSchema,
   ContentImageSplitRawSchema,
+  FormContainerRawSchema,
   ProblemInsightSolutionRawSchema,
   SolutionMapRawSchema,
   SolutionsAccordionRawSchema,
@@ -39,16 +40,15 @@ export const SolutionsAccordion = SolutionsAccordionRawSchema.transform(
   }),
 );
 
-export const ProblemInsightSolutionSchema = ProblemInsightSolutionRawSchema.transform(
-  (res) => ({
+export const ProblemInsightSolutionSchema =
+  ProblemInsightSolutionRawSchema.transform((res) => ({
     type: "problem-insight-solution" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     problem: res.problem,
     insight: res.insight,
     solution: res.solution,
-  }),
-);
+  }));
 
 export const SolutionMap = SolutionMapRawSchema.transform((res) => ({
   type: "map" as const,
@@ -86,6 +86,14 @@ export const TestimonialsFeedSchema = TestimonialsFeedRawSchema.transform(
   }),
 );
 
+export const FormcontainerSchema = FormContainerRawSchema.transform((res) => ({
+  type: "form_container" as const,
+  title: res.title,
+  paragraph: res.paragraph,
+  form: res.form,
+  list: res.list,
+}));
+
 export const SectionsSchema = z.array(
   z.discriminatedUnion("__component", [
     PartnersSectionSchema,
@@ -99,6 +107,7 @@ export const SectionsSchema = z.array(
     CardProductStepsSchema,
     ContentImageSplitSchema,
     TestimonialsFeedSchema,
+    FormcontainerSchema,
   ]),
 );
 
@@ -123,3 +132,5 @@ export type CardProductStepsType = z.infer<typeof CardProductStepsSchema>;
 export type ContentImageSplitType = z.infer<typeof ContentImageSplitSchema>;
 export type TestimonialsFeedType = z.infer<typeof TestimonialsFeedSchema>;
 export type SectionsType = z.infer<typeof SectionsSchema>;
+export type FormContiner = z.infer<typeof FormcontainerSchema>;
+

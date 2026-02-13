@@ -30,10 +30,11 @@ import {
 } from "@/features/header/type/header.type";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 
-export function Header() {
+export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isHiddenOnScroll, setIsHiddenOnScroll] = useState(false);
+  const [topOffset, setTopOffset] = useState(topBannerHeight);
   const headerRef = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => setOpenId(null), []);
@@ -95,6 +96,8 @@ export function Header() {
       requestAnimationFrame(() => {
         const y = window.scrollY;
         const diff = y - lastY;
+        const nextTopOffset = Math.max(topBannerHeight - y, 0);
+        setTopOffset((prev) => (prev === nextTopOffset ? prev : nextTopOffset));
 
         if (y <= 8) {
           setIsHiddenOnScroll(false);
@@ -113,14 +116,25 @@ export function Header() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+
+    const syncTopOffsetOnMount = requestAnimationFrame(() => {
+      const y = window.scrollY;
+      const nextTopOffset = Math.max(topBannerHeight - y, 0);
+      setTopOffset((prev) => (prev === nextTopOffset ? prev : nextTopOffset));
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(syncTopOffsetOnMount);
+    };
+  }, [topBannerHeight]);
 
   return (
     <header
       ref={headerRef}
+      style={{ top: topOffset }}
       className={cx(
-        "fixed top-0 left-0 right-0 overflow-visible flex items-center justify-between",
+        "fixed left-0 right-0 overflow-visible flex items-center justify-between",
         mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
         isHiddenOnScroll || openId != null ? "z-[200000]" : "z-[2000]",
         mobileOpen

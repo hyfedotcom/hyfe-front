@@ -2,23 +2,23 @@
 
 import { useNavStack } from "@/hooks/useNavStack";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { ICONS } from "@/shared/icons/resources";
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useEffect, useState } from "react";
+import { SheetShare } from "./SheetShare";
 
 export function Sheet({
   children,
   returnPath,
+  share,
 }: {
   children: React.ReactElement;
   returnPath: string;
+  share?: {
+    citation?: string;
+  };
 }) {
   const [open, setOpen] = useState(false);
-  const width = useWindowSize();
-  const [isShareOpen, setIsShareOpen] = useState(false);
   const router = useRouter();
   const { hasInternalBack } = useNavStack();
-  const didInitShare = useRef(false);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setOpen(true));
@@ -52,48 +52,24 @@ export function Sheet({
 
     setTimeout(() => {
       if (hasInternalBack()) {
-        router.back(); // пришёл изнутри — назад
+        router.back();
       } else {
-        router.replace(fallbackPath); // deep link — уходим на fallback без лишней записи
+        router.replace(fallbackPath);
       }
     }, 300);
   };
-
-  useEffect(() => {
-    console.log("BROWSER width:", width);
-  }, [width]);
-
-  useEffect(() => {
-    if (didInitShare.current) return;
-    if (width === 0) return;
-    didInitShare.current = true;
-
-    const set = () => setIsShareOpen(width >= 768);
-    set();
-  }, [width]);
-
-  const toggleShare = () => {
-    setIsShareOpen((prev) => !prev);
-  };
-
-  const Twitter = ICONS.Twitter;
-  const Copy = ICONS.Copy;
-  const Facebook = ICONS.Facebook;
-  const Linkedin = ICONS.Linkedin;
-  const Quote = ICONS.Quote;
-  const Share = ICONS.Share;
 
   return (
     <div className="max-w-screen fixed inset-0 z-1000000 ">
       <button
         className="absolute inset-0 bg-black/40"
-        onClick={() => close(returnPath)}
+        onClick={() => router.push(`${returnPath}`)}
         aria-label="Close"
       />
 
       <div
         className={[
-          "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-0 md:pt-15",
+          "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-0 ",
           "transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
           "max-h-[100dvh] rounded-t-[28px] md:rounded-t-[40px]",
@@ -119,40 +95,11 @@ export function Sheet({
             />
           </svg>
         </button>
-        <div className="fixed flex flex-col md:flex-row gap-2  mx-auto top-3 md:top-3 left-4 md:left-8 z-1000 ">
-          <button
-            onClick={toggleShare}
-            className="z-100000 md:hidden w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
-          >
-            <Share className="text-black" />
-          </button>
-          <button
-            className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
-          >
-            <Twitter className="text-black" />
-          </button>
-          <button
-            className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
-          >
-            <Copy className="text-black" />
-          </button>
-          <button
-            className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
-          >
-            <Facebook className="text-black" />
-          </button>
-          <button
-            className={`${isShareOpen ? "" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000`}
-          >
-            <Linkedin className="text-black" />
-          </button>
-          <button
-            className={`${isShareOpen ? "px-4 shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute w-10 h-10"}   font-semibold h-10 rounded-full bg-white  flex justify-center items-center gap-2 cursor-pointer  hover:scale-110 duration-300 z-1000`}
-          >
-            <Quote className="text-black" /> {isShareOpen && "Cite"}
-          </button>
-        </div>
+
+        {share && <SheetShare citation={share.citation} />}
+
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+          <div className="w-full absolute top-0 z-100 h-10 md:h-25 bg-gradient-to-b via-white/50 from-white to-white/0"></div>
           {children}
         </div>
       </div>

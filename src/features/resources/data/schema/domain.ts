@@ -338,12 +338,22 @@ export const ResourceLandingDomainSchema = z.object({
   title: z.string(),
   paragraph: z.union([z.string(), z.undefined()]),
   seo: SeoDomainSchema,
+  stats: z.union([
+    z.array(
+      z.looseObject({
+        label: z.string(),
+        value: z.string(),
+      }),
+    ),
+    z.undefined(),
+  ]),
 });
 
 export const LandingSchema = StrapiResponse(ResourceLandingRawSchema)
   .transform((res) => ({
     title: res.data.title,
     paragraph: res.data.paragraph ?? undefined, // null -> undefined
+    stats: res.data.stats ?? undefined,
     seo: SeoSchema.parse(res.data.seo),
   }))
   .pipe(ResourceLandingDomainSchema);

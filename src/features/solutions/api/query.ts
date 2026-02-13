@@ -149,6 +149,25 @@ export const pageSolution = (slug: string) => ({
             },
           },
         },
+        "form.form-container": {
+          fields: ["title", "paragraph"],
+          populate: {
+            list: {
+              fields: ["label"],
+            },
+            form: {
+              fields: ["cta_label", "cough_news_subscription"],
+              populate: {
+                inputs: {
+                  fields: ["label", "type", "required"],
+                },
+                consent: {
+                  fields: ["label", "privacy_link", "required"],
+                },
+              },
+            },
+          },
+        },
       },
     },
   },
