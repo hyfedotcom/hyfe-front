@@ -37,13 +37,13 @@ export const headerNav: NavItem[] = [
     items: [
       {
         id: "sol-1",
-        label: "For pharma",
+        label: "For Pharma",
         description: "Objective cough data for clinical development",
         href: "/solutions/life-sciences",
       },
       {
         id: "sol-2",
-        label: "For academics",
+        label: "For Academics",
         description: "Measure cough objectively, over time",
         href: "/solutions/research",
       },

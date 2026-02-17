@@ -1,3 +1,4 @@
+import { getPrivacyTermPage } from "@/features/privacy-terms";
 import ResourceTypePage from "../components/layout/ResourceTypePage";
 import { ResourceTypeScrollReset } from "../components/navigation/ResourceTypeScrollReset";
 import { isResourceType } from "@/features/resources/data/api/resourceType";
@@ -17,7 +18,6 @@ export default async function Layout({
 
   return (
     <>
-      <ResourceTypeScrollReset />
       <ResourceTypePage type={type} />
       {children}
     </>

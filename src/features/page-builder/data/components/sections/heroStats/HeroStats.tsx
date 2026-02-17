@@ -171,7 +171,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
       {stats.length > 0 && (
         <div className="relative min-h-[120vh] md:min-h-[150vh]">
           <div className="sticky top-1/2 -translate-y-1/2">
-            <div className="flex flex-col lg:flex-row gap-3 px-4 lg:px-20 pb-20 md:pb-[329px]">
+            <div className="flex flex-col lg:flex-row gap-3 px-4 xl:px-20 pb-20 md:pb-[329px]">
               {stats.map((s, i) => {
                 const [start, end] = getRange(i);
                 return (

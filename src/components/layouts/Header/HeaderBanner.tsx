@@ -22,7 +22,7 @@ export function HeaderBanner({
 
   return (
     <div className="h-10 border-b border-black/20 bg-gradient-to-r from-[#212838] via-[#2A3040] to-[#212838] text-white">
-      <div className="h-full w-full px-4 md:px-10 lg:px-20">
+      <div className="h-full w-full px-4 md:px-10 xl:px-20">
         {!href && (
           <div className="mx-auto flex h-full max-w-[1400px] items-center justify-center">
             {content}

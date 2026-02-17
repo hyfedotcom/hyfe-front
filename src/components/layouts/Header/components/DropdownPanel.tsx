@@ -17,12 +17,13 @@ export function DropdownPanel({
   close: () => void;
 }) {
   const META = {
-    "Life Sciences": { label: "Life Sciences", Icon: LifeScienceIcon },
-    Research: {
-      label: "Research",
+    "For Pharma": { Icon: LifeScienceIcon },
+    "For Academics": {
       Icon: ResearchIcon,
     },
-    "Virtual Care": { label: "Virtual Care", Icon: VirtualCareIcon },
+    "For Healthcare Providers": {
+      Icon: VirtualCareIcon,
+    },
     Team: { Icon: UsersIcon },
     Careers: { Icon: BriefeCaseIcon },
     Advisors: { Icon: GraduationCapIcon },
@@ -54,7 +55,8 @@ export function DropdownPanel({
         />
         <div className="relative z-10">
           {items.map((it) => {
-            const meta = it.label && isMetaKey(it.label) ? META[it.label] : null;
+            const meta =
+              it.label && isMetaKey(it.label) ? META[it.label] : null;
             const Icon = meta?.Icon;
             return (
               <NavLink
@@ -66,7 +68,7 @@ export function DropdownPanel({
                   "hover:bg-black/5",
                 )}
               >
-                {Icon && <Icon className="text-black min-w-5 min-h-5" />}
+                {Icon && <Icon className="text-primary-600 min-w-5 min-h-5" />}
                 <div className="min-w-0 pr-8">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-black">{it.label}</span>

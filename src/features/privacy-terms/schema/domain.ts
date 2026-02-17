@@ -4,7 +4,7 @@ import {
   SeoDomainSchema,
   SeoSchema,
 } from "@/features/resources";
-import { PrivacyTermItemRawSchema } from "./raw";
+import { PrivacyTermItemRawSchema, textOrientation } from "./raw";
 
 export const PrivacyTermPageDomainSchema = z.object({
   title: z.string(),
@@ -13,6 +13,7 @@ export const PrivacyTermPageDomainSchema = z.object({
   content: ResourceBlockContentSchema,
   seo: SeoDomainSchema.optional(),
   content_only: z.boolean(),
+  textOrientation: textOrientation,
 });
 
 export const PrivacyTermPageSchema = PrivacyTermItemRawSchema.transform(
@@ -24,6 +25,7 @@ export const PrivacyTermPageSchema = PrivacyTermItemRawSchema.transform(
       content: item.rich_text.content,
       seo: item.seo ? SeoSchema.parse(item.seo) : undefined,
       content_only: item.content_only ?? false,
+      textOrientation: item.text_orientation ?? "left",
     }),
 );
 

@@ -12,7 +12,7 @@ export async function getPrivacyTermPage(slug: string) {
     query: privacyTermBySlugQuery(slug),
     tags: [`privacy-term:${slug}`, "privacy-term:all"],
   });
-
+  
   const pages = parseOrThrow(StrapiCollectionSchema(PrivacyTermPagesSchema), raw);
   return pages[0] ?? null;
 }

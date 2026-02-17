@@ -117,7 +117,7 @@ export function MegaPanel({
                         >
                           <div className="flex items-start gap-3 w-full pr-8">
                             {Icon && (
-                              <Icon className="text-black min-w-7 min-h-7" />
+                              <Icon className="text-primary-600 min-w-7 min-h-7" />
                             )}
                             <div className="min-w-0 grow">
                               <div className="flex items-center gap-2">

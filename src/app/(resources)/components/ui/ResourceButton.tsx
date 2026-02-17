@@ -12,12 +12,14 @@ export function ResourceButton({
   classNameProp,
   active = false,
   url,
+  onClick,
 }: {
   label: "news" | "publications" | "cough-news" | "white-papers" | "insights";
-  url: string;
+  url?: string;
   tag?: "Link" | "button";
   classNameProp?: string;
   active: boolean;
+  onClick?: () => void;
 }) {
   const META = {
     news: { label: "News", Icon: NewsIcon },
@@ -27,12 +29,15 @@ export function ResourceButton({
     "white-papers": { label: "White Papers", Icon: WhitePapersIcon },
   } as const;
 
+  const className =
+    "hover:bg-gradient-to-br from-white via-white to-primary-100/70 duration-300 transition-all";
+
   const meta = label ? META[label] : null;
   const Icon = meta?.Icon;
 
   const content = (
     <span
-      className={`flex ${classNameProp}  items-center gap-2.5 px-6 py-3 text-[20px] leading-[100%] capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
+      className={`flex ${classNameProp} ${className}  items-center gap-2.5 px-4 py-2.5 text-[14px] md:text-[16px] leading-[100%] capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
     >
       {Icon && (
         <Icon
@@ -45,11 +50,18 @@ export function ResourceButton({
 
   if (tag === "Link") {
     return (
-      <Link className=" cursor-pointer" href={`${url ? url : `/${label}`}`}>
+      <Link
+        className={`cursor-pointer`}
+        href={`${url ? url : `/${label}`}`}
+      >
         {content}
       </Link>
     );
   } else {
-    return <button className="cursor-pointer">{content}</button>;
+    return (
+      <button onClick={onClick} className={`cursor-pointer`}>
+        {content}
+      </button>
+    );
   }
 }

@@ -25,12 +25,12 @@ export function TabSlider({ card }: { card: CardType[] }) {
             <div
               key={index}
               onClick={() => setActiv(index)}
-              onMouseEnter={() => preload(c.icon?.url || "")}
+              onMouseEnter={() => preload(c.image?.url || "")}
               className={clsx(
                 "group md:max-w-[586px] p-4 md:px-5 rounded-[28px] cursor-pointer transition-all duration-400",
                 index === activ
                   ? `bg-primary-100 py-4 md:py-5 ${activ === 0 ? "mb-3" : "my-3"}`
-                  : "bg-gray-50 md:bg-transparent hover:bg-gray-50 ",
+                  : "bg-gray-50 md:bg-transparent hover:bg-primary-100/50 ",
               )}
             >
               <button type="button" className="cursor-pointer w-full">

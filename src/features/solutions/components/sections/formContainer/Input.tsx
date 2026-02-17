@@ -3,73 +3,76 @@
 import type { InputType } from "@/features/solutions/schema/hero/raw";
 import { useState } from "react";
 
-const inputType = {
-  name: {
-    placeholder: "First and last name",
-    type: "text",
-    label: "Full name",
-  },
-  email: {
-    placeholder: "Enter your email",
-    type: "email",
-    label: "Your email address",
-  },
-  number: {
-    placeholder: "Enter your phone",
-    type: "number",
-    label: "Enter your phone number",
-  },
-  message: {
-    placeholder: "Write",
-    type: "textaria",
-    label: "Write",
-  },
-  custom: {
-    placeholder: "penis",
-    type: "penis",
-    label: "penis",
-  },
-};
-
 export function Input({
   input,
   value,
   onChange,
+  hasError = false,
+  disabled = false,
+  onFocus,
+  onBlur,
 }: {
   input: InputType;
   value: string;
   onChange: (next: string) => void;
+  hasError?: boolean;
+  disabled?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }) {
-  const { required, type } = input;
+  const { required, type, label } = input;
   const [isActive, setIsActive] = useState(false);
-  const inputSelect = inputType[type];
+  const inputLabel = label?.trim() || "Field";
+
+  function handleFocus() {
+    setIsActive(true);
+    onFocus?.();
+  }
+
+  function handleBlur() {
+    setIsActive(value.length !== 0);
+    onBlur?.();
+  }
 
   return (
     <div className="relative">
-      {type === "message" ? (
+      {type === "textarea" ? (
         <textarea
+          className={`min-h-[140px] p-4 w-full bg-white border rounded-[20px] resize-y ${
+            hasError ? "border-[#B42318]" : "border-black/15"
+          } ${disabled ? "opacity-70 cursor-not-allowed" : ""}`}
           required={required}
           value={value}
+          placeholder=""
+          disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setIsActive(true)}
-          onBlur={() => setIsActive(value.length !== 0)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       ) : (
         <input
-          className="h-12 pl-5 w-full bg-white border rounded-full"
+          className={`h-12 pl-5 w-full bg-white border rounded-full ${
+            hasError ? "border-[#B42318]" : "border-black/15"
+          } ${disabled ? "opacity-70 cursor-not-allowed" : ""}`}
           required={required}
-          type={inputSelect.type}
+          type={type}
           value={value}
+          placeholder=""
+          disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setIsActive(true)}
-          onBlur={() => setIsActive(value.length !== 0)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       )}
 
       <label
-        className={`${isActive ? "-top-4 text-[13px] text-body-secondary" : "top-2 text-[16px] text-body-secondary"} absolute left-4 bg-white px-3 py-1 rounded-full pointer-events-none`}
+        className={`${
+          isActive || value
+            ? "-top-4 text-[13px]"
+            : "top-2 text-[16px]"
+        } absolute left-4 bg-white px-3 py-1 rounded-full pointer-events-none text-body-secondary `}
       >
-        {inputSelect.label} {required && <span className="text-red-600">*</span>}
+        {inputLabel} {required && <span className="text-red-600">*</span>}
       </label>
     </div>
   );

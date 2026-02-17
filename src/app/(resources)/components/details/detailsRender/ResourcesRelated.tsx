@@ -110,6 +110,7 @@ export function ResourcesRelated({
           <Link
             className="w-[85vw] sm:w-[50vw] shrink-0 md:w-full  md:min-w-[425px] md:max-w-[425px] flex flex-col justify-between md:max-w-[425px bg-primary p-5 rounded-[20px] group hover:bg-black  duration-300 transition-colors"
             href={`/${resourceType}`}
+            scroll={true}
           >
             <h3 className="text-black group-hover:text-primary! font-medium!  duration-300 transition-colors">
               {relatedCtaCopy}

@@ -19,6 +19,7 @@ import type {
   ResourceCardListType,
 } from "@/features/resources";
 import type { ResourceFeedManySectionType } from "../schema/pageBuilder";
+import { HeroContentType } from "@/features/about/schema/domain";
 
 export type ResourceFeedSectionRenderable = ResourceFeedSectionType & {
   cards?: ResourceCardType[];
@@ -42,7 +43,8 @@ type PageBuilderBaseSection =
   | SolutionMapType
   | CardProductStepsType
   | ContentImageSplitType
-  | TestimonialsFeedType;
+  | TestimonialsFeedType
+  | HeroContentType;
 
 type NonResourceFeedSection = Exclude<
   PageBuilderBaseSection,
@@ -59,7 +61,9 @@ export type PageBuilderSection =
 
 export type PageBuilderSectionType = PageBuilderSection["type"];
 
-export type PageBuilderComponent<P> = (props: P) => ReactNode | Promise<ReactNode>;
+export type PageBuilderComponent<P> = (
+  props: P,
+) => ReactNode | Promise<ReactNode>;
 
 export type PageBuilderRegistry = {
   [K in PageBuilderSectionType]: PageBuilderComponent<{

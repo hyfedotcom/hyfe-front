@@ -61,6 +61,8 @@ export const CardProductStepsRawSchema = z.looseObject({
   cards: z.array(CardSchema),
 });
 
+export const ContentImageSplitEnum = z.enum(["left", "right"]);
+
 export const ContentImageSplitRawSchema = z.looseObject({
   __component: z.literal("shared.content-image-split"),
   title: z.string(),
@@ -73,6 +75,7 @@ export const ContentImageSplitRawSchema = z.looseObject({
     .nullable(),
   ctas: z.array(CtaSchema).optional().nullable(),
   image: MediaRawSchema,
+  variant: ContentImageSplitEnum,
 });
 
 export const TestimonialsFeedRawSchema = z.looseObject({
@@ -91,14 +94,14 @@ export const TestimonialsFeedRawSchema = z.looseObject({
 });
 
 export const InputTypeRawSchema = z.enum([
-  "name",
+  "text",
   "email",
-  "number",
-  "message",
-  "custom",
+  "tel",
+  "textarea",
 ]);
 
 export const InputRawSchema = z.looseObject({
+  hb_name: z.string().optional().nullable(),
   label: z.string(),
   type: InputTypeRawSchema,
   required: z.boolean(),
@@ -111,6 +114,7 @@ export const ConsentRawShema = z.looseObject({
 });
 
 export const FormRawSchema = z.looseObject({
+  formId: z.string().optional().nullable(),
   inputs: z.array(InputRawSchema),
   consent: z.array(ConsentRawShema),
   cta_label: z.string(),
@@ -131,6 +135,8 @@ export const FormContainerRawSchema = z.looseObject({
   form: FormRawSchema,
 });
 
+
+
 export type FormType = z.infer<typeof FormRawSchema>;
 export type InputType = z.infer<typeof InputRawSchema>;
-export type ConsentType = z.infer<typeof InputRawSchema>;
+export type ConsentType = z.infer<typeof ConsentRawShema>;

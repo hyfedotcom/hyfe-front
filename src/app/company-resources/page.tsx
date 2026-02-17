@@ -3,6 +3,7 @@ import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
 import { getPageResource } from "@/features/resources/data/api/getResourceFeedPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+import { CompanyResourcesClient } from "./components/CompanyResourcesClient";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -11,7 +12,7 @@ export default async function ScienceResources() {
   const data = await getPageResource({ slug: "company-resource" });
 
   if (!data) return notFound();
-  const resourceTypes: Array<"news" | "insights"> = ["news", "insights"];
+
   return (
     <div className="relative">
       <ResourcesListHero
@@ -21,26 +22,7 @@ export default async function ScienceResources() {
         }}
       />
       <div>
-        <div className="resources-glass-sticky-wrap mt-10">
-          <div className="resources-glass-surface rounded-[30px]">
-            <div aria-hidden="true" className="resources-glass-overlay" />
-            <div aria-hidden="true" className="resources-glass-highlight" />
-            <div className="resources-glass-bar-content">
-              <div className="flex min-w-0 gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {resourceTypes.map((t) => (
-                  <ResourceButton
-                    key={t}
-                    label={t}
-                    url={`#${t}`}
-                    active
-                    tag="Link"
-                    classNameProp="resources-glass-resource-pill"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <CompanyResourcesClient />
         <PageBuilder sections={data?.sections} />
       </div>
     </div>

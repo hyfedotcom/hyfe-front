@@ -16,7 +16,7 @@ const seoPopulate = {
 
 export const privacyTermBySlugQuery = (slug: string) => ({
   filters: { slug: { $eq: slug } },
-  fields: ["content_only", "name", "slug", "date"],
+  fields: ["content_only", "name", "slug", "date","text_orientation"],
   populate: {
     rich_text: {
       fields: ["content"],

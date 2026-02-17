@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serverEnv } from "@/core/env.server";
 
+const HUBSPOT_DRY_RUN = process.env.HUBSPOT_DRY_RUN === "true";
+
 export async function POST(req: NextRequest) {
   try {
     const form = await req.formData();
@@ -14,6 +16,10 @@ export async function POST(req: NextRequest) {
 
     if (!email) {
       return NextResponse.json({ error: "email is required" }, { status: 400 });
+    }
+
+    if (HUBSPOT_DRY_RUN) {
+      return NextResponse.json({ ok: true, dryRun: true });
     }
 
     const ip =

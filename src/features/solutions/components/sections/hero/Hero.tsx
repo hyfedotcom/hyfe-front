@@ -97,7 +97,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
       </svg>
       <div className="relative z-1">
         {" "}
-        <div className="space-y-5 pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 px-4 md:px-10 lg:px-20">
+        <div className="space-y-5 pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 px-4 md:px-10 xl:px-20">
           <h1 className="md:text-[50px]! lg:text-[70px]!">{title}</h1>
           <p className="body-large text-balance">{paragraph}</p>
         </div>

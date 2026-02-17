@@ -127,32 +127,22 @@ export function RecourcesList({
   }, [hasSearch]);
 
   useEffect(() => {
-    let ticking = false;
-    const updatePinned = () => {
-      ticking = false;
-      if (!sentinelRef.current) return;
-      const y = window.scrollY || 0;
-      if (y <= 0) {
-        setIsPinned(false);
-        return;
-      }
-      const top = sentinelRef.current.getBoundingClientRect().top;
-      setIsPinned(top <= 0);
-    };
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsPinned(entry.boundingClientRect.top <= 0);
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: "0px",
+      },
+    );
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(updatePinned);
-    };
-
-    updatePinned();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    observer.observe(sentinel);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      setIsPinned(false);
+      observer.disconnect();
     };
   }, []);
 
@@ -199,11 +189,11 @@ export function RecourcesList({
       />
       <div
         ref={cardsStartRef}
-        className="flex w-full flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-start gap-4 md:gap-5 px-4 md:px-10 lg:px-20"
+        className="flex w-full flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-start sm:items-stretch gap-4 md:gap-5 px-4 md:px-10 xl:px-20"
       >
         {visibleList.map((c) => (
           <Link
-            className="w-full"
+            className="w-full sm:h-full"
             href={`/${type}/${c.slug}`}
             key={c.slug}
             scroll={false}

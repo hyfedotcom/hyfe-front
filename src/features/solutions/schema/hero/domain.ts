@@ -74,6 +74,7 @@ export const ContentImageSplitSchema = ContentImageSplitRawSchema.transform(
     content: res.content ?? undefined,
     ctas: res.ctas ?? undefined,
     image: MediaSchema.parse(res.image),
+    variant: res.variant,
   }),
 );
 
@@ -115,12 +116,15 @@ export const SolutionRawSchema = z.looseObject({
   name: z.string(),
   slug: z.string(),
   sections: SectionsSchema,
-  seo: SeoSchema,
+  seo: SeoSchema.optional(),
 });
 
 export const SolutionCollectionSchema = StrapiCollectionSchema(
   z.array(SolutionRawSchema),
 );
+
+
+
 
 export type AccordionType = z.infer<typeof SolutionsAccordion>;
 export type ProblemInsightSolutionType = z.infer<
@@ -133,4 +137,3 @@ export type ContentImageSplitType = z.infer<typeof ContentImageSplitSchema>;
 export type TestimonialsFeedType = z.infer<typeof TestimonialsFeedSchema>;
 export type SectionsType = z.infer<typeof SectionsSchema>;
 export type FormContiner = z.infer<typeof FormcontainerSchema>;
-

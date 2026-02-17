@@ -18,7 +18,7 @@ export function ResourcesListHero({ data }: { data: Props }) {
   );
 
   return (
-    <main className="pt-25 md:pt-40 lg:pt-55 px-4 md:px-10 lg:px-20 space-y-6 md:space-y-8">
+    <main className="pt-25 md:pt-40 lg:pt-55 px-4 md:px-10 xl:px-20 space-y-6 md:space-y-8">
       <ResourcesBreadcrumbs />
       <div className="space-y-5 max-w-[980px]">
         <h1 className="text-balance">{title}</h1>

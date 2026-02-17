@@ -3,7 +3,7 @@ import { FormContiner } from "@/features/solutions/schema/hero/domain";
 import { Form } from "./Form";
 import { ContentContainer } from "@/components/content/ContentContainer";
 
-export function FromContainer({ section }: { section: FormContiner }) {
+export function FormContainer({ section }: { section: FormContiner }) {
   return (
     <SectionContainer>
       <div>
@@ -21,6 +21,7 @@ export function FromContainer({ section }: { section: FormContiner }) {
               ))}
             </ul>
           )}
+          
           <Form form={section.form} />
         </div>
       </div>

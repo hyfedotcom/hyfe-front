@@ -156,7 +156,7 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
           />
         </>
       )}
-      <div className="relative z-10 mx-auto flex w-full items-center justify-between px-4 md:px-10 lg:px-20">
+      <div className="relative z-10 mx-auto flex w-full items-center justify-between px-4 md:px-10 xl:px-20">
         {/* Logo */}
         <Link
           href="/"

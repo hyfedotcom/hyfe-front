@@ -1,5 +1,4 @@
 import getCareers from "@/features/careers/api/getCareers";
-import { CareersType } from "@/features/careers/schema/careers.schema";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -33,7 +32,7 @@ export default async function CareersPage() {
       {vacancies.length > 0 && (
         <section className="flex flex-col gap-5">
           {vacancies.map((v, i) => (
-            <Link key={i} href={`/careers/${v.slug}`}>
+            <Link key={i} href={`/careers/${v.slug}`} scroll={false}>
               <VacancyItem vacancy={v} />
             </Link>
           ))}

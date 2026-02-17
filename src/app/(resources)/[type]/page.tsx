@@ -20,7 +20,9 @@ type Params = { type: string };
 export async function generateStaticParams(): Promise<Params[]> {
   try {
     const privacyTermSlugs = await getSlugs("privacy-term-items");
-    const allTypes = Array.from(new Set([...RESOURCE_TYPES, ...privacyTermSlugs]));
+    const allTypes = Array.from(
+      new Set([...RESOURCE_TYPES, ...privacyTermSlugs]),
+    );
     return allTypes.map((type) => ({ type }));
   } catch (e) {
     console.error("generateStaticParams error on /[type] route:", e);
@@ -85,6 +87,8 @@ export default async function DynamicTypePage({
     return notFound();
   }
 
+  const dir = legalPage.textOrientation === "left" ? "ltr" : "rtl";
+
   return (
     <>
       {legalPage.content_only && <ChromeOffStyle />}
@@ -92,7 +96,8 @@ export default async function DynamicTypePage({
         <SeoStructuredData seo={legalPage.seo} id="privacy-terms-seo-jsonld" />
       )}
       <main
-        className={`max-w-[950px] mx-auto px-4 md:px-10 ${
+        dir={dir}
+        className={` legal max-w-[950px] mx-auto px-4 md:px-10 ${
           legalPage.content_only
             ? "py-10 md:py-16"
             : "pt-[220px] pb-[100px] md:pt-[240px] md:pb-[140px]"

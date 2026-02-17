@@ -8,7 +8,7 @@ import { NewsletterSignupForm } from "@/features/newsletter/components/Newslette
 
 export function Footer({ newsletter }: { newsletter: NewsletterFormType }) {
   return (
-    <footer className="px-4 md:px-10 lg:px-20 pt-20 pb-10 rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] bg-white space-y-[60px]">
+    <footer className="px-4 md:px-10 xl:px-20 pt-20 pb-10 rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] bg-white space-y-[60px]">
       <div
         className=" space-y-8 mt-2  text-center! mx-auto"
         aria-labelledby="news-subscription-title-footer"

@@ -16,7 +16,8 @@ import { Map } from "@/features/solutions/components/sections/map/Map";
 import { CardProductSteps } from "./sections/CardProductSteps/CardProductSteps";
 import ContentImageSplit from "@/features/solutions/components/sections/ContentImageSplit/ContentImageSplit";
 import { Testimonials } from "@/features/solutions/components/sections/testimonials/Testimonials";
-import { FromContainer } from "@/features/solutions/components/sections/formContainer/FromContainer";
+import { FormContainer } from "@/features/solutions/components/sections/formContainer/FormContainer";
+import { HeroContent } from "./sections/HeroContent/HeroContent";
 
 export const pageBuilderRegistry: PageBuilderRegistry = {
   "hero-stats": HeroStats,
@@ -36,5 +37,6 @@ export const pageBuilderRegistry: PageBuilderRegistry = {
   "card-product-steps": CardProductSteps,
   "content-image-split": ContentImageSplit,
   "testimonials-feed": Testimonials,
-  form_container: FromContainer,
+  form_container: FormContainer,
+  "hero-content": HeroContent
 };

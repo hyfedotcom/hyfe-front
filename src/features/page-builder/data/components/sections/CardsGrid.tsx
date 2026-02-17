@@ -9,10 +9,11 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 
 export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   const [sizes, setSizes] = useState({
-    sectionWidth: 0,
-    containerWidth: 0,
+    viewportWidth: 0,
+    contentWidth: 0,
   });
   const sectionRef = useRef<HTMLElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const width = useWindowSize();
   const isMobile = width <= 768;
@@ -23,14 +24,14 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   });
 
   useEffect(() => {
-    const section = sectionRef.current;
+    const viewport = viewportRef.current;
     const container = containerRef.current;
-    if (!section || !container) return;
+    if (!viewport || !container) return;
 
     const updateSizes = () => {
       setSizes({
-        sectionWidth: section.clientWidth,
-        containerWidth: container.clientWidth,
+        viewportWidth: viewport.clientWidth,
+        contentWidth: container.scrollWidth,
       });
     };
 
@@ -42,36 +43,61 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
     }
 
     const observer = new ResizeObserver(updateSizes);
-    observer.observe(section);
+    observer.observe(viewport);
     observer.observe(container);
     return () => observer.disconnect();
-  }, []);
+  }, [section.cards.length]);
 
-  const scrollHeight =
-    Math.max(section.cards.length, 1) * (isMobile ? 600 : 600);
-  const maxX = sizes.sectionWidth - sizes.containerWidth;
+  const maxX = Math.min(sizes.viewportWidth - sizes.contentWidth, 0);
+  const shouldCheckOverflow = () => {
+    if (isMobile) return true
+    return isMobile || (section.cards.length > 3 && !isMobile);
+  };
+  const hasHorizontalScroll =
+    shouldCheckOverflow() && (sizes.viewportWidth === 0 || maxX < -1);
+  const scrollHeight = hasHorizontalScroll
+    ? Math.max(section.cards.length, 1) * (isMobile ? 600 : 600)
+    : undefined;
   const x = useTransform(scrollYProgress, [0.1, 0.8], [0, maxX]);
 
   return (
     <section
       ref={sectionRef}
-
-      className="relative py-[100px]  md:py-[140px]"
+      className="relative py-[100px] md:py-[140px]"
       style={{ height: scrollHeight }}
     >
-      <div className="space-y-6 md:space-y-10  sticky top-10 md:top-24">
-        <ContentContainer content={section} classContainer="px-4 md:px-10 lg:px-20 text-center mx-auto" width="max-w-[1200px]" />
-        <div className="overflow-x-hidden">
-          <motion.div
-            ref={containerRef}
-            style={{ x }}
-            className="flex flex-row gap-5 px-4 md:px-10 lg:px-20 w-max"
-          >
-            {section.cards.map((c, i) => (
-              <Card card={c} key={i} />
-            ))}
-          </motion.div>
-        </div>
+      <div
+        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-10 md:top-24" : ""}`}
+      >
+        <ContentContainer
+          content={section}
+          classContainer="px-4 md:px-10 xl:px-20 text-center mx-auto"
+          width="max-w-[1200px]"
+        />
+        {hasHorizontalScroll ? (
+          <div ref={viewportRef} className="overflow-x-hidden">
+            <motion.div
+              ref={containerRef}
+              style={{ x }}
+              className="flex flex-row gap-5 px-4 md:px-10 xl:px-20 w-max"
+            >
+              {section.cards.map((c, i) => (
+                <Card card={c} key={i} />
+              ))}
+            </motion.div>
+          </div>
+        ) : (
+          <div className="px-4 md:px-10 xl:px-20">
+            <div
+              ref={viewportRef}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+            >
+              {section.cards.map((c, i) => (
+                <Card card={c} key={i} width="w-full md:max-w-none" />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

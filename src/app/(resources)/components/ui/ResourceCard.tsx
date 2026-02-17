@@ -16,7 +16,7 @@ export function ResourceCard({
   return (
     <div
       className={
-        "group flex flex-col w-full h-fit hover:bg-activ border-[1.5px] border-border hover:border-primary hover:shadow-hover duration-300 space-y-4 md:space-y-5 bg-card rounded-[20px] overflow-hidden"
+        "group flex flex-col w-full h-fit sm:h-full hover:bg-activ border-[1.5px] border-border hover:border-primary hover:shadow-hover duration-300 space-y-4 md:space-y-5 bg-card rounded-[20px] overflow-hidden"
       }
     >
       <Image
@@ -26,18 +26,20 @@ export function ResourceCard({
         alt={cover.alt ?? `Image resource about ${title}}`}
         className={`${type === "publications" && "object-top-left"} w-full h-46 md:h-65 object-cover`}
       />
-      <div className="px-4 md:px-5  h-full flex flex-col">
-        <div className=" h-full flex flex-col">
+      <div className="px-4 md:px-5 flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col">
           <div className="flex mb-3 md:mb-4 gap-1 shrink-0">
             <TagPlate label={type} type={type} />
             {tags && tags.map((t, i) => <TagPlate label={t.tag} key={i} />)}
           </div>
 
           <div className="flex flex-col flex-1 min-h-0 ">
-            <h4 className={`${excerpt && "mb-2"} max-[768px]:text-[14px]! line-clamp-2`}>{title}</h4>
+            <h4 className={`${excerpt && "mb-2"} body-large font-medium! text-black! max-[768px]:text-[14px]! `}>{title}</h4>
 
             {excerpt && (
-              <p className="text-[12px] md:text-[16px] text-body-secondary! line-clamp-2">{excerpt}</p>
+              <p className="text-[12px] md:text-[16px] text-body-secondary! flex-1 min-h-0 overflow-hidden line-clamp-2">
+                {excerpt}
+              </p>
             )}
 
        

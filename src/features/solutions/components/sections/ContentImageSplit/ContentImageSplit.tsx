@@ -7,16 +7,20 @@ export default function ContentImageSplit({
 }: {
   section: ContentImageSplitType;
 }) {
-  const { ctas, content, title, type, image } = section;
+  const { ctas, content, title, type, image, variant } = section;
   return (
     <SectionContainer>
-      <div className="flex items-center flex-col-reverse md:flex-row">
+      <div
+        className={`${variant === "right" ? "flex-col-reverse md:flex-row-reverse" : "flex-col md:flex-row"} flex items-center `}
+      >
         <div className="md:w-1/2 space-y-6">
-          <h2>{title}</h2>
+          <h2 className="text-balance">{title}</h2>
           {content && (
             <div className="space-y-5">
               {content.map((e, i) => (
-                <p className="text-balance" key={i}>{e.paragraph}</p>
+                <p className="text-balance" key={i}>
+                  {e.paragraph}
+                </p>
               ))}
             </div>
           )}
