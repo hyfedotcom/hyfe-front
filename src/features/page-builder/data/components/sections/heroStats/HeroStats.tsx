@@ -51,6 +51,12 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
     return [start, end] as const;
   };
 
+  const h1Size =
+    title.length < 25
+      ? "text-[38px]! md:text-[42px]! lg:text-[48px]! xl:text-[54px]! 2xl:text-[62px]!"
+      : "text-[28px]! md:text-[34px]! lg:text-[40px]! xl:text-[46px]! 2xl:text-[50px]!";
+  console.log(h1Size);
+
   return (
     <main
       ref={sectionRef}
@@ -71,7 +77,10 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
             className="absolute left-1/2 -translate-x-1/2 translate-y-[32%] w-full max-w-none -top-200 md:-top-140 overflow-visible"
             preserveAspectRatio="xMidYMin slice"
           >
-            <g className="svg-blur-filter" filter="url(#hero_stats_blur_filter)">
+            <g
+              className="svg-blur-filter"
+              filter="url(#hero_stats_blur_filter)"
+            >
               <path
                 d="M-388 531.555C-204.407 531.555 -206.5 828.554 -63 531.555C80.5 234.556 305 808.553 466 531.555C627 254.557 733.5 939.053 1030 531.555C1326.5 124.057 1330.73 531.555 1488 531.555C1614.81 531.555 1750 10.5563 1884 531.555C2018 1052.55 2158.82 531.555 2309 531.555V1497.56H-388V531.555Z"
                 fill="url(#hero_stats_blur_gradient)"
@@ -144,6 +153,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
                 alt="maps"
                 quality={100}
                 sizes="100vw"
+                priority={true}
                 className="w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
             </motion.div>
@@ -151,7 +161,7 @@ export function HeroStats({ section }: { section: HeroStatsSectionType }) {
         </div>
         <div className="flex flex-col items-center px-4 md:px-10 text-center space-y-11 z-3 relative">
           <div className="space-y-8 text-balance max-w-[1000px]">
-            <h1>{title}</h1>
+            <h1 className={h1Size}>{title}</h1>
             <p className="body-large text-balance">{paragraph}</p>
           </div>
           <div className="flex gap-6 flex-col sm:flex-row">

@@ -1,9 +1,8 @@
 "use client";
 
 import { JumpLinks } from "@/components/navigation/JumpLinks";
-import { FAQSection } from "./FAQSection";
 import { FaqSectionType } from "@/features/faq/schema/faq.schema";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useActiveSection } from "./useActiveSection";
 
 export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
@@ -14,32 +13,81 @@ export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
     [sections],
   );
 
-  const { activeId, setActiveId } = useActiveSection(
+  const { activeId } = useActiveSection(
     items.map((x) => x.id),
     280,
   );
+  const [forcedActiveId, setForcedActiveId] = useState<string | null>(null);
+  const scrollListenerRef = useRef<(() => void) | null>(null);
+  const scrollIdleTimerRef = useRef<number | null>(null);
+  const scrollHardStopTimerRef = useRef<number | null>(null);
+
+  const clearAutoScrollLock = useCallback(() => {
+    if (scrollListenerRef.current) {
+      window.removeEventListener("scroll", scrollListenerRef.current);
+      scrollListenerRef.current = null;
+    }
+    if (scrollIdleTimerRef.current) {
+      window.clearTimeout(scrollIdleTimerRef.current);
+      scrollIdleTimerRef.current = null;
+    }
+    if (scrollHardStopTimerRef.current) {
+      window.clearTimeout(scrollHardStopTimerRef.current);
+      scrollHardStopTimerRef.current = null;
+    }
+    setForcedActiveId(null);
+  }, []);
 
   const onSelect = (id: string) => {
     const section = document.getElementById(id);
     if (!section) return;
 
-    const targetTop = section.getBoundingClientRect().top + window.scrollY - 200;
+    const targetTop =
+      section.getBoundingClientRect().top + window.scrollY - 200;
+    const clampedTop = Math.max(targetTop, 0);
 
-    setTimeout(() => setActiveId(id), 500);
-    window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
+    clearAutoScrollLock();
+    setForcedActiveId(id);
+
+    const onScroll = () => {
+      if (scrollIdleTimerRef.current) {
+        window.clearTimeout(scrollIdleTimerRef.current);
+      }
+
+      const reachedTarget = Math.abs(window.scrollY - clampedTop) <= 12;
+      if (reachedTarget) {
+        clearAutoScrollLock();
+        return;
+      }
+
+      scrollIdleTimerRef.current = window.setTimeout(() => {
+        clearAutoScrollLock();
+      }, 120);
+    };
+
+    scrollListenerRef.current = onScroll;
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    window.scrollTo({ top: clampedTop, behavior: "smooth" });
     history.replaceState(null, "", `#${id}`);
+
+    onScroll();
+    scrollHardStopTimerRef.current = window.setTimeout(() => {
+      clearAutoScrollLock();
+    }, 2000);
   };
 
+  useEffect(() => {
+    return () => clearAutoScrollLock();
+  }, [clearAutoScrollLock]);
+
   return (
-    <div className="flex gap-10 justify-center">
-      <div className="hidden lg:block mt-[40px] h-full w-full max-w-[300px] sticky top-40">
-        <JumpLinks items={items} activeId={activeId} onSelect={onSelect} />
-      </div>
-      <div className="space-y-25">
-        {sections.map((s, i) => (
-          <FAQSection key={i} section={s}></FAQSection>
-        ))}
-      </div>
+    <div className="w-full max-w-[340px]">
+      <JumpLinks
+        items={items}
+        activeId={forcedActiveId ?? activeId}
+        onSelect={onSelect}
+      />
     </div>
   );
 }

@@ -47,7 +47,7 @@ export default async function Member({ params }: { params: Props }) {
             alt={image.alt ?? name}
             fill
             sizes="(max-width: 640px) 160px, (max-width: 1024px) 240px, 400px"
-            className="object-cover rounded-full "
+            className="object-cover rounded-full border-2 border-border"
           />
         </div>
         <div className="space-y-10">

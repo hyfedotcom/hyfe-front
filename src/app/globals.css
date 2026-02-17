@@ -296,7 +296,7 @@ h1 {
 h2,
 .h2-class {
   /* 28px → 48px */
-  @apply text-[clamp(28px,3.2vw+16px,48px)] leading-[126%] font-medium text-heading;
+  @apply text-[clamp(28px,3.2vw+16px,40px)] leading-[126%] font-medium text-heading;
 }
 
 h3 {
@@ -307,7 +307,7 @@ h3 {
 h4,
 .h4-class {
   /* 18px → 24px */
-  @apply text-[clamp(18px,1.6vw+12px,24px)] leading-[126%] font-medium text-heading;
+  @apply text-[20px] md:text-[clamp(18px,1.6vw+12px,24px)] leading-[126%] font-medium text-heading;
 }
 
 body {

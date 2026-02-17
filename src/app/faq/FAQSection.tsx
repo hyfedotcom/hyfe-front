@@ -17,7 +17,7 @@ export function FAQSection({ section }: { section: FaqSectionType }) {
       id={title.replace(/ /g, "-").trim().toLowerCase()}
       className="w-full  space-y-5 "
     >
-      <h3 className="mb-5">{title}</h3>
+      <h3 className="mb-5  lg:min-w-[600px] xl:min-w-[800px] 2xl:min-w-[1000px]">{title}</h3>
 
       <div className="space-y-4 w-full ">
         {faqs?.map((f, i) => (

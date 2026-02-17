@@ -23,7 +23,7 @@ export default function FAQItem({
     <div
       data-open={active}
       className={[
-        "group w-fullrounded-[20px] bg-card  border hover:border-primary rounded-[20px] hover:shadow-hover duration-300",
+        "group w-full lg:min-w-[600px] xl:min-w-[800px] 2xl:min-w-[1000px] rounded-[20px] bg-card  border hover:border-primary rounded-[20px] hover:shadow-hover duration-300",
         active ? "border-primary shadow-hover" : "border-border",
         className,
       ].join(" ")}

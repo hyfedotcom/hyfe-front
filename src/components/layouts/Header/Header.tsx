@@ -141,7 +141,10 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
           ? "bg-white/96 backdrop-blur-sm"
           : "border-b border-black/[0.12] ring-1 ring-black/[0.05] bg-gradient-to-b from-white/56 via-white/30 to-white/16 backdrop-blur-[28px] backdrop-saturate-150 shadow-[0_12px_30px_rgba(15,23,42,0.12),0_1px_6px_rgba(255,255,255,0.45)_inset]",
         "transition-[transform,height] duration-300",
-        isHiddenOnScroll && openId === null && !mobileOpen && "-translate-y-full",
+        isHiddenOnScroll &&
+          openId === null &&
+          !mobileOpen &&
+          "-translate-y-full",
       )}
     >
       {!mobileOpen && (
@@ -172,7 +175,8 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
             width={120}
             height={36}
             alt="Hyfe"
-            priority
+            priority={false}
+            loading="lazy"
           />
         </Link>
 

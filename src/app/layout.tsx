@@ -8,6 +8,8 @@ import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 import { getNewsletterForm } from "@/features/newsletter";
 import getGeneral from "@/features/general/api/getGeneral";
 import { HeaderBanner } from "@/components/layouts/Header/HeaderBanner";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -28,6 +30,8 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <SpeedInsights />
+      <Analytics />
       <body className={`${poppins.variable} antialiased`}>
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
         <ScrollToTop />
