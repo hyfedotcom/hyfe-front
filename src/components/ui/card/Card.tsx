@@ -11,13 +11,14 @@ export function Card({
   const { image, description, title } = card;
   return (
     <div className={`rounded-[20px] overflow-hidden bg-card flex-1 ${width}`}>
-      <Image
-        src={image.url}
-        alt={image.alt ?? "image of card"}
-        width={image.width}
-        height={image.height}
-        className="w-full"
-      />
+      <div className="relative w-full aspect-[16/11]">
+        <Image
+          src={image.url}
+          alt={image.alt ?? "image of card"}
+          fill
+          className="object-cover"
+        />
+      </div>
       <div className="p-6 space-y-3  border-t border-border">
         <h4>{title}</h4>
         <p className="body-medium">{description}</p>

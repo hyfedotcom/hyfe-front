@@ -14,9 +14,8 @@ import { Analytics } from "@vercel/analytics/next";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  preload: true,
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export default async function RootLayout({

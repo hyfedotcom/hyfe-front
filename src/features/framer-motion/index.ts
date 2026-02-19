@@ -8,6 +8,7 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  useMotionTemplate,
 } from "framer-motion";
 
 export {
@@ -17,4 +18,5 @@ export {
   useScroll,
   useTransform,
   AnimatePresence,
+  useMotionTemplate,
 };

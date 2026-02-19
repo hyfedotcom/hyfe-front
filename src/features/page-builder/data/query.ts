@@ -19,11 +19,20 @@ export const pageBuilder = {
     sections: {
       on: {
         "shared.hero-stats": {
-          fields: ["title", "paragraph"],
+          fields: ["title", "paragraph", "map_title"],
           populate: {
             ctas: { fields: ["label", "url"] },
             clinical_trials: {
               fields: ["value", "label"],
+            },
+            datapoints: {
+              fields: ["label"],
+            },
+            coughs: {
+              fields: ["label"],
+            },
+            countries: {
+              fields: ["label"],
             },
           },
         },

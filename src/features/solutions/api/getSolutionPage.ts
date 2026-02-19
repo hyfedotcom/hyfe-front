@@ -27,8 +27,6 @@ export default async function getSolutionPage({ slug }: { slug: string }) {
     tags: [`solution:${slug}`],
   });
 
-  console.log(solutionSkeletonRaw);
-
   const secrionsOrder = (
     solutionSkeletonRaw as solutionSkeleton
   ).data[0].sections.map((e) => e.__component);
@@ -54,6 +52,6 @@ export default async function getSolutionPage({ slug }: { slug: string }) {
   const nextSections: PageBuilderSection[] = sections.map((s) =>
     isResourceFeed(s) ? (byKey.get(getResourceFeedKey(s)) ?? s) : s,
   );
-  console.log({ ...solutionFirst, sections: nextSections });
+
   return { seo: solutionFirst[0].seo, sections: nextSections };
 }

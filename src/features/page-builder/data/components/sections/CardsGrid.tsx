@@ -34,7 +34,6 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
         contentWidth: container.scrollWidth,
       });
     };
-
     updateSizes();
 
     if (typeof ResizeObserver === "undefined") {
@@ -50,7 +49,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
 
   const maxX = Math.min(sizes.viewportWidth - sizes.contentWidth, 0);
   const shouldCheckOverflow = () => {
-    if (isMobile) return true
+    if (isMobile) return true;
     return isMobile || (section.cards.length > 3 && !isMobile);
   };
   const hasHorizontalScroll =
@@ -75,11 +74,11 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
           width="max-w-[1200px]"
         />
         {hasHorizontalScroll ? (
-          <div ref={viewportRef} className="overflow-x-hidden">
+          <div ref={viewportRef} className="overflow-x-hidden ">
             <motion.div
               ref={containerRef}
               style={{ x }}
-              className="flex flex-row gap-5 px-4 md:px-10 xl:px-20 w-max"
+              className="flex flex-row gap-5 px-4 md:px-10 xl:px-20 w-max "
             >
               {section.cards.map((c, i) => (
                 <Card card={c} key={i} />

@@ -174,8 +174,7 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
             src="/general/logo.svg"
             width={120}
             height={36}
-            alt="Hyfe"
-            priority={false}
+            alt="Hyfe logo"
             loading="lazy"
           />
         </Link>

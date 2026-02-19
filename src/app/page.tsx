@@ -8,7 +8,6 @@ import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-
 export async function generateMetadata(): Promise<Metadata> {
   const fallback: Metadata = {
     title: "",
@@ -35,7 +34,7 @@ export default async function Home() {
   return (
     <>
       <SeoStructuredData seo={page.seo} id="home-seo-jsonld" />
-      <PageBuilder sections={page?.sections} />
+      <PageBuilder sections={page.sections} />
     </>
   );
 }

@@ -4,6 +4,7 @@ import {
 } from "@/features/resources/utils/FeedBuilder";
 import { getHeaderStats } from "@/features/stats/api/getHeaderStats";
 import type {
+  HeroStatsSectionType,
   PageSectionsType,
   ResourceFeedManySectionType,
   TabbedResourceFeedSectionType,
@@ -57,17 +58,16 @@ export async function hydratePageSections(
   let nextSections = sections as PageBuilderSection[];
 
   if (heroStatsSections.length) {
-    const headerStats = await getHeaderStats();
+    const heroSection = nextSections.find((s) => s.type === "hero-stats");
+    const headerStats = await getHeaderStats({
+      section: heroSection as HeroStatsSectionType,
+    });
     nextSections = nextSections.map((section) => {
       if (section.type !== "hero-stats") return section;
 
-      const apiStats = headerStats?.length ? headerStats : section.stats;
-      const stats = [
-        ...apiStats,
-        ...(section.clinicalTrials ? [section.clinicalTrials] : []),
-      ];
+      const apiStats = headerStats?.length ? headerStats : [];
 
-      return { ...section, stats };
+      return { ...section, stats: apiStats };
     });
   }
 
@@ -78,7 +78,7 @@ export async function hydratePageSections(
     );
     nextSections = nextSections.map((section) =>
       isResourceFeed(section)
-        ? byKey.get(getResourceFeedKey(section)) ?? section
+        ? (byKey.get(getResourceFeedKey(section)) ?? section)
         : section,
     );
   }
@@ -89,8 +89,8 @@ export async function hydratePageSections(
     const byIndex = new Map(
       feedManyEntries.map((entry, i) => [entry.index, builtMany[i]] as const),
     );
-    nextSections = nextSections.map((section, index) =>
-      byIndex.get(index) ?? section,
+    nextSections = nextSections.map(
+      (section, index) => byIndex.get(index) ?? section,
     );
   }
 
@@ -100,8 +100,8 @@ export async function hydratePageSections(
     const byIndex = new Map(
       tabbedEntries.map((entry, i) => [entry.index, builtTabbed[i]] as const),
     );
-    nextSections = nextSections.map((section, index) =>
-      byIndex.get(index) ?? section,
+    nextSections = nextSections.map(
+      (section, index) => byIndex.get(index) ?? section,
     );
   }
 

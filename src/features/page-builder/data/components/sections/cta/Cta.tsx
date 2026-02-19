@@ -84,23 +84,23 @@ export function Cta({ section }: { section: CTASectionSchemaType }) {
               content={section}
               classContainer="xl:pl-20 flex flex-col justify-start! items-left! text-left! mr-auto "
               width="max-w-[800px]"
-              classH="text-[80px]! leading-[126%]! font-semibold!  text-nowrap"
+              classH="text-[42px]! md:text-[50px]! lg:text-[60px]! xl:text-[70px]! 2xl:text-[80px]! leading-[126%]! font-semibold!  md:text-nowrap"
               classP="body-large text-black! font-medium!"
               classCtas="justify-start! justify-start "
-              classBtn="mr-auto"
+              classBtn="justify-between mr-auto"
             />
           </div>
         </SectionContainer>
-        <div className="w-[1260px] h-[950px]  relative scale-120 translate-x-[10%] ">
+        <div className="w-[1260px] h-[400px] md:h-[950px]  relative scale-120 translate-x-[10%] ">
           <Image
             src="/home/watch.png"
             alt="cough monitor smart watch"
             width={700}
             height={700}
-            className="z-1 w-screen md:w-[70vw]  lg:w-[700px] h-auto lg:object-cover translate-y-[-25%] lg:translate-y-[20%] relative left-1/4"
+            className="z-1 w-screen md:w-[70vw] absolute  lg:w-[700px] h-auto lg:object-cover md:translate-y-[-25%] lg:translate-y-[20%] md:left-1/4"
           ></Image>
           <Image
-            className="absolute inset-0 object-contain object-cover object-left "
+            className="absolute inset-0 object-contain object-cover object-top md:object-left "
             src={"/home/honeycombs.png"}
             alt={"CoughMonitor Suite "}
             fill

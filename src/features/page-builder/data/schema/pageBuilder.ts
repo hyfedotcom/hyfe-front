@@ -22,16 +22,22 @@ export const SectionHeroStatsSchema = z
     title: z.string(),
     paragraph: z.string().nullable(),
     ctas: z.array(CtaSchema).nullable(),
-    stats: z.array(StatSchema).optional(),
-    clinical_trials: StatSchema.nullish(),
+    map_title: z.string(),
+    clinical_trials: StatSchema,
+    datapoints: z.looseObject({ label: z.string() }),
+    coughs: z.looseObject({ label: z.string() }),
+    countries: z.looseObject({ label: z.string() }),
   })
   .transform((res) => ({
     type: "hero-stats" as const,
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     ctas: res.ctas ?? undefined,
-    stats: res.stats ?? [],
-    clinicalTrials: res.clinical_trials ?? undefined,
+    map_title: res.map_title,
+    clinicalTrials: res.clinical_trials,
+    datapoints: res.datapoints.label,
+    coughs: res.coughs.label,
+    countries: res.countries.label,
   }));
 
 export const SectionCardsGridSchema = z
@@ -201,6 +207,7 @@ export const PageCollectionSchema = z
 
 export type PageSectionsType = z.infer<typeof PageSectionsSchema>;
 export type HeroStatsSectionType = z.infer<typeof SectionHeroStatsSchema>;
+
 export type CardsGridSectionType = z.infer<typeof SectionCardsGridSchema>;
 export type PartnersSectionType = z.infer<typeof PartnersSectionSchema>;
 export type ProductsCardsSectionType = z.infer<typeof ProductsCardsSchema>;
@@ -215,3 +222,7 @@ export type TabbedResourceFeedSectionType = z.infer<
 export type ResourceFeedManySectionType = z.infer<
   typeof ResourceFeedManySectionSchema
 >;
+
+export type HeroStatsSectionmodifiedType = HeroStatsSectionType & {
+  stats: Record<string, string>[];
+};
