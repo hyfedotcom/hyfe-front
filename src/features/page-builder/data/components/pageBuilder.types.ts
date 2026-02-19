@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type {
+  HeroStatsSectionmodifiedType,
   PageSectionsType,
   TabbedResourceFeedSectionType,
 } from "../schema/pageBuilder";
@@ -44,7 +45,8 @@ type PageBuilderBaseSection =
   | CardProductStepsType
   | ContentImageSplitType
   | TestimonialsFeedType
-  | HeroContentType;
+  | HeroContentType
+  | HeroStatsSectionmodifiedType;
 
 type NonResourceFeedSection = Exclude<
   PageBuilderBaseSection,
@@ -57,7 +59,8 @@ export type PageBuilderSection =
   | NonResourceFeedSection
   | ResourceFeedSectionRenderable
   | ResourceFeedManySectionRenderable
-  | TabbedResourceFeedSectionRenderable;
+  | TabbedResourceFeedSectionRenderable
+  | HeroStatsSectionmodifiedType;
 
 export type PageBuilderSectionType = PageBuilderSection["type"];
 
@@ -65,8 +68,13 @@ export type PageBuilderComponent<P> = (
   props: P,
 ) => ReactNode | Promise<ReactNode>;
 
+type PageBuilderSectionByType<K extends PageBuilderSectionType> =
+  K extends "hero-stats"
+    ? HeroStatsSectionmodifiedType
+    : Extract<PageBuilderSection, { type: K }>;
+
 export type PageBuilderRegistry = {
   [K in PageBuilderSectionType]: PageBuilderComponent<{
-    section: Extract<PageBuilderSection, { type: K }>;
+    section: PageBuilderSectionByType<K>;
   }>;
 };

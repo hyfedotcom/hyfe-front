@@ -40,7 +40,7 @@ function ScrollRevealItem({
 }
 
 export function HeroStats({
-  section,
+  section
 }: {
   section: HeroStatsSectionmodifiedType;
 }) {
