@@ -9,11 +9,11 @@ export function MemberCard({ member }: { member: MemberType }) {
         alt={member.name}
         width={160}
         height={160}
-        className="rounded-full w-[160px] h-[160px]"
+        className="rounded-full w-[160px] h-[160px] mx-auto"
       />
       <div className="space-y-1 text-center">
         <h4>{member.name}</h4>
-        <p className="body-medium">{member.job}</p>
+        <p className="body-medium text-balance">{member.job}</p>
       </div>
     </div>
   );

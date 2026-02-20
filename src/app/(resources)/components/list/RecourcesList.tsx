@@ -37,7 +37,7 @@ export function RecourcesList({
       const targetTop =
         window.scrollY +
         cardsStart.getBoundingClientRect().top -
-        (isMobile ? -100 : 250);
+        (isMobile ? 250 : 250);
 
       window.scrollTo({
         top: Math.max(targetTop, 0),
@@ -165,8 +165,8 @@ export function RecourcesList({
   }, [isMobile, closeMobilePanels]);
 
   return (
-    <section className="relative space-y-10">
-      <div ref={sentinelRef} aria-hidden />
+    <section className="relative space-y-6 md:space-y-8">
+      <div ref={sentinelRef} aria-hidden className="my-0!"/>
       <ResourcesFiltersBar
         type={type}
         uniqueTags={uniqueTags}

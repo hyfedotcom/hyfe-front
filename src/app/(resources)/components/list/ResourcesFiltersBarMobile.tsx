@@ -99,9 +99,9 @@ export function ResourcesFiltersBarMobile({
             aria-expanded={mobileFiltersOpen}
             aria-controls="resources-mobile-filters"
             className={clsx(
-              "resources-glass-toggle-shell flex h-11 items-center justify-center gap-2 px-3 text-[13px] font-medium text-black",
+              "resources-glass-toggle-shell flex h-11 items-center justify-center gap-2 px-3 text-[13px] font-medium text-black resources-glass-search-shell",
               mobileFiltersOpen || activeTags.length > 0
-                ? "resources-glass-toggle-active"
+                ? "resources-glass-toggle-active "
                 : "resources-glass-toggle-idle",
             )}
           >

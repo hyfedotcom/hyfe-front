@@ -16,16 +16,18 @@ export function ResourceDetailsHero({
   const typeLabel = formatResourceTypeLabel(type);
 
   return (
-    <div className=" w-full md:space-y-10 md:space-y-15 pb-10 md:pb-20">
-      <div className="space-y-5 md:space-y-8">
+    <div className=" w-full space-y-8 md:space-y-15 pt-6 pb-10 md:pb-20">
+      <div className="space-y-4 md:space-y-8">
         <div>
           {" "}
           <Link href={`/${type}`} className="h4-class text-primary-700!">
             {typeLabel}
           </Link>
         </div>
-        <h1 className="text-[28px]! md:text-[52px]! text-balance">{title}</h1>
-        <div className="flex flex-col-reverse md:flex-row justify-between gap-6">
+        <h1 className="text-[24px]! md:text-[42px]! lg:text-[52px]! text-balance">
+          {title}
+        </h1>
+        <div className="flex flex-row items-center md:flex-row justify-between gap-6">
           <div className="flex gap-2">
             {tags.map((t: { tag: string }, i: number) => (
               <Link key={i} href={`/${type}`}>
@@ -33,7 +35,7 @@ export function ResourceDetailsHero({
               </Link>
             ))}
           </div>
-          <p className="body-medium text-body-secondary!">
+          <p className="text-[14px] md:text-[16px] text-body-secondary!">
             {formatDateWithDots(date)}
           </p>
         </div>

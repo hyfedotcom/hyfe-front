@@ -209,7 +209,7 @@ export function NewsletterSignupForm({
           ) : null}
         </div>
 
-        <div className="relative group/submit self-start">
+        <div className="relative group/submit self-start w-full">
           <Button
             label={isSubmitting ? "Sending..." : ctaLabel}
             url=""
@@ -217,7 +217,7 @@ export function NewsletterSignupForm({
             tag="button"
             color="white"
             classNameProp={cx(
-              "h-12 sm:w-max shrink-0",
+              "h-12 sm:w-max shrink-0 text-center justify-center",
               isSubmitting && "pointer-events-none opacity-70",
             )}
             arrow={false}

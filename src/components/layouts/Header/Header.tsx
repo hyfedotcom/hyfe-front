@@ -128,6 +128,7 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
       cancelAnimationFrame(syncTopOffsetOnMount);
     };
   }, [topBannerHeight]);
+  
 
   return (
     <header

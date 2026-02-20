@@ -2,23 +2,35 @@
 
 import { useNavStack } from "@/hooks/useNavStack";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SheetShare } from "./SheetShare";
 
-export function Sheet({
-  children,
-  returnPath,
-  share,
-}: {
-  children: React.ReactElement;
+type Props = {
+  children: React.ReactNode;
   returnPath: string;
-  share?: {
-    citation?: string;
-  };
-}) {
+  share?: { citation?: string };
+};
+
+function useLatestRef(value: string) {
+  const ref = useRef(value);
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref;
+}
+
+export function Sheet({ children, returnPath, share }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { hasInternalBack } = useNavStack();
+
+  const isClosingRef = useRef(false);
+  const pendingNavRef = useRef<null | { fallback: string; useBack: boolean }>(
+    null,
+  );
+
+  const returnBackRef = useLatestRef(returnPath);
+  const hasInternalBackRef = hasInternalBack;
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setOpen(true));
@@ -28,46 +40,94 @@ export function Sheet({
   useEffect(() => {
     if (!open) return;
 
-    const scrollY = window.scrollY;
     const body = document.body;
+    const scrollY = window.scrollY;
 
-    body.style.overflow = "hidden";
+    // компенсация скроллбара, чтобы не было прыжка ширины
+    const scrollbarW = window.innerWidth - document.documentElement.clientWidth;
+
+    // body.style.position = "fixed";
+    body.style.position = "hidden";
+    // body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    if (scrollbarW > 0) body.style.paddingRight = `${scrollbarW}px`;
 
     return () => {
-      body.style.overflow = "";
-
+      const top = body.style.top;
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
       body.style.width = "";
-      window.scrollTo(0, scrollY);
+      body.style.paddingRight = "";
+
+      const restoredY = top ? Math.abs(parseInt(top, 10)) : scrollY;
+      window.scrollTo(0, restoredY);
     };
   }, [open]);
 
-  const normalizeInternalPath = (url: string) => {
-    if (!url) return "/";
-    return url.startsWith("/") ? url : `/${url}`;
-  };
+  const close = useCallback(() => {
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
 
-  const close = (url: string) => {
+    const fallback = returnBackRef.current;
+    const useBack = Boolean(hasInternalBackRef());
+
+    pendingNavRef.current = { fallback, useBack };
+    console.log(pendingNavRef.current);
     setOpen(false);
-    const fallbackPath = normalizeInternalPath(url);
+  }, [hasInternalBackRef, returnBackRef]);
 
-    setTimeout(() => {
-      if (hasInternalBack()) {
-        router.back();
-      } else {
-        router.replace(fallbackPath);
-      }
-    }, 300);
-  };
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, close]);
+
+  const onSheetTransitionEnd = useCallback(
+    (e: React.TransitionEvent<HTMLDivElement>) => {
+      // 1) только сам контейнер
+      if (e.target !== e.currentTarget) return;
+
+      // 2) только то, что реально анимируем
+      const p = e.propertyName;
+      if (p !== "transform" && p !== "translate") return;
+
+      // 3) только закрытие
+      if (!isClosingRef.current) return;
+
+      // 4) доп. защита: ждём именно состояние "закрыто"
+      if (open) return;
+
+      const pending = pendingNavRef.current;
+      if (!pending) return;
+
+      pendingNavRef.current = null;
+      isClosingRef.current = false;
+
+      if (pending.useBack) router.back();
+      else router.replace(pending.fallback);
+    },
+    [open, router],
+  );
 
   return (
     <div className="max-w-screen fixed inset-0 z-1000000 ">
       <button
-        className="absolute inset-0 bg-black/40"
-        onClick={() => router.push(`${returnPath}`)}
+        className="absolute inset-0 bg-black/40 cursor-pointer"
+        onClick={() => close()}
         aria-label="Close"
       />
 
       <div
+        role="dialog"
+        aria-modal="true"
         className={[
           "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-0 ",
           "transition-transform duration-300 ease-out",
@@ -75,12 +135,15 @@ export function Sheet({
           "max-h-[100dvh] rounded-t-[28px] md:rounded-t-[40px]",
           "overflow-hidden flex flex-col",
         ].join(" ")}
+        onTransitionEnd={onSheetTransitionEnd}
       >
         <button
-          onClick={() => close(returnPath)}
+          onClick={() => close()}
           aria-label="Close"
-          className="fixed w-10 h-10 rounded-full bg-white top-3 md:top-8 right-4 md:right-8 flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
+          className=" resources-glass-surface fixed w-10 h-10 rounded-full top-3 md:top-8 right-4 md:right-8 flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
         >
+          <div aria-hidden="true" className="resources-glass-overlay"></div>
+          <div aria-hidden="true" className="resources-glass-highlight"></div>
           <svg
             width="18"
             height="18"

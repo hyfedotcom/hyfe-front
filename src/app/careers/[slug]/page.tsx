@@ -67,22 +67,24 @@ export default async function VacancySingle({ params }: { params: Props }) {
   } = vacancy;
   return (
     <Sheet returnPath="/careers">
-      <div className="max-w-[950px] space-y-10 md:space-y-16 mx-auto py-10 md:py-14 px-4 md:px-10">
-        <main className="space-y-10">
-          <div className="space-y-6 md:space-y-6">
+      <div className="max-w-[950px] mt-10 space-y-10 md:space-y-16 mx-auto py-10 md:py-14 px-4 md:px-10">
+        <main className="space-y-6 md:space-y-10">
+          <div className="space-y-4 md:space-y-6">
             <div className="flex gap-3 md:gap-5 flex-wrap">
               <LocationsType location_type={location_type} />
               <TimeZone time_zone={time_zone} />
               <EmploymentType employment_type={employment_type} />
             </div>
-            <h1 className="text-[28px]! md:text-[52px]!">{title}</h1>
+            <h1 className="text-[22px]! md:text-[42px]! lg:text-[52px]!">
+              {title}
+            </h1>
           </div>
           <Button
             label="APPLY NOW"
             url={apply_link}
-            arrow={false}
+            arrow={true}
             tag="a"
-            classNameProp="px-10! text-[16px]!"
+            classNameProp=" justify-between px-5"
           ></Button>
         </main>
         <section>
@@ -90,9 +92,9 @@ export default async function VacancySingle({ params }: { params: Props }) {
           <Button
             label="APPLY NOW"
             url={apply_link}
-            arrow={false}
+            arrow={true}
             tag="a"
-            classNameProp="w-full flex justify-center items-center! text-center!"
+            classNameProp=" justify-between px-5"
           ></Button>
         </section>
       </div>

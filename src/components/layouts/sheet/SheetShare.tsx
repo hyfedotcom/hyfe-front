@@ -190,19 +190,43 @@ export function SheetShare({ citation }: { citation?: string }) {
   const hasCitation = Boolean(citation?.trim());
 
   return (
-    <div className="fixed flex flex-col md:flex-row gap-2  mx-auto bottom-4 md:bottom-auto md:top-3 right-4 md:left-8 z-1000 ">
-      <button   
+    <div className="w-max mr-auto fixed flex flex-col md:flex-row gap-2  bottom-4 md:bottom-auto top-4 md:top-8 left-4 md:left-8 z-1000 ">
+      <button
         onClick={toggleShare}
-        className="z-100000 md:hidden w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
+        className="z-100000 md:hidden w-10 h-10 rounded-full resources-glass-surface flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
       >
-        <Share className="text-black " />
+        {" "}
+        <div aria-hidden="true" className="resources-glass-overlay"></div>
+        <div aria-hidden="true" className="resources-glass-highlight"></div>
+        {!isShareOpen ? (
+          <Share className="text-black " />
+        ) : (
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            className="rotate-180"
+          >
+            <path
+              d="M5 8L10 13L15 8"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
       </button>
       <button
         aria-label="Copy page link"
         title="Copy page link"
         onClick={handleCopyLink}
-        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} ${isLinkCopied ? "px-3" : "w-10"} h-10 rounded-full bg-white flex justify-center items-center cursor-pointer hover:scale-110 duration-300 z-1000`}
+        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute opacity-0"} ${isLinkCopied ? "px-3" : "w-10"} h-10 rounded-full resources-glass-surface flex justify-center items-center cursor-pointer hover:scale-110 duration-300 z-1000`}
       >
+        <div aria-hidden="true" className="resources-glass-overlay"></div>
+        <div aria-hidden="true" className="resources-glass-highlight"></div>
         {isLinkCopied ? (
           <span className="text-[12px] font-semibold">Copied</span>
         ) : (
@@ -213,8 +237,11 @@ export function SheetShare({ citation }: { citation?: string }) {
         aria-label="Share on X (Twitter)"
         title="Share on X (Twitter)"
         onClick={shareToTwitter}
-        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
+        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute opacity-0"} w-10 h-10 rounded-full resources-glass-surface  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
       >
+        {" "}
+        <div aria-hidden="true" className="resources-glass-overlay"></div>
+        <div aria-hidden="true" className="resources-glass-highlight"></div>
         <Twitter className="text-black" />
       </button>
 
@@ -222,16 +249,22 @@ export function SheetShare({ citation }: { citation?: string }) {
         aria-label="Share on Facebook"
         title="Share on Facebook"
         onClick={shareToFacebook}
-        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
+        className={`${isShareOpen ? "shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute opacity-0"} w-10 h-10 rounded-full resources-glass-surface flex justify-center items-center cursor-pointer  hover:scale-110 duration-300 z-1000`}
       >
+        {" "}
+        <div aria-hidden="true" className="resources-glass-overlay"></div>
+        <div aria-hidden="true" className="resources-glass-highlight"></div>
         <Facebook className="text-black" />
       </button>
       <button
         aria-label="Share on LinkedIn"
         title="Share on LinkedIn"
         onClick={shareToLinkedIn}
-        className={`${isShareOpen ? "" : "absolute"} w-10 h-10 rounded-full bg-white  flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000`}
+        className={`${isShareOpen ? "" : "absolute opacity-0"} w-10 h-10 rounded-full resources-glass-surface  flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000`}
       >
+        {" "}
+        <div aria-hidden="true" className="resources-glass-overlay"></div>
+        <div aria-hidden="true" className="resources-glass-highlight"></div>
         <Linkedin className="text-black" />
       </button>
 
@@ -240,9 +273,13 @@ export function SheetShare({ citation }: { citation?: string }) {
           aria-label="Copy citation"
           title="Copy citation"
           onClick={handleCopyCitation}
-          className={`${isShareOpen ? "px-4 shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute w-10 h-10"}   font-semibold h-10 rounded-full bg-white  flex justify-center items-center gap-2 cursor-pointer  hover:scale-110 duration-300 z-1000`}
+          className={`${isShareOpen ? "px-4 shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)]" : "absolute w-10 h-10 opacity-0"}   font-semibold h-10 rounded-full resources-glass-surface flex justify-center items-center gap-2 cursor-pointer  hover:scale-110 duration-300 z-1000`}
         >
-          <Quote className="text-black" /> {isShareOpen && (isCiteCopied ? "Copied" : "Cite")}
+          {" "}
+          <div aria-hidden="true" className="resources-glass-overlay"></div>
+          <div aria-hidden="true" className="resources-glass-highlight"></div>
+          <Quote className="text-black" />{" "}
+          {isShareOpen && (isCiteCopied ? "Copied" : "Cite")}
         </button>
       )}
     </div>

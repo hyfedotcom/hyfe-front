@@ -40,7 +40,7 @@ function ScrollRevealItem({
 }
 
 export function HeroStats({
-  section
+  section,
 }: {
   section: HeroStatsSectionmodifiedType;
 }) {
@@ -203,12 +203,12 @@ export function HeroStats({
 
               <Image
                 src="/home/map.png"
-                width={1920}
-                height={1080}
+                width={1600}
+                height={900}
                 alt="maps"
                 quality={100}
                 sizes="100vw"
-                priority={true}
+                priority
                 className={`w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]`}
               />
               <div>

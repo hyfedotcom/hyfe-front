@@ -25,7 +25,7 @@ export default async function ResourceTypePage({ type }: { type: string }) {
   return (
     <div className="w-full space-y-10 relative pb-[100px] md:pb-[140px]">
       <SeoStructuredData seo={landing.seo} id="resource-type-seo-jsonld" />
-      <div className=" mx-auto md:space-y-10">
+      <div className=" mx-auto md:space-y-2">
         <ResourcesListHero data={landing} />
         <RecourcesList tags={tags} data={list} type={type} />
         <ResourcesNavTabs type={type} />

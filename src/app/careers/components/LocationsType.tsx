@@ -1,12 +1,13 @@
 export function LocationsType({ location_type }: { location_type: string }) {
   return (
-    <div className="flex gap-2 px-4 py-2 bg-bg-150 rounded-[10px] w-max">
+    <div className="flex gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-bg-150 rounded-[10px] w-max items-center">
       <svg
         width="24"
         height="24"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5 md:w-6 md:h-6"
       >
         <path
           d="M20 10C20 16.5 12 22 12 22C12 22 4 16.5 4 10C4 7.87827 4.84285 5.84344 6.34315 4.34315C7.84344 2.84285 9.87827 2 12 2C14.1217 2 16.1566 2.84285 17.6569 4.34315C19.1571 5.84344 20 7.87827 20 10Z"
@@ -19,7 +20,7 @@ export function LocationsType({ location_type }: { location_type: string }) {
           strokeWidth="2"
         />
       </svg>
-      <p className="body-medium">{location_type}</p>
+      <p className="text-[12px] md:text-[16px] font-medium md:font-normal leading-[100%] h-max text-black">{location_type}</p>
     </div>
   );
 }

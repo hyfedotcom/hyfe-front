@@ -25,8 +25,8 @@
       "@/resources/*": ["./src/features/resources/server"],
       "@/shared/*": ["./src/shared/*"],
       "@/strapi/*": ["./src/core/strapi/*"],
-      "@/framer":["./src/features/framer-motion/index"],
-      "@/features":["./src/features/*"]
+      "@/framer": ["./src/features/framer-motion/index"],
+      "@/features": ["./src/features/*"]
     }
   },
   "include": [
@@ -36,7 +36,8 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "src/features/page-builder/data/components/sections/heroStats"
-, "next-sitemap.comfig.js"  ],
+    "src/features/page-builder/data/components/sections/heroStats",
+    "next-sitemap.comfig.js"
+  ],
   "exclude": ["node_modules"]
 }

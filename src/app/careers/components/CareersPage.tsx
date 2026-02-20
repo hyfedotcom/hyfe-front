@@ -13,10 +13,10 @@ export default async function CareersPage() {
   return (
     <div className="mx-auto w-full max-w-[950px] px-4 md:px-10 pb-[100px] md:pb-[140px]">
       <SeoStructuredData seo={careers.seo} id="careers-seo-jsonld" />
-      <main className="space-y-11  pb-[100px] ">
-        <div className="pt-[240px] text-center space-y-6">
-          <h1>{title}</h1>
-          <p className="body-large">{paragraph}</p>
+      <main className="space-y-7 md:space-y-11 pb-12 md:pb-[60px] ">
+        <div className="pt-[120px] md:pt-[140px] text-center space-y-3 md:space-y-6">
+          <h1 className="text-left md:text-center ">{title}</h1>
+          <p className="body-large text-balance text-left md:text-center">{paragraph}</p>
         </div>
         {images &&
           images.map((image, i) => (
@@ -26,6 +26,7 @@ export default async function CareersPage() {
               alt={image.alt ?? "hyfe team"}
               width={image.width}
               height={image.height}
+              className="mx-auto rounded-[8px] object-cover max-h-[300px] md:max-h-[400px] lg:max-h-[450px]"
             />
           ))}
       </main>
