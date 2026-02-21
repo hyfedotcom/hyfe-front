@@ -128,7 +128,7 @@ export function HeroStatsScene({
             <motion.div
               style={{ y: mapY, scale }}
               className={`relative w-[1000px] md:w-screen translate-y-[120px] transition-opacity duration-500 ${
-                isVisualReady ? "opacity-100" : "opacity-0"
+                isMapReady ? "opacity-100" : "opacity-0"
               }`}
             >
               <Image
