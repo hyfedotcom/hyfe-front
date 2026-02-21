@@ -27,9 +27,10 @@ export default async function StrapiFetch<T>({
     cache: isDraft ? "no-store" : "force-cache",
   });
 
+  const bodyText = await res.text().catch(() => "");
+
   if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    const msg = `Strapi error ${res.status}: ${text}`;
+    const msg = `Strapi error ${res.status}: ${bodyText || "<empty body>"}`;
 
     // ✅ в dev всегда показываем ошибку
     if (process.env.NODE_ENV === "development") {
@@ -45,5 +46,20 @@ export default async function StrapiFetch<T>({
     throw new Error(msg);
   }
 
-  return (await res.json()) as T;
+  if (res.status === 204 || res.status === 205 || res.status === 304) {
+    return null as T;
+  }
+
+  if (!bodyText.trim()) {
+    return null as T;
+  }
+
+  try {
+    return JSON.parse(bodyText) as T;
+  } catch {
+    const preview = bodyText.slice(0, 300);
+    throw new Error(
+      `Strapi invalid JSON ${res.status} for ${url.pathname}: ${preview || "<empty body>"}`,
+    );
+  }
 }

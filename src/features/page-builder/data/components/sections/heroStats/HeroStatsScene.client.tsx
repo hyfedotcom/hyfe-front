@@ -4,6 +4,9 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
 
+const HERO_STATS_BG_BLUR_DATA_URL =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAEARoABQAAAAEAAAA+ARsABQAAAAEAAABGASgAAwAAAAEAAgAAh2kABAAAAAEAAABOAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADKADAAQAAAABAAAAEAAAAACFk7TpAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL0lEQVQoFZWS0UpCQRCGv92zHUMJE7zwIgjqNpAuu9L36GV8hqCn8K6n6AmCiMC6CaNMxPSouzvNakk34WkOc3ZmZ/75Z3bX8If0emJTqNPBdruIMUQw4uThqsLhcc4i5IT7SPXDY6sGe92giDWMz3jd/xQpXuizdBQ3F7xXj7B5Az/yjEczgo9UWieYrEVYGiV6ZDC4pcnEMb27hKytwTpxIYSiIIYVs2ETsXVEwcE/s5ifgx06xm9nIG2EHBE19ScSkanVPaMKUQ50glO1nxyT1Z4a2TqQgilJKbe+OipaTBVqjjmp0kZ+1m93u6T9xKXFHEEByd0liVm/lJztyv0VtwmQtJwIa0BqZ3dLm5Lrlv7JoI+gfP3N0OUZdN50B+UBOqnTdryCfKlj0lf1BfebcqHLiU9tAAAAAElFTkSuQmCC";
+
 function useIsMobileBreakpoint(maxWidth: number) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -59,7 +62,6 @@ export function HeroStatsScene({
 }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useIsMobileBreakpoint(768);
-  const [isBlurReady, setIsBlurReady] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
 
   const { scrollYProgress } = useScroll({
@@ -82,8 +84,6 @@ export function HeroStatsScene({
     return [start, end] as const;
   };
 
-  const isVisualReady = isBlurReady && isMapReady;
-
   return (
     <div
       ref={sectionRef}
@@ -95,27 +95,30 @@ export function HeroStatsScene({
           className="pointer-events-none absolute inset-0 -z-10 bottom-0"
         >
           <div
-            className={`absolute inset-0 bg-gradient-to-b ${!isVisualReady ? " from-[#fffdf3] via-[#ffe789] to-[#FFD67F]" : "bg-white"} opacity-70 duration-1000`}
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url("${HERO_STATS_BG_BLUR_DATA_URL}"), linear-gradient(to bottom, #fffdf3, #ffe789, #FFD67F)`,
+              backgroundPosition: "center top, center top",
+              backgroundRepeat: "no-repeat, no-repeat",
+              backgroundSize: "cover, cover",
+            }}
           />
-          <Image
-            src="/home/bgBlur.png"
+          {/* <Image
+            src="/home/bgBlurOptimized.png"
             alt="Background blur"
-            width={1620}
-            height={1080}
+            fill
+            quality={35}
             priority
             fetchPriority="high"
             sizes="100vw"
-            onLoadingComplete={() => setIsBlurReady(true)}
-            className={`absolute  w-full h-full object-cover object-top transition-opacity duration-500 ${
-              isBlurReady ? "opacity-100" : "opacity-0"
-            }`}
-          />
-
+            placeholder="empty"
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          /> */}
           <div className="sticky top-0 h-[100vh] flex items-end justify-center overflow-hidden">
             <motion.div
               style={{ y: mapTitleY }}
-              className={`resources-glass-surface-strong opacity-100! backdrop-blur-[10px] w:max min-w-[200px] md:w-max rounded-[30px] absolute bottom-4 py-1.5 px-4 z-10 text-center left-1/2 -translate-x-1/2 transition-opacity duration-500 ${
-                isVisualReady ? "opacity-100" : "opacity-0"
+              className={`resources-glass-surface-strong opacity-100! backdrop-blur-[10px] w:max min-w-[200px] md:w-max rounded-[30px] absolute bottom-4 py-1.5 px-4 z-10 text-center left-1/2 -translate-x-1/2 transition-opacity duration-200 ${
+                isMapReady ? "opacity-100" : "opacity-0"
               }`}
             >
               <div aria-hidden="true" className="resources-glass-overlay" />
@@ -127,7 +130,7 @@ export function HeroStatsScene({
 
             <motion.div
               style={{ y: mapY, scale }}
-              className={`relative w-[1000px] md:w-screen translate-y-[120px] transition-opacity duration-500 ${
+              className={`relative w-[1000px] md:w-screen translate-y-[120px] transition-opacity duration-200 ${
                 isMapReady ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -138,8 +141,7 @@ export function HeroStatsScene({
                 alt="Global map"
                 quality={80}
                 sizes="100vw"
-                loading="eager"
-                fetchPriority="low"
+                loading="lazy"
                 onLoadingComplete={() => setIsMapReady(true)}
                 className="w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
