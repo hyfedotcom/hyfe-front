@@ -96,7 +96,7 @@ export function HeroStats({
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bottom-0"
         >
-          <svg
+          {/* <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1920"
             height="1798"
@@ -171,7 +171,14 @@ export function HeroStats({
                 <stop offset="1" stopColor="#FF9D00" />
               </linearGradient>
             </defs>
-          </svg>
+          </svg> */}
+          <Image
+            src="/home/bgBlur.png"
+            alt="bg layout"
+            width={1920}
+            height={1080}
+            className="absolute  w-full h-full inset-0 overflow-visible"
+          />
           <div className="sticky  top-0 h-[100vh] flex items-end justify-center overflow-hidden">
             <motion.div
               style={{ y: mapTitleY }}
@@ -209,6 +216,7 @@ export function HeroStats({
                 quality={100}
                 sizes="100vw"
                 priority
+                fetchPriority="high"
                 className={`w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]`}
               />
               <div>

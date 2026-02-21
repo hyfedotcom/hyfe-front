@@ -172,7 +172,7 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
           tabIndex={mobileOpen ? -1 : 0}
         >
           <Image
-            src="/general/logo.svg"
+            src="/header/logo.png"
             width={120}
             height={36}
             alt="Hyfe logo"
