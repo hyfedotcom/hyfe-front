@@ -14,11 +14,11 @@ export default async function CareersPage() {
     <div className="mx-auto w-full max-w-[950px] px-4 md:px-10 pb-[100px] md:pb-[140px]">
       <SeoStructuredData seo={careers.seo} id="careers-seo-jsonld" />
       <main className="space-y-7 md:space-y-11 pb-12 md:pb-[60px] ">
-        <div className="pt-[120px] md:pt-[140px] text-center space-y-3 md:space-y-6">
-          <h1 className="text-left md:text-center ">{title}</h1>
+        <div className="pt-[120px] md:pt-[200px] text-center space-y-3 md:space-y-6">
+          <h1 className="text-left md:text-center font-medium!">{title}</h1>
           <p className="body-large text-balance text-left md:text-center">{paragraph}</p>
         </div>
-        {images &&
+        {/* {images &&
           images.map((image, i) => (
             <Image
               key={i}
@@ -28,7 +28,7 @@ export default async function CareersPage() {
               height={image.height}
               className="mx-auto rounded-[8px] object-cover max-h-[300px] md:max-h-[400px] lg:max-h-[450px]"
             />
-          ))}
+          ))} */}
       </main>
       {vacancies.length > 0 && (
         <section className="flex flex-col gap-5">

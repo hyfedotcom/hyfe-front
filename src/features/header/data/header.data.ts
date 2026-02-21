@@ -43,7 +43,7 @@ export const headerNav: NavItem[] = [
       },
       {
         id: "sol-2",
-        label: "For Academics",
+        label: "For Researchers",
         description: "Measure cough objectively, over time",
         href: "/solutions/research",
       },

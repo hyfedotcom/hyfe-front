@@ -103,17 +103,6 @@ export function HeroStatsScene({
               backgroundSize: "cover, cover",
             }}
           />
-          {/* <Image
-            src="/home/bgBlurOptimized.png"
-            alt="Background blur"
-            fill
-            quality={35}
-            priority
-            fetchPriority="high"
-            sizes="100vw"
-            placeholder="empty"
-            className="absolute inset-0 h-full w-full object-cover object-top"
-          /> */}
           <div className="sticky top-0 h-[100vh] flex items-end justify-center overflow-hidden">
             <motion.div
               style={{ y: mapTitleY }}
@@ -127,7 +116,6 @@ export function HeroStatsScene({
                 {mapTitle}
               </p>
             </motion.div>
-
             <motion.div
               style={{ y: mapY, scale }}
               className={`relative w-[1000px] md:w-screen translate-y-[120px] transition-opacity duration-200 ${
@@ -141,14 +129,13 @@ export function HeroStatsScene({
                 alt="Global map"
                 quality={80}
                 sizes="100vw"
-                loading="lazy"
+                loading="eager"
                 onLoadingComplete={() => setIsMapReady(true)}
                 className="w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
-
               <Image
                 src="/home/Points.svg"
-                alt=""
+                alt="Points of global map"
                 aria-hidden
                 width={2894}
                 height={827}
@@ -159,7 +146,6 @@ export function HeroStatsScene({
           </div>
         </div>
       </div>
-
       {stats.length > 0 && (
         <div className="relative min-h-[120vh] md:min-h-[150vh]">
           <div className="sticky top-1/2 -translate-y-1/2">

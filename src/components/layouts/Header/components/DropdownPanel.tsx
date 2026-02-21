@@ -18,7 +18,7 @@ export function DropdownPanel({
 }) {
   const META = {
     "For Pharma": { Icon: LifeScienceIcon },
-    "For Academics": {
+    "For Researchers": {
       Icon: ResearchIcon,
     },
     "For Healthcare Providers": {

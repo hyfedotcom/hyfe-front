@@ -16,7 +16,7 @@ export function ResourceCard({
   return (
     <div
       className={
-        "group flex flex-col w-full h-fit sm:h-full hover:bg-activ border-[1.5px] border-border hover:border-primary hover:shadow-hover duration-300 space-y-4 md:space-y-5 bg-card rounded-[20px] overflow-hidden"
+        "group flex flex-col w-full h-fit sm:h-full  border-[1.5px] border-border hover:border-primary hover:shadow-hover hover:bg-activ duration-300 space-y-4 md:space-y-5 bg-card rounded-[20px] overflow-hidden"
       }
     >
       <Image

@@ -6,6 +6,9 @@ import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
 
+const HERO_STATS_BG_BLUR_DATA_URL =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAEARoABQAAAAEAAAA+ARsABQAAAAEAAABGASgAAwAAAAEAAgAAh2kABAAAAAEAAABOAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADKADAAQAAAABAAAAEAAAAACFk7TpAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL0lEQVQoFZWS0UpCQRCGv92zHUMJE7zwIgjqNpAuu9L36GV8hqCn8K6n6AmCiMC6CaNMxPSouzvNakk34WkOc3ZmZ/75Z3bX8If0emJTqNPBdruIMUQw4uThqsLhcc4i5IT7SPXDY6sGe92giDWMz3jd/xQpXuizdBQ3F7xXj7B5Az/yjEczgo9UWieYrEVYGiV6ZDC4pcnEMb27hKytwTpxIYSiIIYVs2ETsXVEwcE/s5ifgx06xm9nIG2EHBE19ScSkanVPaMKUQ50glO1nxyT1Z4a2TqQgilJKbe+OipaTBVqjjmp0kZ+1m93u6T9xKXFHEEByd0liVm/lJztyv0VtwmQtJwIa0BqZ3dLm5Lrlv7JoI+gfP3N0OUZdN50B+UBOqnTdryCfKlj0lf1BfebcqHLiU9tAAAAAElFTkSuQmCC";
+
 export function Hero({ section }: { section: SolutionsHeroType }) {
   const { ctas, paragraph, title } = section;
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -19,87 +22,23 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
   const watchY = useTransform(scrollYProgress, [0, 1], [-100, 0]);
 
   return (
-    <main
-      ref={sectionRef}
-      className="relative bg-primary-100 overflow-hidden"
-    >
-      <svg
-        width="1920"
-        height="1911"
-        viewBox="0 0 1920 1911"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="absolute right-[-20%] -bottom-1/2 z-0 w-[2400px] max-w-none overflow-visible"
-      >
-        <g className="svg-blur-filter" filter="url(#hero_simple_blur_filter)">
-          <path
-            d="M-388 553.49C-204.407 553.49 -206.5 878.624 -63 553.49C80.5 228.357 305 856.729 466 553.49C627 250.252 733.5 999.591 1030 553.49C1326.5 107.389 1330.73 553.49 1488 553.49C1614.81 553.49 1750 -16.8628 1884 553.49C2018 1123.84 2158.82 553.49 2309 553.49V1611H-388V553.49Z"
-            fill="url(#hero_simple_blur_gradient)"
-          />
-        </g>
-        <g
-          className="svg-blur-fallback"
-          filter="url(#hero_simple_blur_filter_fallback)"
-        >
-          <path
-            d="M-388 553.49C-204.407 553.49 -206.5 878.624 -63 553.49C80.5 228.357 305 856.729 466 553.49C627 250.252 733.5 999.591 1030 553.49C1326.5 107.389 1330.73 553.49 1488 553.49C1614.81 553.49 1750 -16.8628 1884 553.49C2018 1123.84 2158.82 553.49 2309 553.49V1611H-388V553.49Z"
-            fill="url(#hero_simple_blur_gradient)"
-          />
-        </g>
-        <defs>
-          <filter
-            id="hero_simple_blur_filter"
-            x="-688"
-            y="0"
-            width="3297"
-            height="1911"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="150"
-              result="effect1_foregroundBlur_1028_25466"
-            />
-          </filter>
-          <filter
-            id="hero_simple_blur_filter_fallback"
-            x="-1100"
-            y="-500"
-            width="4200"
-            height="3200"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feGaussianBlur stdDeviation="150" />
-          </filter>
-          <linearGradient
-            id="hero_simple_blur_gradient"
-            x1="982"
-            y1="472.42"
-            x2="1058.73"
-            y2="1507.11"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0.00154131" stopColor="white" />
-            <stop offset="0.151644" stopColor="#FFCE1D" />
-            <stop offset="0.301746" stopColor="#FFC800" />
-            <stop offset="0.63368" stopColor="#FFAE00" />
-            <stop offset="1" stopColor="#FF9D00" />
-          </linearGradient>
-        </defs>
-      </svg>
+    <main ref={sectionRef} className="relative bg-primary-100 overflow-hidden">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url("${HERO_STATS_BG_BLUR_DATA_URL}"), linear-gradient(to bottom, #fffdf3, #ffe789, #FFD67F)`,
+          backgroundPosition: "center top, center top",
+          backgroundRepeat: "no-repeat, no-repeat",
+          backgroundSize: "cover, cover",
+        }}
+      />
       <div className="relative z-1">
         {" "}
-        <div className="space-y-5 pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 px-4 md:px-10 xl:px-20">
-          <h1 className="md:text-[50px]! lg:text-[70px]!">{title}</h1>
-          <p className="body-large text-balance">{paragraph}</p>
+        <div className="space-y-5 pt-[140px] md:pt-[240px] max-w-[1600px] mx-auto text-center text-balance mb-11 px-4 md:px-10 xl:px-20">
+          <h1 className="text-[28px]! md:text-[50px]! lg:text-[55px]! font-medium!">
+            {title}
+          </h1>
+          <p className="body-large text-balance text-black!">{paragraph}</p>
         </div>
         <motion.div
           style={{ y: ctasY }}
@@ -122,6 +61,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
               src="/image/tablet-hero.png"
               width={1254}
               height={807}
+              loading="eager"
               alt="cough monitor and dashboard"
             />
           </motion.div>
@@ -133,6 +73,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
               src="/image/watch-hero.png"
               width={293}
               height={425}
+              loading="eager"
               alt="cough monitor and dashboard"
               className="w-[25vh] md:w-[293px]"
             />
