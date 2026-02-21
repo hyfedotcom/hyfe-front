@@ -174,15 +174,6 @@ html {
     );
   }
 
-  .resources-glass-toggle-idle {
-    border-color: rgb(0 0 0 / 0.12);
-    background-image: linear-gradient(
-      to bottom,
-      rgb(255 255 255 / 0.9),
-      rgb(255 255 255 / 0.72)
-    );
-  }
-
   .resources-glass-mobile-panel {
     @apply border rounded-[22px];
     border-color: rgb(0 0 0 / 0.15);
@@ -313,7 +304,6 @@ h4,
 body {
   background: var(--color-white);
   color: var(--foreground);
-  font-family: var(--font-poppins), Helvetica, sans-serif;
 }
 
 .svg-blur-fallback {

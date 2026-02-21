@@ -12,10 +12,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
-  variable: "--font-poppins",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+  style: ["normal"],
 });
 
 export default async function RootLayout({
@@ -31,7 +31,7 @@ export default async function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={`${poppins.variable} antialiased`}>
+      <body className={`${poppins.className} antialiased`}>
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
         <ScrollToTop />
         <div data-site-header>
