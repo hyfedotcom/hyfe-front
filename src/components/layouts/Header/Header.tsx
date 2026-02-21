@@ -430,7 +430,7 @@ function MobileMenu({
               aria-label="Hyfe home"
             >
               <Image
-                src="/general/logo.svg"
+                src="/header/logo.png"
                 width={120}
                 height={36}
                 alt="Hyfe"

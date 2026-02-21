@@ -8,7 +8,7 @@ import { richTextToPlainText } from "@/features/resources/utils/richTextToPlainT
 
 const SITE_NAME = "Hyfe";
 const SITE_URL = publicEnv.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
-const LOGO_URL = `${SITE_URL}/general/logo.svg`;
+const LOGO_URL = `${SITE_URL}/header/logo.png`;
 
 export function buildOrganizationJsonLd() {
   return {

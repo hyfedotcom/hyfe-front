@@ -94,7 +94,9 @@ export function HeroStatsScene({
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 bottom-0"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white via-[#FFF5CE] to-[#FFD67F] opacity-70" />
+          <div
+            className={`absolute inset-0 bg-gradient-to-b ${!isVisualReady ? " from-[#fffdf3] via-[#ffe789] to-[#FFD67F]" : "bg-white"} opacity-70 duration-1000`}
+          />
           <Image
             src="/home/bgBlur.png"
             alt="Background blur"
@@ -102,6 +104,7 @@ export function HeroStatsScene({
             height={1080}
             priority
             fetchPriority="high"
+            sizes="100vw"
             onLoadingComplete={() => setIsBlurReady(true)}
             className={`absolute  w-full h-full object-cover object-top transition-opacity duration-500 ${
               isBlurReady ? "opacity-100" : "opacity-0"
@@ -135,8 +138,8 @@ export function HeroStatsScene({
                 alt="Global map"
                 quality={80}
                 sizes="100vw"
-                priority
-                fetchPriority="high"
+                loading="eager"
+                fetchPriority="low"
                 onLoadingComplete={() => setIsMapReady(true)}
                 className="w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
