@@ -20,7 +20,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["10% start", "90% end"],
+    offset: ["start start", "end end"],
   });
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   const hasHorizontalScroll =
     shouldCheckOverflow() && (sizes.viewportWidth === 0 || maxX < -1);
   const scrollHeight = hasHorizontalScroll
-    ? Math.max(section.cards.length, 1) * (isMobile ? 600 : 600)
+    ? Math.max(section.cards.length, 1) * 600
     : undefined;
   const x = useTransform(scrollYProgress, [0.1, 0.8], [0, maxX]);
 
@@ -66,7 +66,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
       style={{ height: scrollHeight }}
     >
       <div
-        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-10 md:top-24" : ""}`}
+        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-10 md:top-30" : ""}`}
       >
         <ContentContainer
           content={section}

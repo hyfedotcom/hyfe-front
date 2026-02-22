@@ -7,7 +7,7 @@ export function SolutionCard({
   card: { value: string; cta: { label: string; url: string } };
 }) {
   return (
-    <div className="bg-[#FBF9F2]/40 backdrop-blur-2xl p-6 border border-[#FFF199] w-full flex-1 flex flex-col items-center justify-between rounded-[28px] space-y-10 md:space-y-20 ">
+    <div className="bg-[#FBF9F2]/40 backdrop-blur-sm p-10 border border-[#FFF199] w-full flex-1 flex flex-col items-center justify-between rounded-[28px] space-y-10 ">
       <div className="mx-auto">
         <ProblemChip type="solution" />
       </div>

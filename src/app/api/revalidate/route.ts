@@ -46,17 +46,18 @@ const PAGE_REVALIDATE_BY_UID: Record<string, { tag: string; path: string }> = {
   },
 };
 
-const PAGE_REVALIDATE_BY_MODEL: Record<string, { tag: string; path: string }> = {
-  home: { tag: "home", path: "/" },
-  "science-and-research-resource": {
-    tag: "science-and-research-resource",
-    path: "/science-resources",
-  },
-  "company-resource": {
-    tag: "company-resource",
-    path: "/company-resources",
-  },
-};
+const PAGE_REVALIDATE_BY_MODEL: Record<string, { tag: string; path: string }> =
+  {
+    home: { tag: "home", path: "/" },
+    "science-and-research-resource": {
+      tag: "science-and-research-resource",
+      path: "/science-resources",
+    },
+    "company-resource": {
+      tag: "company-resource",
+      path: "/company-resources",
+    },
+  };
 
 function resolveResourceItemsTypeFromRouteType(routeType: string) {
   if (routeType === "news") return "news-items";
@@ -211,10 +212,12 @@ export async function POST(req: Request) {
 
     // 3.0 RESOURCE ITEM (news/publication/insight/...)
     const resourceItemsType =
-      (uid && RESOURCE_UID_TO_ITEMS_TYPE[uid]) || RESOURCE_MODEL_TO_ITEMS_TYPE[model];
+      (uid && RESOURCE_UID_TO_ITEMS_TYPE[uid]) ||
+      RESOURCE_MODEL_TO_ITEMS_TYPE[model];
 
     if (resourceItemsType) {
-      const routeType = resolveRouteTypeFromResourceItemsType(resourceItemsType);
+      const routeType =
+        resolveRouteTypeFromResourceItemsType(resourceItemsType);
 
       if (slug) {
         revalidateTag(`resource:${resourceItemsType}-${slug}`, "max");
@@ -245,7 +248,11 @@ export async function POST(req: Request) {
       revalidateTag(`resource:${itemsType}-list`, "max");
       revalidateTag(`resource:${itemsType}-slugs`, "max");
       revalidatePath(`/${routeType}`);
-      return NextResponse.json({ ok: true, kind: "resource-landing", routeType });
+      return NextResponse.json({
+        ok: true,
+        kind: "resource-landing",
+        routeType,
+      });
     }
 
     // 4.0 FAQ LANDING
@@ -288,15 +295,21 @@ export async function POST(req: Request) {
     }
 
     // 6.0 PAGE BUILDER TAGS (home + resource feed pages)
-    const pageConfig = PAGE_REVALIDATE_BY_UID[uid] || PAGE_REVALIDATE_BY_MODEL[model];
+    const pageConfig =
+      PAGE_REVALIDATE_BY_UID[uid] || PAGE_REVALIDATE_BY_MODEL[model];
     if (pageConfig) {
       revalidateTag(`page:${pageConfig.tag}`, "max");
       revalidatePath(pageConfig.path);
       return NextResponse.json({ ok: true, kind: "page", ...pageConfig });
     }
 
-    // fallback for unknown models with slug-based page tag
+    if (uid === "api::about.about" || model === "about") {
+      revalidateTag("about:page", "max");
+      return NextResponse.json({ ok: true, kind: "page" });
+    }
+
     if (slug) {
+      // fallback for unknown models with slug-based page tag
       revalidateTag(`page:${slug}`, "max");
       return NextResponse.json({ ok: true, kind: "fallback-page-tag", slug });
     }
