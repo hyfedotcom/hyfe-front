@@ -20,7 +20,7 @@ export function Card({
         />
       </div>
       <div className="p-6 space-y-3  border-t border-border">
-        <h4>{title}</h4>
+        <h3 className="text-[20px]! font-medium! md:text-[24px]!">{title}</h3>
         <p className="body-medium">{description}</p>
       </div>
     </div>

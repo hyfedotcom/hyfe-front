@@ -13,7 +13,7 @@ function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-export function   Form({ form }: { form: FormType }) {
+export function Form({ form }: { form: FormType }) {
   const { consent, cta_label, inputs, cough_news_subscription } = form;
   const formRef = useRef<HTMLFormElement | null>(null);
   const [values, setValues] = useState<string[]>(() => inputs.map(() => ""));
@@ -266,71 +266,73 @@ export function   Form({ form }: { form: FormType }) {
           </div>
         );
       })}
-      {consent.map((consentItem, i) => (
-        <label
-          key={i}
-          className={cx(
-            "relative z-10 flex items-start gap-3 overflow-visible",
-            showConsentError[i] && "z-[130]",
-          )}
-        >
-          <input
-            type="checkbox"
-            disabled={isSubmitting}
-            checked={consentValues[i] ?? false}
-            onFocus={() => setFocusedConsentIndex(i)}
-            onBlur={() => {
-              setFocusedConsentIndex((prev) => (prev === i ? null : prev));
-              setTouchedConsents((prev) => {
-                const nextValues = [...prev];
-                nextValues[i] = true;
-                return nextValues;
-              });
-            }}
-            onChange={(event) => {
-              setConsentValues((prev) => {
-                const nextValues = [...prev];
-                nextValues[i] = event.target.checked;
-                return nextValues;
-              });
-              if (submitState === "error") {
-                setSubmitState("idle");
-                setServerError(null);
-              }
-            }}
+      <div className="space-y-2"> 
+        {consent.map((consentItem, i) => (
+          <label
+            key={i}
             className={cx(
-              "h-4 w-4 rounded border mt-1 accent-black transition-[border-color,box-shadow,background-color] duration-200",
-              "border-black/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/10",
-              "disabled:opacity-70 disabled:cursor-not-allowed",
-              showConsentError[i] &&
-                "border-[#B42318]! ring-2 ring-[#B42318]/40 ring-offset-1 ring-offset-white focus-visible:border-[#B42318]! focus-visible:ring-[#B42318]/25!",
+              "relative z-10 flex items-start gap-3 overflow-visible",
+              showConsentError[i] && "z-[130]",
             )}
-          />
-          <span className="text-[14px] leading-[150%] text-black">
-            {consentItem.label}{" "}
-            {consentItem.privacy_link ? (
-              <Link href="/privacy" className="underline underline-offset-2">
-                Privacy Policy
-              </Link>
-            ) : null}
-            {consentItem.required ? (
-              <span className="text-[#B42318]"> *</span>
-            ) : null}
-          </span>
-
-          {showConsentError[i] ? (
-            <div
+          >
+            <input
+              type="checkbox"
+              disabled={isSubmitting}
+              checked={consentValues[i] ?? false}
+              onFocus={() => setFocusedConsentIndex(i)}
+              onBlur={() => {
+                setFocusedConsentIndex((prev) => (prev === i ? null : prev));
+                setTouchedConsents((prev) => {
+                  const nextValues = [...prev];
+                  nextValues[i] = true;
+                  return nextValues;
+                });
+              }}
+              onChange={(event) => {
+                setConsentValues((prev) => {
+                  const nextValues = [...prev];
+                  nextValues[i] = event.target.checked;
+                  return nextValues;
+                });
+                if (submitState === "error") {
+                  setSubmitState("idle");
+                  setServerError(null);
+                }
+              }}
               className={cx(
-                "absolute z-[120] inline-flex items-center rounded-full bg-[#FFF2F0] border border-[#FECACA] px-3 py-1.5 text-[12px] leading-[120%] text-[#B42318] shadow-[0_8px_24px_rgba(0,0,0,0.10)]",
-                "before:content-[''] before:absolute before:-top-[5px] before:left-4 -translate-x-3.5 before:w-2.5 before:h-2.5 before:bg-[#FFF2F0] before:border-l before:border-t before:border-[#FECACA] before:rotate-45",
-                "left-0 top-[calc(100%+6px)]",
+                "h-4 w-4 rounded border mt-1 accent-black transition-[border-color,box-shadow,background-color] duration-200",
+                "border-black/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/10",
+                "disabled:opacity-70 disabled:cursor-not-allowed",
+                showConsentError[i] &&
+                  "border-[#B42318]! ring-2 ring-[#B42318]/40 ring-offset-1 ring-offset-white focus-visible:border-[#B42318]! focus-visible:ring-[#B42318]/25!",
               )}
-            >
-              Please confirm this checkbox before submitting.
-            </div>
-          ) : null}
-        </label>
-      ))}
+            />
+            <span className="text-[14px] leading-[150%] text-black">
+              {consentItem.label}{" "}
+              {consentItem.privacy_link ? (
+                <Link href="/privacy" className="underline underline-offset-2">
+                  Privacy Policy
+                </Link>
+              ) : null}
+              {consentItem.required ? (
+                <span className="text-[#B42318]"> *</span>
+              ) : null}
+            </span>
+
+            {showConsentError[i] ? (
+              <div
+                className={cx(
+                  "absolute z-[120] inline-flex items-center rounded-full bg-[#FFF2F0] border border-[#FECACA] px-3 py-1.5 text-[12px] leading-[120%] text-[#B42318] shadow-[0_8px_24px_rgba(0,0,0,0.10)]",
+                  "before:content-[''] before:absolute before:-top-[5px] before:left-4 -translate-x-3.5 before:w-2.5 before:h-2.5 before:bg-[#FFF2F0] before:border-l before:border-t before:border-[#FECACA] before:rotate-45",
+                  "left-0 top-[calc(100%+6px)]",
+                )}
+              >
+                Please confirm this checkbox before submitting.
+              </div>
+            ) : null}
+          </label>
+        ))}
+      </div>
       <input
         type="text"
         value={website}

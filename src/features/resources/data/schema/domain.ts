@@ -469,11 +469,13 @@ export const ResourceFeedSchema = z
     title: z.string(),
     paragraph: z.string().nullable(),
     sections: z.array(ResourceFeedSectionSchema),
+    seo: SeoRawSchema,
   })
   .transform((res) => ({
     title: res.title,
     paragraph: res.paragraph ?? undefined,
     sections: res.sections,
+    seo: SeoSchema.parse(res.seo),
   }));
 
 export type ResourceFeedType = z.infer<typeof ResourceFeedTypeSchema>;

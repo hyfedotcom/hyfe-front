@@ -34,7 +34,7 @@ export function ResourceCard({
           </div>
 
           <div className="flex flex-col flex-1 min-h-0 ">
-            <h4 className={`${excerpt && "mb-2"} body-large font-medium! text-black! max-[768px]:text-[16px]! `}>{title}</h4>
+            <h3 className={`${excerpt && "mb-2"} body-large font-medium! text-black! max-[768px]:text-[16px]! `}>{title}</h3>
 
             {excerpt && (
               <p className="text-[14px] md:text-[16px] text-body-secondary! flex-1 min-h-0 overflow-hidden line-clamp-2">

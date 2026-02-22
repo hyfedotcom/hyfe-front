@@ -265,6 +265,7 @@ export function FeedContainer({
               role="tabpanel"
               aria-labelledby={tabId}
               aria-hidden={!isActive}
+              inert={!isActive}
               className={cx(
                 "w-full transition-all duration-300 ease-out",
                 "flex gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",

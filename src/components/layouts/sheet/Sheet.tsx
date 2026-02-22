@@ -23,6 +23,7 @@ export function Sheet({ children, returnPath, share }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { hasInternalBack } = useNavStack();
+  const sheetRootRef = useRef<HTMLDivElement | null>(null);
 
   const isClosingRef = useRef(false);
   const pendingNavRef = useRef<null | { fallback: string; useBack: boolean }>(
@@ -65,6 +66,51 @@ export function Sheet({ children, returnPath, share }: Props) {
 
       const restoredY = top ? Math.abs(parseInt(top, 10)) : scrollY;
       window.scrollTo(0, restoredY);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const sheetRoot = sheetRootRef.current;
+    if (!sheetRoot) return;
+
+    const changed = new Map<
+      HTMLElement,
+      { ariaHidden: string | null; hadInert: boolean }
+    >();
+    let current: HTMLElement | null = sheetRoot;
+
+    while (
+      current?.parentElement &&
+      current.parentElement !== document.documentElement
+    ) {
+      const parent = current.parentElement as HTMLElement;
+      const siblings = Array.from(parent.children);
+
+      for (const sibling of siblings) {
+        if (!(sibling instanceof HTMLElement) || sibling === current) continue;
+
+        if (!changed.has(sibling)) {
+          changed.set(sibling, {
+            ariaHidden: sibling.getAttribute("aria-hidden"),
+            hadInert: sibling.hasAttribute("inert"),
+          });
+        }
+
+        sibling.setAttribute("aria-hidden", "true");
+        sibling.setAttribute("inert", "");
+      }
+
+      current = parent;
+    }
+
+    return () => {
+      changed.forEach(({ ariaHidden, hadInert }, el) => {
+        if (ariaHidden === null) el.removeAttribute("aria-hidden");
+        else el.setAttribute("aria-hidden", ariaHidden);
+
+        if (!hadInert) el.removeAttribute("inert");
+      });
     };
   }, [open]);
 
@@ -118,7 +164,7 @@ export function Sheet({ children, returnPath, share }: Props) {
   );
 
   return (
-    <div className="max-w-screen fixed inset-0 z-1000000 ">
+    <div ref={sheetRootRef} className="max-w-screen fixed inset-0 z-1000000 ">
       <button
         className="absolute inset-0 bg-black/40 cursor-pointer"
         onClick={() => close()}
@@ -128,6 +174,7 @@ export function Sheet({ children, returnPath, share }: Props) {
       <div
         role="dialog"
         aria-modal="true"
+        aria-label="Resource details"
         className={[
           "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-0 ",
           "transition-transform duration-300 ease-out",

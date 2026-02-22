@@ -28,5 +28,6 @@ export async function getPageResource({
     title: page.title,
     paragraph: page.paragraph,
     sections: sectionsNew,
+    seo: page.seo
   };
 }

@@ -12,7 +12,7 @@ export function MemberCard({ member }: { member: MemberType }) {
         className="rounded-full w-[160px] h-[160px]"
       />
       <div className="space-y-1 text-center">
-        <h4>{member.name}</h4>
+        <h3 className="text-[20px]! md:text-[24px]!">{member.name}</h3>
         <p className="body-medium">{member.job}</p>
       </div>
     </div>

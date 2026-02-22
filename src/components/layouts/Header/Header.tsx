@@ -406,103 +406,128 @@ function MobileMenu({
             open ? "opacity-100" : "opacity-0",
           )}
           aria-label="Close menu"
+          tabIndex={open ? 0 : -1}
           onClick={closeMenu}
         />
 
-        <div
-          id="mobile-menu"
-          role="dialog"
-          aria-modal={open}
-          aria-hidden={!open}
-          aria-labelledby="mobile-menu-title"
-          className={cx(
-            "absolute right-0 top-0 h-full w-screen max-w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col",
-            "transition-transform duration-300 ease-out",
-            open ? "translate-x-0" : "translate-x-full",
-          )}
-        >
-          <div className="flex items-center justify-between px-4 py-4 border-b border-black/10">
-            <Link
-              href="/"
-              onClick={closeMenu}
-              id="mobile-menu-title"
-              className="shrink-0"
-              aria-label="Hyfe home"
-            >
-              <Image
-                src="/header/logo.png"
-                width={120}
-                height={36}
-                alt="Hyfe"
-              />
-            </Link>
-            <button
-              className="h-10 w-10 rounded-full hover:bg-black/5 text-black"
-              onClick={closeMenu}
-              aria-label="Close menu"
-              autoFocus={open}
-            >
-              ✕
-            </button>
-          </div>
+        {open ? (
+          <div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+            className={cx(
+              "absolute right-0 top-0 h-full w-screen max-w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col",
+              "transition-transform duration-300 ease-out translate-x-0",
+            )}
+          >
+            <div className="flex items-center justify-between px-4 py-4 border-b border-black/10">
+              <Link
+                href="/"
+                onClick={closeMenu}
+                id="mobile-menu-title"
+                className="shrink-0"
+                aria-label="Hyfe home"
+              >
+                <Image
+                  src="/header/logo.png"
+                  width={120}
+                  height={36}
+                  alt="Hyfe"
+                />
+              </Link>
+              <button
+                className="h-10 w-10 rounded-full hover:bg-black/5 text-black"
+                onClick={closeMenu}
+                aria-label="Close menu"
+                autoFocus={open}
+              >
+                ✕
+              </button>
+            </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-            {mainItems.map((item) => {
-              if (item.kind === "link") {
-                return (
-                  <NavLink
-                    key={item.id}
-                    href={item.href}
-                    onClick={closeMenu}
-                    className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      {item.label}
-                      <LinkIndicator
-                        href={item.href}
-                        className="text-black/70"
-                        internalClassName="w-2 h-4"
-                        externalClassName="w-4 h-4"
-                      />
-                    </span>
-                  </NavLink>
-                );
-              }
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+              {mainItems.map((item) => {
+                if (item.kind === "link") {
+                  return (
+                    <NavLink
+                      key={item.id}
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        {item.label}
+                        <LinkIndicator
+                          href={item.href}
+                          className="text-black/70"
+                          internalClassName="w-2 h-4"
+                          externalClassName="w-4 h-4"
+                        />
+                      </span>
+                    </NavLink>
+                  );
+                }
 
-              if (item.kind === "dropdown") {
-                return (
-                  <MobileAccordion
-                    key={item.id}
-                    label={item.label}
-                    open={openAccordionId === item.id}
-                    onToggle={() =>
-                      setOpenAccordionId((prev) =>
-                        prev === item.id ? null : item.id,
-                      )
-                    }
-                  >
-                    <div className="space-y-1 pb-2">
-                      {item.items.map((it) => {
-                        const meta =
-                          it.label && isDropdownMeta(it.label)
-                            ? dropdownMeta[it.label]
-                            : null;
-                        const Icon = meta?.Icon;
-                        return (
+                if (item.kind === "dropdown") {
+                  return (
+                    <MobileAccordion
+                      key={item.id}
+                      label={item.label}
+                      open={openAccordionId === item.id}
+                      onToggle={() =>
+                        setOpenAccordionId((prev) =>
+                          prev === item.id ? null : item.id,
+                        )
+                      }
+                    >
+                      <div className="space-y-1 pb-2">
+                        {item.items.map((it) => {
+                          const meta =
+                            it.label && isDropdownMeta(it.label)
+                              ? dropdownMeta[it.label]
+                              : null;
+                          const Icon = meta?.Icon;
+                          return (
+                            <MobileLinkItem
+                              key={it.id}
+                              item={it}
+                              onClick={closeMenu}
+                              Icon={Icon}
+                            />
+                          );
+                        })}
+                      </div>
+                    </MobileAccordion>
+                  );
+                }
+
+                if (item.kind === "card") {
+                  return (
+                    <MobileAccordion
+                      key={item.id}
+                      label={item.label}
+                      open={openAccordionId === item.id}
+                      onToggle={() =>
+                        setOpenAccordionId((prev) =>
+                          prev === item.id ? null : item.id,
+                        )
+                      }
+                    >
+                      <div className="space-y-1 pb-2">
+                        {item.items.map((it) => (
                           <MobileLinkItem
                             key={it.id}
                             item={it}
                             onClick={closeMenu}
-                            Icon={Icon}
+                            showImage
                           />
-                        );
-                      })}
-                    </div>
-                  </MobileAccordion>
-                );
-              }
+                        ))}
+                      </div>
+                    </MobileAccordion>
+                  );
+                }
 
-              if (item.kind === "card") {
                 return (
                   <MobileAccordion
                     key={item.id}
@@ -514,99 +539,75 @@ function MobileMenu({
                       )
                     }
                   >
-                    <div className="space-y-1 pb-2">
-                      {item.items.map((it) => (
-                        <MobileLinkItem
-                          key={it.id}
-                          item={it}
-                          onClick={closeMenu}
-                          showImage
-                        />
+                    <div className="space-y-4 pb-2">
+                      {item.sections.map((sec) => (
+                        <div key={sec.id} className="space-y-2">
+                          <div className="px-0">
+                            <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
+                              {sec.title}
+                            </div>
+                            {sec.description && (
+                              <div className="text-xs text-black/55">
+                                {sec.description}
+                              </div>
+                            )}
+                            {sec.allHref && (
+                              <NavLink
+                                href={sec.allHref}
+                                onClick={closeMenu}
+                                className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
+                              >
+                                View all
+                                <LinkIndicator
+                                  href={sec.allHref}
+                                  className="text-black/70"
+                                  internalClassName="w-2 h-4"
+                                  externalClassName="w-3.5 h-3.5"
+                                />
+                              </NavLink>
+                            )}
+                          </div>
+
+                          <div className="space-y-1">
+                            {sec.items.map((it) => {
+                              const Icon = getMegaIcon(it.id, it.label);
+                              return (
+                                <MobileLinkItem
+                                  key={it.id}
+                                  item={it}
+                                  onClick={closeMenu}
+                                  Icon={Icon}
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </MobileAccordion>
                 );
-              }
-
-              return (
-                <MobileAccordion
-                  key={item.id}
-                  label={item.label}
-                  open={openAccordionId === item.id}
-                  onToggle={() =>
-                    setOpenAccordionId((prev) =>
-                      prev === item.id ? null : item.id,
-                    )
-                  }
-                >
-                  <div className="space-y-4 pb-2">
-                    {item.sections.map((sec) => (
-                      <div key={sec.id} className="space-y-2">
-                        <div className="px-0">
-                          <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
-                            {sec.title}
-                          </div>
-                          {sec.description && (
-                            <div className="text-xs text-black/55">
-                              {sec.description}
-                            </div>
-                          )}
-                          {sec.allHref && (
-                            <NavLink
-                              href={sec.allHref}
-                              onClick={closeMenu}
-                              className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
-                            >
-                              View all
-                              <LinkIndicator
-                                href={sec.allHref}
-                                className="text-black/70"
-                                internalClassName="w-2 h-4"
-                                externalClassName="w-3.5 h-3.5"
-                              />
-                            </NavLink>
-                          )}
-                        </div>
-
-                        <div className="space-y-1">
-                          {sec.items.map((it) => {
-                            const Icon = getMegaIcon(it.id, it.label);
-                            return (
-                              <MobileLinkItem
-                                key={it.id}
-                                item={it}
-                                onClick={closeMenu}
-                                Icon={Icon}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </MobileAccordion>
-              );
-            })}
-          </div>
-
-          {cta ? (
-            <div className="px-4 pb-5 pt-2 border-t border-black/10">
-              <NavLink
-                href={cta.href}
-                onClick={closeMenu}
-                className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
-              >
-                {cta.label}
-                <LinkIndicator
-                  href={cta.href}
-                  className="text-white"
-                  internalClassName="w-2 h-4"
-                  externalClassName="w-4 h-4"
-                />
-              </NavLink>
+              })}
             </div>
-          ) : null}
-        </div>
+
+            {cta ? (
+              <div className="px-4 pb-5 pt-2 border-t border-black/10">
+                <NavLink
+                  href={cta.href}
+                  onClick={closeMenu}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
+                >
+                  {cta.label}
+                  <LinkIndicator
+                    href={cta.href}
+                    className="text-white"
+                    internalClassName="w-2 h-4"
+                    externalClassName="w-4 h-4"
+                  />
+                </NavLink>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </>
   );

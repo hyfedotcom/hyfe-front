@@ -190,9 +190,16 @@ export function SheetShare({ citation }: { citation?: string }) {
   const hasCitation = Boolean(citation?.trim());
 
   return (
-    <div className="w-max mr-auto fixed flex flex-col md:flex-row gap-2  bottom-4 md:bottom-auto top-4 md:top-8 left-4 md:left-8 z-1000 ">
+    <div
+      id="sheet-share-actions"
+      className="w-max mr-auto fixed flex flex-col md:flex-row gap-2  bottom-4 md:bottom-auto top-4 md:top-8 left-4 md:left-8 z-1000 "
+    >
       <button
+        type="button"
         onClick={toggleShare}
+        aria-label={isShareOpen ? "Hide share options" : "Show share options"}
+        aria-expanded={isDesktop ? true : isMobileShareOpen}
+        aria-controls="sheet-share-actions"
         className="z-100000 md:hidden w-10 h-10 rounded-full resources-glass-surface flex justify-center items-center cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.20)] border border-black/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.30)] hover:scale-110 duration-300 z-1000"
       >
         {" "}

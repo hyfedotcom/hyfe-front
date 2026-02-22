@@ -23,7 +23,8 @@ export function ResourcesBreadcrumbs() {
 
   return (
     <span className="flex gap-1 items-center">
-      <Link href={"/"} className={` ${activeClassName}`}>
+      <Link href={"/"} aria-label="Home" className={` ${activeClassName}`}>
+        <span className="sr-only">Home</span>
         <span className="hidden md:block">Home</span>
         <span className=" md:hidden">
           <svg
@@ -32,6 +33,8 @@ export function ResourcesBreadcrumbs() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
           >
             <path
               d="M4.28571 20.6699H9.03257V12.8434H14.9674V20.6699H19.7143V8.69876L12 2.66266L4.28571 8.69876V20.6699ZM3 22V8.0337L12 1L21 8.0337V22H13.6817V14.1735H10.3183V22H3Z"

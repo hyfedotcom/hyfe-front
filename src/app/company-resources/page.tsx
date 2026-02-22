@@ -1,12 +1,32 @@
 import { ResourcesListHero } from "@/features/resources/client";
-import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
 import { notFound } from "next/navigation";
 import { getPageResource } from "@/features/resources/data/api/getResourceFeedPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 import { CompanyResourcesClient } from "./components/CompanyResourcesClient";
+import { Metadata } from "next";
+import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "",
+    description: "",
+    robots: { index: false, follow: false },
+  };
+
+  try {
+    const page = await getPageResource({ slug: "company-resource" });
+
+    if (!page?.seo) return fallback;
+
+    return getSeoMetadata(page.seo);
+  } catch (e) {
+    console.error("Seo error on slug (metaData)", e);
+    return fallback;
+  }
+}
 
 export default async function ScienceResources() {
   const data = await getPageResource({ slug: "company-resource" });
@@ -15,12 +35,7 @@ export default async function ScienceResources() {
 
   return (
     <div className="relative">
-      <ResourcesListHero
-        data={{
-          title: data.title ?? "Resources",
-          paragraph: data.paragraph,
-        }}
-      />
+      <ResourcesListHero data={data} />
       <div>
         <CompanyResourcesClient />
         <PageBuilder sections={data?.sections} />

@@ -24,7 +24,7 @@ export default function HeroClient() {
             src="/image/tablet-hero.png"
             width={1254}
             height={807}
-            loading="eager"
+            fetchPriority="high"
             alt="cough monitor and dashboard"
           />
         </motion.div>

@@ -45,13 +45,13 @@ export function Card({
         </p>
 
         {title && (
-          <h4
-            className={`font-medium !text-[20px] body-large ${
+          <h3
+            className={`font-medium !text-[20px] font-medium! body-large ${
               description ? "mb-3" : "mb-0"
             }`}
           >
             {title}
-          </h4>
+          </h3>
         )}
         {description && <p>{description}</p>}
       </div>

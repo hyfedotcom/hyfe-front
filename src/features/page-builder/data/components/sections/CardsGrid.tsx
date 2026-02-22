@@ -66,7 +66,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
       style={{ height: scrollHeight }}
     >
       <div
-        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-10 md:top-30" : ""}`}
+        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-20 md:top-30" : ""}`}
       >
         <ContentContainer
           content={section}

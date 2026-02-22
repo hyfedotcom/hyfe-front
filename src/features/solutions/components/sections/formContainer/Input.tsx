@@ -1,7 +1,7 @@
 "use client";
 
 import type { InputType } from "@/features/solutions/schema/hero/raw";
-import { useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 export function Input({
   input,
@@ -23,6 +23,13 @@ export function Input({
   const { required, type, label } = input;
   const [isActive, setIsActive] = useState(false);
   const inputLabel = label?.trim() || "Field";
+  const inputId = useId();
+  const labelId = `${inputId}-label`;
+  const inputName = useMemo(() => {
+    const hbName = input.hb_name?.trim();
+    if (hbName) return hbName;
+    return inputLabel.toLowerCase().replace(/\s+/g, "_");
+  }, [input.hb_name, inputLabel]);
 
   function handleFocus() {
     setIsActive(true);
@@ -38,6 +45,9 @@ export function Input({
     <div className="relative">
       {type === "textarea" ? (
         <textarea
+          id={inputId}
+          name={inputName}
+          aria-labelledby={labelId}
           className={`min-h-[140px] p-4 w-full bg-white border rounded-[20px] resize-y ${
             hasError ? "border-[#B42318]" : "border-black/15"
           } ${disabled ? "opacity-70 cursor-not-allowed" : ""}`}
@@ -51,6 +61,9 @@ export function Input({
         />
       ) : (
         <input
+          id={inputId}
+          name={inputName}
+          aria-labelledby={labelId}
           className={`h-12 pl-5 w-full bg-white border rounded-full ${
             hasError ? "border-[#B42318]" : "border-black/15"
           } ${disabled ? "opacity-70 cursor-not-allowed" : ""}`}
@@ -66,6 +79,8 @@ export function Input({
       )}
 
       <label
+        id={labelId}
+        htmlFor={inputId}
         className={`${
           isActive || value
             ? "-top-4 text-[13px]"

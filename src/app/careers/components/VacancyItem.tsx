@@ -7,7 +7,7 @@ export function VacancyItem({ vacancy }: { vacancy: VacancyType }) {
   const { employment_type, excerpt, location_type, time_zone, title } = vacancy;
   return (
     <div className="p-4 md:p-10 bg-activ border-border border hover:border-primary duration-200 space-y-4 md:space-y-5 rounded-[20px]  hover:shadow-hover duration-300">
-      <h4 className="text-[16px]! md:text-[24px]!">{title}</h4>
+      <h3 className="text-[16px]! md:text-[24px]!">{title}</h3>
       <div className="flex gap-3 flex-wrap">
         <LocationsType location_type={location_type} />
         <TimeZone time_zone={time_zone} />
