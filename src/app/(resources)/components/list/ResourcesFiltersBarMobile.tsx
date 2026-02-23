@@ -13,7 +13,6 @@ type ResourcesFiltersBarMobileProps = {
   onSearchChange: (value: string) => void;
   onSearchFocus: () => void;
   onSearchBlur: () => void;
-  onClearSearch: () => void;
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
 };
@@ -29,16 +28,28 @@ export function ResourcesFiltersBarMobile({
   onSearchChange,
   onSearchFocus,
   onSearchBlur,
-  onClearSearch,
   onClearAllFilters,
   onToggleMobileFilters,
 }: ResourcesFiltersBarMobileProps) {
+  const hasActiveTags = activeTags.length > 0;
+  const isSearchActive = hasSearch || mobileFiltersOpen;
+  const filtersButtonStateClass = hasActiveTags
+    ? "border-white/85 ring-1 ring-primary/45 bg-gradient-to-tl from-primary/50 via-white to-white shadow-[0_8px_18px_rgba(15,23,42,0.12),0_1px_4px_rgba(255,255,255,0.72)_inset]"
+    : mobileFiltersOpen
+      ? "resources-glass-search-open"
+      : "resources-glass-search-idle";
+
   return (
     <div className="md:hidden space-y-2">
       <div className="flex items-center gap-2">
         <div
           id="resources-mobile-search"
-          className="resources-glass-search-shell resources-glass-search-open relative flex h-11 w-full items-center px-3"
+          className={clsx(
+            "resources-glass-search-shell relative flex h-11 w-full items-center px-3",
+            isSearchActive
+              ? "resources-glass-search-open"
+              : "resources-glass-search-idle",
+          )}
         >
           <svg
             className="pointer-events-none h-5 w-5 shrink-0 text-black/55"
@@ -60,36 +71,13 @@ export function ResourcesFiltersBarMobile({
           </svg>
           <input
             type="search"
-            className="h-full w-full bg-transparent pl-2 pr-9 text-[13px] leading-[100%] text-black outline-none placeholder:text-black/45"
+            className="h-full w-full bg-transparent pl-2 pr-2 text-[13px] leading-[100%] text-black outline-none placeholder:text-black/45"
             value={search}
             onChange={(event) => onSearchChange(event.target.value)}
             onFocus={onSearchFocus}
             onBlur={onSearchBlur}
             placeholder="Search resources"
           />
-          {hasSearch && (
-            <button
-              type="button"
-              onClick={onClearSearch}
-              className="absolute right-2 flex h-7 w-7 items-center justify-center rounded-full text-black/65"
-              aria-label="Clear search"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 20 20"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M5 5L15 15M15 5L5 15"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          )}
         </div>
 
         {uniqueTags.length > 0 && (
@@ -98,15 +86,25 @@ export function ResourcesFiltersBarMobile({
             onClick={onToggleMobileFilters}
             aria-expanded={mobileFiltersOpen}
             aria-controls="resources-mobile-filters"
+            aria-label={
+              mobileFiltersOpen
+                ? "Close filters panel"
+                : hasActiveTags
+                  ? `Open filters panel, ${activeTags.length} filters selected`
+                  : "Open filters panel"
+            }
             className={clsx(
-              "resources-glass-toggle-shell flex h-11 items-center justify-center gap-2 px-3 text-[13px] font-medium text-black resources-glass-search-shell",
-              mobileFiltersOpen || activeTags.length > 0
-                ? "resources-glass-toggle-active "
-                : "resources-glass-toggle-idle",
+              "resources-glass-toggle-shell resources-glass-search-shell flex h-11 items-center justify-center gap-2 px-3 text-[13px] font-medium text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+              filtersButtonStateClass,
             )}
           >
-            Filters
-            {activeTags.length > 0 && (
+            <span>{mobileFiltersOpen ? "Close" : "Filters"}</span>
+            {mobileFiltersOpen && (
+              <span className="min-w-5 rounded-full border border-black/20 bg-white/95 px-1.5 text-[11px] leading-5 text-black/90">
+                Filters
+              </span>
+            )}
+            {!mobileFiltersOpen && hasActiveTags && (
               <span className="min-w-5 rounded-full border border-black/15 bg-white/95 px-1.5 text-[11px] leading-5 text-black/80">
                 {activeTags.length}
               </span>
@@ -129,7 +127,10 @@ export function ResourcesFiltersBarMobile({
       {uniqueTags.length > 0 && mobileFiltersOpen && (
         <div
           id="resources-mobile-filters"
-          className="resources-glass-mobile-panel p-2.5"
+          className={clsx(
+            "resources-glass-mobile-panel resources-glass-mobile-panel-open p-2.5",
+            hasActiveTags && "resources-glass-mobile-panel-active",
+          )}
         >
           <div className="max-h-[45vh] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex flex-wrap gap-2">

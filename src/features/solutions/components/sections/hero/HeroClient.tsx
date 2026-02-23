@@ -25,6 +25,7 @@ export default function HeroClient() {
             width={1254}
             height={807}
             fetchPriority="high"
+            preload
             alt="cough monitor and dashboard"
           />
         </motion.div>

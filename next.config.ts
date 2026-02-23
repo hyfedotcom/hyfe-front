@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   images: {
-    dangerouslyAllowLocalIP: isDev, 
+    dangerouslyAllowLocalIP: isDev,
     remotePatterns: [
       { protocol: "https", hostname: "*.strapiapp.com" },
       {
@@ -22,9 +22,8 @@ const nextConfig: NextConfig = {
       {
         source: "/publication/:slug",
         destination: "/publications/:slug",
-        permanent: true, // 308 (аналог 301 для методов, SEO ок)
+        permanent: true,
       },
-      // если были хвосты типа /resource/slug/:
       {
         source: "/publication/:slug/",
         destination: "/publications/:slug",
@@ -43,6 +42,21 @@ const nextConfig: NextConfig = {
       {
         source: "/virtual-care",
         destination: "/solutions/virtual-care",
+        permanent: true,
+      },
+      {
+        source: "/cough-monitor",
+        destination: "https://coughmonitor.com",
+        permanent: true,
+      },
+      {
+        source: "/cough-monitor",
+        destination: "https://coughmonitor.com",
+        permanent: true,
+      },
+      {
+        source: "/digital-therapeutics-dtx",
+        destination: "https://resolvedtx.com",
         permanent: true,
       },
     ];

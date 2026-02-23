@@ -31,12 +31,12 @@ export function ResourcesListHero({ data }: { data: Props }) {
               {statsList.map((item, index) => (
                 <li
                   key={`${item.label}-${item.value}-${index}`}
-                  className="resources-glass-surface  shadow-active! rounded-[22px] px-5 py-5 md:px-6 md:py-6  bg-gradient-to-b from-white via-white to-primary-100/40"
+                  className="resources-glass-surface  shadow-active! rounded-[22px] px-4 py-4 md:px-6 md:py-6  bg-gradient-to-b from-white via-white to-primary-100/40"
                 >
                   <p className="text-[30px] md:text-[42px] leading-[1.05] font-semibold text-black">
                     {item.value}
                   </p>
-                  <p className="mt-2 body-small text-body-secondary!">
+                  <p className=" mt-1 sm:mt-2 body-small text-body-secondary!">
                     {item.label}
                   </p>
                 </li>

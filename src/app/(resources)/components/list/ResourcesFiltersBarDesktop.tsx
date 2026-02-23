@@ -6,7 +6,6 @@ type ResourcesFiltersBarDesktopProps = {
   uniqueTags: string[];
   activeTags: string[];
   hasFilters: boolean;
-  hasSearch: boolean;
   isDesktopSearchOpen: boolean;
   search: string;
   searchPlaceholder: string;
@@ -14,7 +13,6 @@ type ResourcesFiltersBarDesktopProps = {
   onSearchChange: (value: string) => void;
   onSearchFocus: () => void;
   onSearchBlur: () => void;
-  onClearSearch: () => void;
   onClearAllFilters: () => void;
 };
 
@@ -22,7 +20,6 @@ export function ResourcesFiltersBarDesktop({
   uniqueTags,
   activeTags,
   hasFilters,
-  hasSearch,
   isDesktopSearchOpen,
   search,
   searchPlaceholder,
@@ -30,13 +27,12 @@ export function ResourcesFiltersBarDesktop({
   onSearchChange,
   onSearchFocus,
   onSearchBlur,
-  onClearSearch,
   onClearAllFilters,
 }: ResourcesFiltersBarDesktopProps) {
   return (
-    <div className="hidden md:flex items-center gap-3">
+    <div className="hidden min-w-0 md:flex items-center gap-3">
       {uniqueTags.length > 0 && (
-        <div className="flex min-w-0 flex-1 items-center gap-2 ">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           {hasFilters && (
             <button
               type="button"
@@ -47,53 +43,28 @@ export function ResourcesFiltersBarDesktop({
               {cross}
             </button>
           )}
-          <div className="flex min-w-0 gap-2 max-[768px]:overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden h-[42px]">
-            {uniqueTags.map((tag) => (
-              <ResourceTag
-                key={tag}
-                tag={tag}
-                active={activeTags.includes(tag)}
-                onClick={() => onToggleTag(tag)}
-                glass
-                className="shrink-0"
-              />
-            ))}
+          <div className="min-w-0 flex-1">
+            <div className="-my-2 flex min-w-0 gap-2 overflow-x-auto px-1 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {uniqueTags.map((tag) => (
+                <ResourceTag
+                  key={tag}
+                  tag={tag}
+                  active={activeTags.includes(tag)}
+                  onClick={() => onToggleTag(tag)}
+                  glass
+                  className="shrink-0"
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
 
       {uniqueTags.length === 0 && <div className="flex-1" />}
 
-      <button
-        type="button"
-        onClick={onClearSearch}
-        className={clsx(
-          "resources-glass-pill-surface resources-glass-pill-action mr-1 flex h-10 w-10 items-center justify-center transition-all",
-          hasSearch
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none absolute",
-        )}
-        aria-label="Clear search"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 20 20"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M5 5L15 15M15 5L5 15"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </svg>
-      </button>
-
       <label
         className={clsx(
-          "resources-glass-search-shell group relative ml-auto flex h-11 w-[250px] items-center overflow-hidden px-3 transition-colors",
+          "resources-glass-search-shell group relative ml-auto flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors",
           isDesktopSearchOpen
             ? "resources-glass-search-open"
             : "resources-glass-search-idle",

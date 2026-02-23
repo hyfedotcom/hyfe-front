@@ -30,7 +30,7 @@ export function ResourcesNavTabs({ type }: Props) {
 
   return (
     <>
-      <div className="pointer-events-none fixed bottom-4 translate-y-[45px] left-1/2 z-4000 hidden -translate-x-1/2 md:block">
+      <div className="pointer-events-none fixed bottom-[-2] left-1/2 z-4000 hidden -translate-x-1/2 md:block">
         <div className="resources-glass-surface rounded-[30px] px-3 py-3">
           <div aria-hidden="true" className="resources-glass-overlay" />
           <div aria-hidden="true" className="resources-glass-highlight" />
@@ -108,7 +108,7 @@ export function ResourcesNavTabs({ type }: Props) {
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
-            className="resources-glass-pill-surface resources-glass-pill-action flex w-max items-center justify-between gap-3 ml-auto px-3 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="resources-glass-pill-surface resources-glass-pill-action flex w-max items-center justify-between gap-3 ml-auto px-3 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 "
             aria-expanded={open}
             aria-controls="resource-nav-list"
           >

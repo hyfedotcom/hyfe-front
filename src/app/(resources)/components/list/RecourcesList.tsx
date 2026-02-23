@@ -119,13 +119,6 @@ export function RecourcesList({
     setIsMobileFiltersOpen((prev) => !prev);
   }, []);
 
-  const clearSearch = useCallback(() => {
-    setSearch("");
-    if (!hasSearch) {
-      setIsSearchFocused(false);
-    }
-  }, [hasSearch]);
-
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -182,7 +175,6 @@ export function RecourcesList({
         onSearchChange={setSearch}
         onSearchFocus={() => setIsSearchFocused(true)}
         onSearchBlur={() => setIsSearchFocused(false)}
-        onClearSearch={clearSearch}
         onClearAllFilters={clearAllFilters}
         onToggleMobileFilters={toggleMobileFilters}
         onCloseMobilePanels={closeMobilePanels}

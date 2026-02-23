@@ -18,7 +18,6 @@ type ResourcesFiltersBarProps = {
   onSearchChange: (value: string) => void;
   onSearchFocus: () => void;
   onSearchBlur: () => void;
-  onClearSearch: () => void;
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
   onCloseMobilePanels: () => void;
@@ -39,14 +38,13 @@ export function ResourcesFiltersBar({
   onSearchChange,
   onSearchFocus,
   onSearchBlur,
-  onClearSearch,
   onClearAllFilters,
   onToggleMobileFilters,
   onCloseMobilePanels,
 }: ResourcesFiltersBarProps) {
   const containerClassName = clsx(
-    "sticky top-0 z-[100] w-full px-4 md:px-10 pt-4 md:pt-6 xl:px-20 duration-200",
-    isPinned && !isDown && "translate-y-[60px] md:translate-y-[70px]",
+    "sticky top-0 z-[100] w-full px-4 md:px-10 pt-3 md:pt-3 xl:px-20 duration-200",
+    isPinned && !isDown && "translate-y-[60px] md:translate-y-[80px]",
   );
   const searchPlaceholder = `Search ${formatResourceTypeLabel(type)}`;
 
@@ -78,7 +76,6 @@ export function ResourcesFiltersBar({
               uniqueTags={uniqueTags}
               activeTags={activeTags}
               hasFilters={hasFilters}
-              hasSearch={hasSearch}
               isDesktopSearchOpen={isDesktopSearchOpen}
               search={search}
               searchPlaceholder={searchPlaceholder}
@@ -86,7 +83,6 @@ export function ResourcesFiltersBar({
               onSearchChange={onSearchChange}
               onSearchFocus={onSearchFocus}
               onSearchBlur={onSearchBlur}
-              onClearSearch={onClearSearch}
               onClearAllFilters={onClearAllFilters}
             />
 
@@ -101,7 +97,6 @@ export function ResourcesFiltersBar({
               onSearchChange={onSearchChange}
               onSearchFocus={onSearchFocus}
               onSearchBlur={onSearchBlur}
-              onClearSearch={onClearSearch}
               onClearAllFilters={onClearAllFilters}
               onToggleMobileFilters={onToggleMobileFilters}
             />
