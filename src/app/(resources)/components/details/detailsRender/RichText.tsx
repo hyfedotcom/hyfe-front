@@ -110,7 +110,7 @@ function Paragraph({
 }) {
   const inline = renderInline(nodes);
   if (inline.length === 0) return null;
-
+  console.log(nodes);
   return (
     <p
       className={`${className} ${bodySize} text-body-main whitespace-pre-line`}

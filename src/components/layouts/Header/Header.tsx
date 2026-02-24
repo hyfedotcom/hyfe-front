@@ -8,7 +8,15 @@ import { TriggerButton } from "./components/TriggerButton";
 import { DropdownPanel } from "./components/DropdownPanel";
 import { MegaPanel } from "./components/MegaPanel";
 import type { ComponentType } from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { createPortal } from "react-dom";
 import { BigCardsPanel } from "./components/BigCardsPanel";
 import BriefeCaseIcon from "@/shared/icons/company/BriefeCaseIcon";
 import CompassIcon from "@/shared/icons/company/CompassIcon";
@@ -30,8 +38,98 @@ import {
 } from "@/features/header/type/header.type";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 import { HeaderBanner } from "./HeaderBanner";
-import { HeaderType } from "@/features/general/schema/domain";
+import type { HeaderType } from "@/features/general/schema/domain";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
+
+const subscribeNoop = () => () => {};
+
+function toNavLink(
+  raw: {
+    label: string;
+    url: string;
+    description?: string;
+    icon?: { url: string; alt?: string };
+    image?: { url: string; alt?: string };
+  },
+  id: string,
+): BaseLink {
+  return {
+    id,
+    label: raw.label,
+    href: raw.url,
+    description: raw.description,
+    icon: raw.icon,
+    image: raw.image,
+  };
+}
+
+function buildHeaderNavFromCms(header: HeaderType): NavItem[] {
+  const nav: NavItem[] = [];
+
+  if ((header.product_items?.length ?? 0) > 0) {
+    nav.push({
+      id: "product",
+      label: "Product",
+      kind: "card",
+      items: header.product_items.map((item, idx) =>
+        toNavLink(item, `product-${idx}`),
+      ),
+    });
+  }
+
+  if ((header.solutions_items?.length ?? 0) > 0) {
+    nav.push({
+      id: "solutions",
+      label: "Solutions",
+      kind: "dropdown",
+      items: header.solutions_items.map((item, idx) =>
+        toNavLink(item, `solutions-${idx}`),
+      ),
+    });
+  }
+
+  if ((header.resource_sections?.length ?? 0) > 0) {
+    nav.push({
+      id: "resources",
+      label: "Resources",
+      kind: "mega",
+      sections: header.resource_sections.map((section, sectionIdx) => ({
+        id: `resources-section-${sectionIdx}`,
+        title: section.title,
+        description: section.description,
+        allHref: section.all_url,
+        items: section.items.map((item, idx) =>
+          toNavLink(item, `resources-${sectionIdx}-${idx}`),
+        ),
+      })),
+      quickLinks: (header.resource_quick_links ?? []).map((item, idx) =>
+        toNavLink(item, `resources-quick-${idx}`),
+      ),
+    });
+  }
+
+  if ((header.company_items?.length ?? 0) > 0) {
+    nav.push({
+      id: "company",
+      label: "Company",
+      kind: "dropdown",
+      items: header.company_items.map((item, idx) =>
+        toNavLink(item, `company-${idx}`),
+      ),
+    });
+  }
+
+  if (header.cta?.label && header.cta.url) {
+    nav.push({
+      id: "cta",
+      label: header.cta.label,
+      kind: "cta",
+      href: header.cta.url,
+    });
+  }
+
+  return nav;
+}
 
 export function Header({
   topBannerHeight = 0,
@@ -40,6 +138,8 @@ export function Header({
   header: HeaderType;
   topBannerHeight?: number;
 }) {
+  const navFromCms = buildHeaderNavFromCms(header);
+  const nav = navFromCms.length > 0 ? navFromCms : headerNav;
   const hasTopBanner = header.header_banner.label.trim().length > 0;
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -143,16 +243,18 @@ export function Header({
         style={{ top: topOffset }}
         className={cx(
           "fixed left-0 right-0 overflow-visible flex items-center justify-between",
-          mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
+          "h-[60px] md:h-[84px]",
           shouldHideOnScroll || openId != null ? "z-[200000]" : "z-[2000]",
           mobileOpen
             ? "bg-white/96 backdrop-blur-sm"
             : "border-b border-black/[0.12] ring-1 ring-black/[0.05] bg-gradient-to-b from-white/56 via-white/30 to-white/16 backdrop-blur-[28px] backdrop-saturate-150 shadow-[0_12px_30px_rgba(15,23,42,0.12),0_1px_6px_rgba(255,255,255,0.45)_inset]",
           "transition-[transform,translate,height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
           isHeaderReady ? "opacity-100" : "opacity-0 pointer-events-none",
-          shouldHideOnScroll
-            ? "-translate-y-full pointer-events-none"
-            : "translate-y-0 ",
+          mobileOpen
+            ? ""
+            : shouldHideOnScroll
+              ? "-translate-y-full pointer-events-none"
+              : "translate-y-0",
         )}
       >
         {!mobileOpen && (
@@ -189,7 +291,7 @@ export function Header({
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 relative">
-            {headerNav.map((item) => {
+            {nav.map((item) => {
               if (item.kind === "cta") return null;
 
               if (item.kind === "link") {
@@ -225,9 +327,7 @@ export function Header({
                   <TriggerButton
                     label={item.label}
                     open={isOpen}
-                    onClick={() =>
-                      setOpenId((v) => (v === item.id ? null : item.id))
-                    }
+                    onClick={() => openMenu(item.id)}
                   />
 
                   {isOpen && item.kind === "dropdown" && (
@@ -270,7 +370,7 @@ export function Header({
           <div className="flex items-center gap-3">
             {/* CTA */}
             {(() => {
-              const cta = headerNav.find((x) => x.kind === "cta") as
+              const cta = nav.find((x) => x.kind === "cta") as
                 | CtaNavItem
                 | undefined;
               if (!cta) return null;
@@ -292,7 +392,7 @@ export function Header({
 
             {/* Mobile menu button */}
             <MobileMenu
-              nav={headerNav}
+              nav={nav}
               open={mobileOpen}
               onOpenChange={setMobileOpen}
             />
@@ -315,6 +415,11 @@ function MobileMenu({
   onOpenChange: (open: boolean) => void;
 }) {
   const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
+  const isHydrated = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
   const closeMenu = useCallback(() => {
     setOpenAccordionId(null);
     onOpenChange(false);
@@ -380,8 +485,233 @@ function MobileMenu({
   type DropdownMetaKey = keyof typeof dropdownMeta;
   const isDropdownMeta = (label: string): label is DropdownMetaKey =>
     label in dropdownMeta;
+  const getSolutionsIconByHref = (href: string) => {
+    const normalized = href.replace(/\/+$/, "");
+    if (normalized.includes("/solutions/life-sciences")) return LifeScienceIcon;
+    if (normalized.includes("/solutions/research")) return ResearchIcon;
+    if (normalized.includes("/solutions/virtual-care")) return VirtualCareIcon;
+    return null;
+  };
+  const getDropdownIcon = (item: BaseLink) => {
+    const solutionsIcon = getSolutionsIconByHref(item.href);
+    if (solutionsIcon) return solutionsIcon;
+    if (item.label && isDropdownMeta(item.label)) return dropdownMeta[item.label].Icon;
+    return undefined;
+  };
   const getMegaIcon = (id: string, label: string) =>
     megaMetaById[id]?.Icon ?? megaMetaByLabel[label]?.Icon;
+
+  const mobileMenuOverlay = (
+    <div
+      className={cx(
+        "fixed inset-0 z-[20010] lg:hidden transition-opacity duration-300 ease-out",
+        open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+      )}
+    >
+      <button
+        className={cx(
+          "absolute inset-0 bg-black/30 transition-opacity duration-300",
+          open ? "opacity-100" : "opacity-0",
+        )}
+        aria-label="Close menu"
+        tabIndex={open ? 0 : -1}
+        onClick={closeMenu}
+      />
+
+      {open ? (
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-menu-title"
+          className={cx(
+            "absolute inset-0 w-full bg-white shadow-2xl flex flex-col",
+            "transition-transform duration-300 ease-out translate-x-0",
+          )}
+        >
+          <div className="flex items-center justify-between px-4 py-4 border-b border-black/10">
+            <Link
+              href="/"
+              onClick={closeMenu}
+              id="mobile-menu-title"
+              className="shrink-0"
+              aria-label="Hyfe home"
+            >
+              <Image
+                src="/header/logo.png"
+                width={120}
+                height={36}
+                alt="Hyfe"
+              />
+            </Link>
+            <button
+              className="h-10 w-10 rounded-full hover:bg-black/5 text-black"
+              onClick={closeMenu}
+              aria-label="Close menu"
+              autoFocus={open}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            {mainItems.map((item) => {
+              if (item.kind === "link") {
+                return (
+                  <NavLink
+                    key={item.id}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
+                  >
+                    <span className="min-w-0 truncate">{item.label}</span>
+                    <LinkIndicator
+                      href={item.href}
+                      className="ml-3 shrink-0 text-[#C08A00]"
+                      internalClassName="w-2 h-4"
+                      externalClassName="w-4 h-4"
+                    />
+                  </NavLink>
+                );
+              }
+
+              if (item.kind === "dropdown") {
+                return (
+                  <MobileAccordion
+                    key={item.id}
+                    label={item.label}
+                    open={openAccordionId === item.id}
+                    onToggle={() =>
+                      setOpenAccordionId((prev) =>
+                        prev === item.id ? null : item.id,
+                      )
+                    }
+                  >
+                    <div className="space-y-1 pb-2">
+                      {item.items.map((it) => {
+                        const Icon = getDropdownIcon(it);
+                        return (
+                          <MobileLinkItem
+                            key={it.id}
+                            item={it}
+                            onClick={closeMenu}
+                            Icon={Icon}
+                          />
+                        );
+                      })}
+                    </div>
+                  </MobileAccordion>
+                );
+              }
+
+              if (item.kind === "card") {
+                return (
+                  <MobileAccordion
+                    key={item.id}
+                    label={item.label}
+                    open={openAccordionId === item.id}
+                    onToggle={() =>
+                      setOpenAccordionId((prev) =>
+                        prev === item.id ? null : item.id,
+                      )
+                    }
+                  >
+                    <div className="space-y-1 pb-2">
+                      {item.items.map((it) => (
+                        <MobileLinkItem
+                          key={it.id}
+                          item={it}
+                          onClick={closeMenu}
+                          showImage
+                        />
+                      ))}
+                    </div>
+                  </MobileAccordion>
+                );
+              }
+
+              return (
+                <MobileAccordion
+                  key={item.id}
+                  label={item.label}
+                  open={openAccordionId === item.id}
+                  onToggle={() =>
+                    setOpenAccordionId((prev) =>
+                      prev === item.id ? null : item.id,
+                    )
+                  }
+                >
+                  <div className="space-y-4 pb-2">
+                    {item.sections.map((sec) => (
+                      <div key={sec.id} className="space-y-2">
+                        <div className="px-0">
+                          <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
+                            {sec.title}
+                          </div>
+                          {sec.description && (
+                            <div className="text-xs text-black/55">
+                              {sec.description}
+                            </div>
+                          )}
+                          {sec.allHref && (
+                            <NavLink
+                              href={sec.allHref}
+                              onClick={closeMenu}
+                              className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
+                            >
+                              View all
+                              <LinkIndicator
+                                href={sec.allHref}
+                                className="text-black/70"
+                                internalClassName="w-2 h-4"
+                                externalClassName="w-3.5 h-3.5"
+                              />
+                            </NavLink>
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          {sec.items.map((it) => {
+                            const Icon = getMegaIcon(it.id, it.label);
+                            return (
+                              <MobileLinkItem
+                                key={it.id}
+                                item={it}
+                                onClick={closeMenu}
+                                Icon={Icon}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </MobileAccordion>
+              );
+            })}
+          </div>
+
+          {cta ? (
+            <div className="px-4 pb-5 pt-2 border-t border-black/10">
+              <NavLink
+                href={cta.href}
+                onClick={closeMenu}
+                className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
+              >
+                {cta.label}
+                <LinkIndicator
+                  href={cta.href}
+                  className="text-white"
+                  internalClassName="w-2 h-4"
+                  externalClassName="w-4 h-4"
+                />
+              </NavLink>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
 
   return (
     <>
@@ -400,223 +730,7 @@ function MobileMenu({
         <span className="text-xl leading-none">≡</span>
       </button>
 
-      <div
-        className={cx(
-          "fixed inset-0 z-[20010] lg:hidden transition-opacity duration-300 ease-out",
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none",
-        )}
-      >
-        <button
-          className={cx(
-            "absolute inset-0 bg-black/30 transition-opacity duration-300",
-            open ? "opacity-100" : "opacity-0",
-          )}
-          aria-label="Close menu"
-          tabIndex={open ? 0 : -1}
-          onClick={closeMenu}
-        />
-
-        {open ? (
-          <div
-            id="mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="mobile-menu-title"
-            className={cx(
-              "absolute right-0 top-0 h-full w-screen max-w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col",
-              "transition-transform duration-300 ease-out translate-x-0",
-            )}
-          >
-            <div className="flex items-center justify-between px-4 py-4 border-b border-black/10">
-              <Link
-                href="/"
-                onClick={closeMenu}
-                id="mobile-menu-title"
-                className="shrink-0"
-                aria-label="Hyfe home"
-              >
-                <Image
-                  src="/header/logo.png"
-                  width={120}
-                  height={36}
-                  alt="Hyfe"
-                />
-              </Link>
-              <button
-                className="h-10 w-10 rounded-full hover:bg-black/5 text-black"
-                onClick={closeMenu}
-                aria-label="Close menu"
-                autoFocus={open}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {mainItems.map((item) => {
-                if (item.kind === "link") {
-                  return (
-                    <NavLink
-                      key={item.id}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="flex items-center justify-between rounded-[16px] px-4 py-3 text-base font-medium hover:bg-black/5"
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        {item.label}
-                        <LinkIndicator
-                          href={item.href}
-                          className="text-black/70"
-                          internalClassName="w-2 h-4"
-                          externalClassName="w-4 h-4"
-                        />
-                      </span>
-                    </NavLink>
-                  );
-                }
-
-                if (item.kind === "dropdown") {
-                  return (
-                    <MobileAccordion
-                      key={item.id}
-                      label={item.label}
-                      open={openAccordionId === item.id}
-                      onToggle={() =>
-                        setOpenAccordionId((prev) =>
-                          prev === item.id ? null : item.id,
-                        )
-                      }
-                    >
-                      <div className="space-y-1 pb-2">
-                        {item.items.map((it) => {
-                          const meta =
-                            it.label && isDropdownMeta(it.label)
-                              ? dropdownMeta[it.label]
-                              : null;
-                          const Icon = meta?.Icon;
-                          return (
-                            <MobileLinkItem
-                              key={it.id}
-                              item={it}
-                              onClick={closeMenu}
-                              Icon={Icon}
-                            />
-                          );
-                        })}
-                      </div>
-                    </MobileAccordion>
-                  );
-                }
-
-                if (item.kind === "card") {
-                  return (
-                    <MobileAccordion
-                      key={item.id}
-                      label={item.label}
-                      open={openAccordionId === item.id}
-                      onToggle={() =>
-                        setOpenAccordionId((prev) =>
-                          prev === item.id ? null : item.id,
-                        )
-                      }
-                    >
-                      <div className="space-y-1 pb-2">
-                        {item.items.map((it) => (
-                          <MobileLinkItem
-                            key={it.id}
-                            item={it}
-                            onClick={closeMenu}
-                            showImage
-                          />
-                        ))}
-                      </div>
-                    </MobileAccordion>
-                  );
-                }
-
-                return (
-                  <MobileAccordion
-                    key={item.id}
-                    label={item.label}
-                    open={openAccordionId === item.id}
-                    onToggle={() =>
-                      setOpenAccordionId((prev) =>
-                        prev === item.id ? null : item.id,
-                      )
-                    }
-                  >
-                    <div className="space-y-4 pb-2">
-                      {item.sections.map((sec) => (
-                        <div key={sec.id} className="space-y-2">
-                          <div className="px-0">
-                            <div className="text-xs font-semibold uppercase tracking-wide text-black/60">
-                              {sec.title}
-                            </div>
-                            {sec.description && (
-                              <div className="text-xs text-black/55">
-                                {sec.description}
-                              </div>
-                            )}
-                            {sec.allHref && (
-                              <NavLink
-                                href={sec.allHref}
-                                onClick={closeMenu}
-                                className="mt-2 inline-flex items-center gap-2 text-xs rounded-full bg-black/5 px-3 py-1.5"
-                              >
-                                View all
-                                <LinkIndicator
-                                  href={sec.allHref}
-                                  className="text-black/70"
-                                  internalClassName="w-2 h-4"
-                                  externalClassName="w-3.5 h-3.5"
-                                />
-                              </NavLink>
-                            )}
-                          </div>
-
-                          <div className="space-y-1">
-                            {sec.items.map((it) => {
-                              const Icon = getMegaIcon(it.id, it.label);
-                              return (
-                                <MobileLinkItem
-                                  key={it.id}
-                                  item={it}
-                                  onClick={closeMenu}
-                                  Icon={Icon}
-                                />
-                              );
-                            })}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </MobileAccordion>
-                );
-              })}
-            </div>
-
-            {cta ? (
-              <div className="px-4 pb-5 pt-2 border-t border-black/10">
-                <NavLink
-                  href={cta.href}
-                  onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-black text-white h-12 text-sm font-medium hover:bg-primary-600 transition-colors gap-2"
-                >
-                  {cta.label}
-                  <LinkIndicator
-                    href={cta.href}
-                    className="text-white"
-                    internalClassName="w-2 h-4"
-                    externalClassName="w-4 h-4"
-                  />
-                </NavLink>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
+      {isHydrated ? createPortal(mobileMenuOverlay, document.body) : null}
     </>
   );
 }
@@ -647,22 +761,30 @@ function MobileLinkItem({
             alt={item.image.alt ?? item.label}
             className="h-11 w-11 rounded-[12px] border border-black/10 object-cover"
           />
+        ) : item.icon?.url ? (
+          <Image
+            src={item.icon.url}
+            width={20}
+            height={20}
+            alt={item.icon.alt ?? `${item.label} icon`}
+            className="h-5 w-5 object-contain mt-0.5"
+          />
         ) : Icon ? (
-          <Icon className="text-black min-w-5 min-h-5 mt-0.5" />
+          <Icon className="text-primary-600 min-w-5 min-h-5 mt-0.5" />
         ) : null}
-        <div className="min-w-0 grow">
-          <div className="text-sm font-medium text-black inline-flex items-center gap-2">
-            {item.label}
-            <LinkIndicator
-              href={item.href}
-              className="text-black/70"
-              internalClassName="w-2 h-4"
-              externalClassName="w-4 h-4"
-            />
+        <div className="min-w-0 grow flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-sm font-medium text-black">{item.label}</div>
+            {item.description && (
+              <div className="text-xs text-black/55">{item.description}</div>
+            )}
           </div>
-          {item.description && (
-            <div className="text-xs text-black/55">{item.description}</div>
-          )}
+          <LinkIndicator
+            href={item.href}
+            className="mt-0.5 shrink-0 text-[#C08A00]"
+            internalClassName="w-2 h-4"
+            externalClassName="w-4 h-4"
+          />
         </div>
       </div>
     </NavLink>

@@ -268,8 +268,8 @@ export function FeedContainer({
               inert={!isActive}
               className={cx(
                 "w-full transition-all duration-300 ease-out",
-                "flex gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-                "md:pb-0 md:pl-0 md:pr-0 md:grid md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
+                "flex items-stretch gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+                "md:pb-0 md:pl-0 md:pr-0 md:grid md:auto-rows-fr md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
                 isActive
                   ? "relative z-10 opacity-100 translate-y-0 pointer-events-auto"
                   : "absolute inset-0 z-0 opacity-0 translate-y-2 pointer-events-none",
@@ -279,7 +279,7 @@ export function FeedContainer({
                 <Link
                   key={`${card.slug}-${cardIndex}`}
                   className={cx(
-                    "snap-start flex-none w-[82vw] max-w-[340px]",
+                    "snap-start block flex-none h-full self-stretch w-[82vw] max-w-[340px]",
                     "sm:w-[66vw] md:w-auto md:max-w-none",
                   )}
                   href={`/${card.type}/${card.slug}`}

@@ -8,6 +8,7 @@ import LifeScienceIcon from "@/shared/icons/solutions/LifeScienceIcon";
 import ResearchIcon from "@/shared/icons/solutions/ResearchIcon";
 import VirtualCareIcon from "@/shared/icons/solutions/VirtualCareIcon";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
+import Image from "next/image";
 
 export function DropdownPanel({
   items,
@@ -68,7 +69,17 @@ export function DropdownPanel({
                   "hover:bg-black/5",
                 )}
               >
-                {Icon && <Icon className="text-primary-600 min-w-5 min-h-5" />}
+                {it.icon?.url ? (
+                  <Image
+                    src={it.icon.url}
+                    alt={it.icon.alt ?? `${it.label} icon`}
+                    width={20}
+                    height={20}
+                    className="h-5 w-5 object-contain"
+                  />
+                ) : Icon ? (
+                  <Icon className="text-primary-600 min-w-5 min-h-5" />
+                ) : null}
                 <div className="min-w-0 pr-8">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-black">{it.label}</span>

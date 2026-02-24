@@ -28,7 +28,9 @@ export function ContentContainer({
 }) {
   const { ctas, paragraph, title } = content;
   return (
-    <div className={`${classContainer} ${width} space-y-6 md:space-y-11 text-balance`}>
+    <div
+      className={`${classContainer} ${width} space-y-6 md:space-y-11 text-balance`}
+    >
       <div className="space-y-4 md:space-y-5">
         {title && <h2 className={`${classH} text-balance`}>{title}</h2>}
         {paragraph && <p className={`${classP} text-balance `}>{paragraph}</p>}
@@ -42,7 +44,7 @@ export function ContentContainer({
               key={i}
               url={c.url}
               label={c.label}
-              classNameProp={classBtn}
+              classNameProp={`${classBtn} max-md:w-full max-md:justify-between`}
             />
           ))}
         </div>

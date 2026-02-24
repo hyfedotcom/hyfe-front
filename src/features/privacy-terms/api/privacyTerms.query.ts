@@ -14,6 +14,16 @@ const seoPopulate = {
   },
 };
 
+export const privacyTermIndexableSlugsQuery = {
+  fields: ["slug"],
+  pagination: { pageSize: 1000 },
+  populate: {
+    seo: {
+      fields: ["meta_robots"],
+    },
+  },
+};
+
 export const privacyTermBySlugQuery = (slug: string) => ({
   filters: { slug: { $eq: slug } },
   fields: ["content_only", "name", "slug", "date","text_orientation"],

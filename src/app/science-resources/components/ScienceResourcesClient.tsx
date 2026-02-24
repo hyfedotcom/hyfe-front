@@ -51,23 +51,23 @@ export function ScienceResourcesClient() {
     <>
       <div ref={sentinelRef} className="w-full h-0" aria-hidden></div>
       <div
-        className={`${isPinned && !isDown && "translate-y-[60px] md:translate-y-[70px]"} duration-400 resources-glass-sticky-wrap mt-10 w-max! overflow-visible!`}
+        className={`${isPinned && !isDown && "translate-y-[60px] md:translate-y-[70px]"} duration-400 resources-glass-sticky-wrap mt-1 w-full max-w-full overflow-visible! px-0! md:px-0! xl:px-0! w-max`}
       >
-        <div className="resources-glass-surface rounded-[30px]">
+        <div className="resources-glass-surface mx-4 rounded-[30px] md:mx-10 xl:mx-20">
           <div aria-hidden="true" className="resources-glass-overlay" />
           <div aria-hidden="true" className="resources-glass-highlight" />
-          <div className="resources-glass-bar-content ">
-            <div className="flex min-w-0 gap-2  [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <div aria-hidden="true" className="resources-glass-overlay" />
-              <div aria-hidden="true" className="resources-glass-highlight" />
-              {resourceTypes.map((t) => (
+          <div className="resources-glass-bar-content overflow-visible! px-0! py-0!">
+            <div className="flex min-w-0 gap-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {resourceTypes.map((t, index) => (
                 <ResourceButton
                   key={t}
                   label={t}
                   active
                   tag="button"
                   onClick={() => scroll(t)}
-                  classNameProp="resources-glass-resource-pill"
+                  classNameProp={`resources-glass-resource-pill shrink-0 my-2 md:my-3 ${
+                    index === 0 ? "ml-2 md:ml-3" : ""
+                  } ${index === resourceTypes.length - 1 ? "mr-2 md:mr-3" : ""}`}
                 />
               ))}
             </div>

@@ -1,13 +1,15 @@
 import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
-import { getPrivacyTermPage } from "@/features/privacy-terms";
+import {
+  getIndexablePrivacyTermSlugs,
+  getPrivacyTermPage,
+} from "@/features/privacy-terms";
 import { getResourcesList } from "@/features/resources";
 import {
   isResourceType,
   RESOURCE_TYPES,
 } from "@/features/resources/data/api/resourceType";
-import { getSlugs } from "@/features/shared/api/getSlugs";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
@@ -19,7 +21,7 @@ type Params = { type: string };
 
 export async function generateStaticParams(): Promise<Params[]> {
   try {
-    const privacyTermSlugs = await getSlugs("privacy-term-items");
+    const privacyTermSlugs = await getIndexablePrivacyTermSlugs();
     const allTypes = Array.from(
       new Set([...RESOURCE_TYPES, ...privacyTermSlugs]),
     );

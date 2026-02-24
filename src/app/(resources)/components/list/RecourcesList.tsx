@@ -181,11 +181,11 @@ export function RecourcesList({
       />
       <div
         ref={cardsStartRef}
-        className="flex w-full flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-start sm:items-stretch gap-4 md:gap-5 px-4 md:px-10 xl:px-20"
+        className="flex w-full flex-col items-stretch gap-4 px-4 md:gap-5 md:px-10 sm:grid sm:auto-rows-fr sm:grid-cols-2 sm:items-stretch lg:grid-cols-3 xl:grid-cols-4 xl:px-20"
       >
         {visibleList.map((c) => (
           <Link
-            className="w-full sm:h-full"
+            className="block h-full w-full"
             href={`/${type}/${c.slug}`}
             key={c.slug}
             scroll={false}

@@ -88,7 +88,7 @@ export function TimelineJumpLinksClient({
   if (!items.length) return null;
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-full">
       <JumpLinks
         items={items}
         activeId={forcedActiveId ?? activeId}

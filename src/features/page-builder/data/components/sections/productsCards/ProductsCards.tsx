@@ -12,13 +12,14 @@ export function ProductsCards({
   return (
     <SectionContainer>
       <div id={`${type}`} className="space-y-10 md:space-y-15 bg-white">
-        <ContentContainer content={section} width="max-w-[1000px]" />
+        <ContentContainer content={section} width="max-w-[1000px] text-left md:text-center" />
         <div className="max-w-[1220px] mx-auto space-y-5">
           {cards.map((c, i) => (
             <a
               href={c.cta[0].url}
               key={i}
               target="_blank"
+              rel="noopener noreferrer"
               className="block hover:shadow-hover rounded-[20px] overflow-hidden duration-300"
             >
               <ProductCard card={c} />

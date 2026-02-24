@@ -72,7 +72,10 @@ export function ResourceAdditionalInfo({
           </svg>
         </div>
       </div>
-      <div ref={containerRef} className="flex px-5 gap-3 overflow-x-scroll">
+      <div
+        ref={containerRef}
+        className="flex items-stretch gap-3 overflow-x-auto px-5"
+      >
         {block.info_links.map((c, i) => (
           <AddtionalInfoCard
             ref={(el) => {

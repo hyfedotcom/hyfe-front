@@ -39,7 +39,7 @@ export default async function Member({ params }: { params: Props }) {
   if (!member) notFound();
   const { biography, image, job, linkedin, location, name, twitter } = member;
   return (
-    <Sheet returnPath="/team">
+    <Sheet returnPath="/advisors">
       <div className="max-w-[970px] mx-auto pt-10 px-4 md:px-10">
         <div className="relative w-[160px] h-[160px] sm:w-[240px] sm:h-[240px] lg:w-[320px] lg:h-[320px] mb-10">
           <Image

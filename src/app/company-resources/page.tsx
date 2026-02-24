@@ -5,6 +5,7 @@ import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder
 import { CompanyResourcesClient } from "./components/CompanyResourcesClient";
 import { Metadata } from "next";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -35,10 +36,15 @@ export default async function ScienceResources() {
 
   return (
     <div className="relative">
+      {data.seo && (
+        <SeoStructuredData seo={data.seo} id="company-resources-seo-jsonld" />
+      )}
       <ResourcesListHero data={data} />
       <div>
         <CompanyResourcesClient />
-        <PageBuilder sections={data?.sections} />
+        <div className="space-y-[-100px] md:space-y-[-200px]!  -mt-15">
+          <PageBuilder sections={data?.sections} />
+        </div>
       </div>
     </div>
   );

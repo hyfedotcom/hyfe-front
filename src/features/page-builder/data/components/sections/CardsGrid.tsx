@@ -70,7 +70,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
       >
         <ContentContainer
           content={section}
-          classContainer="px-4 md:px-10 xl:px-20 text-center mx-auto"
+          classContainer="px-4 md:px-10 xl:px-20 text-left md:text-center mx-auto"
           width="max-w-[1200px]"
         />
         {hasHorizontalScroll ? (

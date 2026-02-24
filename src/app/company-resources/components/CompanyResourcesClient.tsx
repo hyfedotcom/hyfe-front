@@ -51,10 +51,10 @@ export function CompanyResourcesClient() {
     <>
       <div ref={sentinelRef} className="w-full h-0"></div>
       <div
-        className={`${isPinned && !isDown && "translate-y-[60px] md:translate-y-[70px]"} shadow-none! duration-400 resources-glass-sticky-wrap mt-10 w-max! overflow-visible!`}
+        className={`${isPinned && !isDown && "translate-y-[60px] md:translate-y-[70px]"} shadow-none! duration-400 resources-glass-sticky-wrap mt-1 w-max! overflow-visible!`}
       >
         <div
-          className={`${!isPinned && " shadow-none!"} duration-300 transition-shadow resources-glass-surface rounded-[30px] `}
+          className={` duration-300 transition-shadow resources-glass-surface rounded-[30px] `}
         >
           <div aria-hidden="true" className="resources-glass-overlay" />
           <div aria-hidden="true" className="resources-glass-highlight" />

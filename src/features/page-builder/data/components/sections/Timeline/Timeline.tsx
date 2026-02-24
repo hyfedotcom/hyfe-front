@@ -6,7 +6,6 @@ import { TimelineColumn } from "./TimelineColumn";
 import { HomeParallaxBackground } from "@/components/background/HomeParallaxBackground";
 import { toSlug } from "@/shared/utils/toSlug";
 import { TimelineJumpLinksClient } from "./TimelineJumpLinksClient";
-// import { useEffect } from "react";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 
 export default function Timeline({ section }: { section: TimelineType }) {
@@ -29,16 +28,12 @@ export default function Timeline({ section }: { section: TimelineType }) {
     label: column.year,
   }));
 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(([entry]) => {}, {});
-  // }, []);
-
   return (
     <SectionContainer className="bg-transparent! px-0!">
       <div className="relative lg:flex">
         {jumpItems.length > 0 && (
           <aside
-            className={`${isDown ? "max-md:top-0" : "max-md:top-14"} translate-x-4  md:translate-x-10 xl:translate-x-20 sticky mb-4 z-[100] w-max  max-md:transition-[top] max-md:duration-300 max-md:ease-out md:top-[70px]  lg:col-start-1 lg:top-1/3 lg:w-auto lg:self-start lg:h-fit lg:px-0 lg:pt-0 lg:justify-end`}
+            className={`${isDown ? "max-md:top-3" : "max-md:top-18"} sticky z-[100] mb-4 w-full max-w-full overflow-visible px-4 max-md:transition-[top] max-md:duration-300 max-md:ease-out md:top-[70px] md:w-max md:max-w-none md:px-0 md:translate-x-10 xl:translate-x-20 lg:col-start-1 lg:top-1/3 lg:w-auto lg:self-start lg:h-fit lg:justify-end`}
           >
             <TimelineJumpLinksClient items={jumpItems} />
           </aside>

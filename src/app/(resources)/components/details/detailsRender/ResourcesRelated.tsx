@@ -91,7 +91,7 @@ export function ResourcesRelated({
       <div className="relative left-1/2 -translate-x-1/2 w-screen">
         <div
           ref={cardsContainerRef}
-          className="w-full flex gap-3 md:gap-5 overflow-x-auto overflow-y-visible
+          className="w-full flex items-stretch gap-3 md:gap-5 overflow-x-auto overflow-y-visible
                 pl-[max(1rem,calc((100vw-870px)/2))]
                 pr-[max(1rem,calc((100vw-870px)/2))]"
         >
@@ -100,7 +100,7 @@ export function ResourcesRelated({
               ref={(r) => {
                 cardsRef.current[index] = r;
               }}
-              className="w-[85vw] sm:w-[50vw] shrink-0 md:w-full inline-block md:min-w-[425px] md:max-w-[425px]"
+              className="block w-[85vw] shrink-0 sm:w-[50vw] md:w-full md:min-w-[425px] md:max-w-[425px]"
               key={card.slug}
               href={`/${resourceType}/${card.slug}`}
             >
@@ -108,7 +108,7 @@ export function ResourcesRelated({
             </Link>
           ))}
           <Link
-            className="w-[85vw] sm:w-[50vw] shrink-0 md:w-full  md:min-w-[425px] md:max-w-[425px] flex flex-col justify-between md:max-w-[425px bg-primary p-5 rounded-[20px] group hover:bg-black  duration-300 transition-colors"
+            className="group flex w-[85vw] shrink-0 flex-col justify-between rounded-[20px] bg-primary p-5 transition-colors duration-300 hover:bg-black sm:w-[50vw] md:w-full md:min-w-[425px] md:max-w-[425px]"
             href={`/${resourceType}`}
             scroll={true}
           >

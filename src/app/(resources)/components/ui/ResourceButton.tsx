@@ -37,7 +37,7 @@ export function ResourceButton({
 
   const content = (
     <span
-      className={`flex ${classNameProp} ${className}  items-center gap-2.5 px-4 py-2.5 text-[14px] md:text-[16px] leading-[100%] capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
+      className={`flex ${classNameProp} ${className}  items-center gap-2.5 px-4 py-2.5 text-[14px] md:text-[16px] leading-[100%] nowra capitalize ${active ? "font-medium text-body" : "font-normal text-body-secondary "}`}
     >
       {Icon && (
         <Icon

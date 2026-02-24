@@ -1,7 +1,43 @@
 import { NextResponse } from "next/server";
 import { serverEnv } from "@/core/env.server";
 import { draftMode } from "next/headers";
-import { redirect } from "next/navigation";
+
+const INTERNAL_PREVIEW_BASE = "https://preview.internal";
+
+function getSafePreviewPath(rawUrl: string | null): string {
+  const candidate = rawUrl?.trim();
+
+  if (!candidate || candidate.startsWith("//")) {
+    return "/";
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(candidate, INTERNAL_PREVIEW_BASE);
+  } catch {
+    return "/";
+  }
+
+  if (parsed.origin !== INTERNAL_PREVIEW_BASE) {
+    return "/";
+  }
+
+  const pathname = parsed.pathname.replace(/\/{2,}/g, "/");
+  const pathWithQueryAndHash = `${pathname}${parsed.search}${parsed.hash}`;
+
+  if (pathWithQueryAndHash === "/" || pathWithQueryAndHash === "") {
+    return "/";
+  }
+
+  if (
+    pathWithQueryAndHash === "/preview" ||
+    pathWithQueryAndHash.startsWith("/preview/")
+  ) {
+    return pathWithQueryAndHash;
+  }
+
+  return `/preview${pathWithQueryAndHash}`;
+}
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -20,5 +56,6 @@ export async function GET(req: Request) {
     (await draftMode()).enable();
   }
 
-  redirect(`/preview/${url}` || "/");
+  const destination = getSafePreviewPath(url);
+  return NextResponse.redirect(new URL(destination, req.url));
 }

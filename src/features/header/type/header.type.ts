@@ -3,6 +3,10 @@ export type BaseLink = {
   label: string;
   description?: string;
   href: string;
+  icon?: {
+    url: string;
+    alt?: string;
+  };
   image?: {
     url: string;
     alt?: string;

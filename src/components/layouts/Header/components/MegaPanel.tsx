@@ -7,6 +7,7 @@ import NewsIcon from "@/shared/icons/resources/NewsIcon";
 import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
 import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
+import Image from "next/image";
 
 const META_BY_ID = {
   news: { Icon: NewsIcon },
@@ -116,9 +117,17 @@ export function MegaPanel({
                           )}
                         >
                           <div className="flex items-start gap-3 w-full pr-8">
-                            {Icon && (
+                            {it.icon?.url ? (
+                              <Image
+                                src={it.icon.url}
+                                alt={it.icon.alt ?? `${it.label} icon`}
+                                width={28}
+                                height={28}
+                                className="h-7 w-7 object-contain"
+                              />
+                            ) : Icon ? (
                               <Icon className="text-primary-600 min-w-7 min-h-7" />
-                            )}
+                            ) : null}
                             <div className="min-w-0 grow">
                               <div className="flex items-center gap-2">
                                 <div className="font-medium text-sm text-black">
