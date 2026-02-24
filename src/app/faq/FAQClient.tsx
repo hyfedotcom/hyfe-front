@@ -2,8 +2,8 @@
 
 import { JumpLinks } from "@/components/navigation/JumpLinks";
 import { FaqSectionType } from "@/features/faq/schema/faq.schema";
+import { useActiveSection } from "@/hooks/useActiveSection";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useActiveSection } from "./useActiveSection";
 
 export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
   const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");

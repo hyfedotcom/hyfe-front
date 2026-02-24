@@ -9,9 +9,9 @@ export default function ContentImageSplit({
 }) {
   const { ctas, content, title, type, image, variant } = section;
   return (
-    <SectionContainer>
+    <SectionContainer className="bg-transparent!">
       <div
-        className={`${variant === "right" ? "flex-col-reverse md:flex-row-reverse" : "flex-col md:flex-row"} flex items-center `}
+        className={`${variant === "right" ? "flex-col md:flex-row-reverse" : "flex-col md:flex-row"} flex items-center gap-10`}
       >
         <div className="md:w-1/2 space-y-6">
           <h2 className="text-balance">{title}</h2>
@@ -30,7 +30,7 @@ export default function ContentImageSplit({
           alt={image.alt ?? "image"}
           width={image.width}
           height={image.height}
-          className="w-1/2"
+          className="w-full md:w-1/2"
         />
       </div>
     </SectionContainer>

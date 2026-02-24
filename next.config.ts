@@ -50,13 +50,18 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/cough-monitor",
-        destination: "https://coughmonitor.com",
+        source: "/digital-therapeutics-dtx",
+        destination: "https://resolvedtx.com",
         permanent: true,
       },
       {
-        source: "/digital-therapeutics-dtx",
-        destination: "https://resolvedtx.com",
+        source: "/team-members/:slug",
+        destination: "/team/:slug",
+        permanent: true,
+      },
+        {
+        source: "/team-members/:slug/",
+        destination: "/team/:slug",
         permanent: true,
       },
     ];

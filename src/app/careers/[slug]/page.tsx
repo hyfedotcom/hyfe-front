@@ -26,18 +26,18 @@ export async function generateMetadata({ params }: { params: Props }) {
     const { slug } = await params;
     const vacancy = await getVacancy(slug);
 
-    if (!vacancy.seo) {
-      return {
-        title: "Page not found",
-        description: "This page does not exist.",
-        robots: { index: false, follow: false },
-      };
-    }
-
     if (!vacancy) {
       return {
         title: "Page",
         description: "Default description",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    if (!vacancy.seo) {
+      return {
+        title: "Page not found",
+        description: "This page does not exist.",
         robots: { index: false, follow: false },
       };
     }

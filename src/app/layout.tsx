@@ -7,7 +7,6 @@ import { buildOrganizationJsonLd } from "@/components/seo/jsonLdBuilders";
 import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 import { getNewsletterForm } from "@/features/newsletter";
 import getGeneral from "@/features/general/api/getGeneral";
-import { HeaderBanner } from "@/components/layouts/Header/HeaderBanner";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -23,9 +22,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const newsletter = await getNewsletterForm();
   const general = await getGeneral();
-  const bannerLabel = general?.header?.header_banner?.label?.trim();
-  const bannerUrl = general?.header?.header_banner?.url?.trim();
-  const hasBanner = Boolean(bannerLabel);
+  const topBannerHeight = general.header.header_banner.label.trim() ? 40 : 0;
 
   return (
     <html lang="en">
@@ -35,8 +32,7 @@ export default async function RootLayout({
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
         <ScrollToTop />
         <div data-site-header>
-          {hasBanner && <HeaderBanner label={bannerLabel!} url={bannerUrl} />}
-          <Header topBannerHeight={hasBanner ? 40 : 0} />
+          <Header header={general.header} topBannerHeight={topBannerHeight} />
         </div>
         {children}
         <div data-site-footer>

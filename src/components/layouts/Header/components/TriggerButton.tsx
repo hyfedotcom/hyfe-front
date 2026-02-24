@@ -23,8 +23,8 @@ export function TriggerButton({
       className={cx(
         "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm",
         "text-black/80 hover:text-black",
-        "hover:bg-black/5",
-        open && "bg-black/5 text-black",
+        "hover:bg-primary-100",
+        open && "bg-primary-100 text-black",
       )}
     >
       {label}

@@ -32,7 +32,7 @@ export function ResourcesFiltersBarDesktop({
   return (
     <div className="hidden min-w-0 md:flex items-center gap-3">
       {uniqueTags.length > 0 && (
-        <div className="flex min-w-0 flex-1 items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-scroll">
           {hasFilters && (
             <button
               type="button"

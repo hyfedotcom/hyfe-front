@@ -11,3 +11,19 @@ export const HeroContentRawSchema = z.looseObject({
   ),
 });
 
+export const TimelineRawSchema = z.looseObject({
+  __component: z.literal("shared.timeline"),
+  column: z.array(
+    z.looseObject({
+      id: z.number(),
+      year: z.string(),
+      item: z.array(
+        z.looseObject({
+          id: z.number(),
+          month_day: z.string(),
+          paragraph: z.string(),
+        }),
+      ),
+    }),
+  ),
+});

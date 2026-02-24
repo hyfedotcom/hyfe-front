@@ -71,7 +71,7 @@ export function ResourcesFiltersBar({
           <div aria-hidden="true" className="resources-glass-overlay" />
           <div aria-hidden="true" className="resources-glass-highlight" />
 
-          <div className="relative z-10 px-2 py-2 md:px-3 md:py-3">
+          <div className="relative z-10 px-2 py-2 md:px-3 md:py-0">
             <ResourcesFiltersBarDesktop
               uniqueTags={uniqueTags}
               activeTags={activeTags}

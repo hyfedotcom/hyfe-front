@@ -18,6 +18,7 @@ import ContentImageSplit from "@/features/solutions/components/sections/ContentI
 import { Testimonials } from "@/features/solutions/components/sections/testimonials/Testimonials";
 import { FormContainer } from "@/features/solutions/components/sections/formContainer/FormContainer";
 import { HeroContent } from "./sections/HeroContent/HeroContent";
+import Timeline from "./sections/Timeline/Timeline";
 
 export const pageBuilderRegistry: PageBuilderRegistry = {
   "hero-stats": HeroStats,
@@ -38,5 +39,6 @@ export const pageBuilderRegistry: PageBuilderRegistry = {
   "content-image-split": ContentImageSplit,
   "testimonials-feed": Testimonials,
   form_container: FormContainer,
-  "hero-content": HeroContent
+  "hero-content": HeroContent,
+  timeline: Timeline,
 };

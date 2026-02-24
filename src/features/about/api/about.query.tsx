@@ -21,6 +21,18 @@ export const AboutQuery = {
             },
           },
         },
+        "shared.timeline": {
+          populate: {
+            column: {
+              fields: ["year"],
+              populate: {
+                item: {
+                  fields: ["month_day", "paragraph"],
+                },
+              },
+            },
+          },
+        },
       },
     },
     seo: {

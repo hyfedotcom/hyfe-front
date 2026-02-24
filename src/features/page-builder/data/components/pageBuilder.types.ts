@@ -20,7 +20,7 @@ import type {
   ResourceCardListType,
 } from "@/features/resources";
 import type { ResourceFeedManySectionType } from "../schema/pageBuilder";
-import { HeroContentType } from "@/features/about/schema/domain";
+import { HeroContentType, TimelineType } from "@/features/about/schema/domain";
 
 export type ResourceFeedSectionRenderable = ResourceFeedSectionType & {
   cards?: ResourceCardType[];
@@ -46,7 +46,8 @@ type PageBuilderBaseSection =
   | ContentImageSplitType
   | TestimonialsFeedType
   | HeroContentType
-  | HeroStatsSectionmodifiedType;
+  | HeroStatsSectionmodifiedType
+  | TimelineType;
 
 type NonResourceFeedSection = Exclude<
   PageBuilderBaseSection,

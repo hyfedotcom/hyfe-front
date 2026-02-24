@@ -29,13 +29,27 @@ import {
   NavItem,
 } from "@/features/header/type/header.type";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
+import { HeaderBanner } from "./HeaderBanner";
+import { HeaderType } from "@/features/general/schema/domain";
+import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 
-export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
+export function Header({
+  topBannerHeight = 0,
+  header,
+}: {
+  header: HeaderType;
+  topBannerHeight?: number;
+}) {
+  const hasTopBanner = header.header_banner.label.trim().length > 0;
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isHiddenOnScroll, setIsHiddenOnScroll] = useState(false);
-  const [topOffset, setTopOffset] = useState(topBannerHeight);
+  const [scrollY, setScrollY] = useState(0);
+  const [isHeaderReady, setIsHeaderReady] = useState(false);
+  const isScrollingDown = useIsScrollingDown(10);
   const headerRef = useRef<HTMLElement | null>(null);
+  const topOffset = Math.max(topBannerHeight - scrollY, 0);
+  const shouldHideOnScroll =
+    isScrollingDown && scrollY >= 56 && openId === null && !mobileOpen;
 
   const close = useCallback(() => setOpenId(null), []);
 
@@ -86,212 +100,206 @@ export function Header({ topBannerHeight = 0 }: { topBannerHeight?: number }) {
   }, [close]);
 
   useEffect(() => {
+    const rafId = requestAnimationFrame(() => setIsHeaderReady(true));
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  useEffect(() => {
     let ticking = false;
-    let lastY = window.scrollY;
+
+    const syncScrollY = (y: number) => {
+      setScrollY((prev) => (prev === y ? prev : y));
+    };
+
+    syncScrollY(window.scrollY);
 
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
 
       requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const diff = y - lastY;
-        const nextTopOffset = Math.max(topBannerHeight - y, 0);
-        setTopOffset((prev) => (prev === nextTopOffset ? prev : nextTopOffset));
-
-        if (y <= 8) {
-          setIsHiddenOnScroll(false);
-          lastY = y;
-          ticking = false;
-          return;
-        }
-
-        if (Math.abs(diff) >= 6) {
-          setIsHiddenOnScroll(diff > 0);
-          lastY = y;
-        }
-
+        syncScrollY(window.scrollY);
         ticking = false;
       });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    const syncTopOffsetOnMount = requestAnimationFrame(() => {
-      const y = window.scrollY;
-      const nextTopOffset = Math.max(topBannerHeight - y, 0);
-      setTopOffset((prev) => (prev === nextTopOffset ? prev : nextTopOffset));
-    });
-
     return () => {
       window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(syncTopOffsetOnMount);
     };
-  }, [topBannerHeight]);
-  
+  }, []);
 
   return (
-    <header
-      ref={headerRef}
-      style={{ top: topOffset }}
-      className={cx(
-        "fixed left-0 right-0 overflow-visible flex items-center justify-between",
-        mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
-        isHiddenOnScroll || openId != null ? "z-[200000]" : "z-[2000]",
-        mobileOpen
-          ? "bg-white/96 backdrop-blur-sm"
-          : "border-b border-black/[0.12] ring-1 ring-black/[0.05] bg-gradient-to-b from-white/56 via-white/30 to-white/16 backdrop-blur-[28px] backdrop-saturate-150 shadow-[0_12px_30px_rgba(15,23,42,0.12),0_1px_6px_rgba(255,255,255,0.45)_inset]",
-        "transition-[transform,height] duration-300",
-        isHiddenOnScroll &&
-          openId === null &&
-          !mobileOpen &&
-          "-translate-y-full",
+    <>
+      {hasTopBanner && (
+        <HeaderBanner
+          label={header.header_banner.label!}
+          url={header.header_banner.url}
+        />
       )}
-    >
-      {!mobileOpen && (
-        <>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-5 md:inset-x-10 top-[1px] h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
-          />
-        </>
-      )}
-      <div className="relative z-10 mx-auto flex w-full items-center justify-between px-4 md:px-10 xl:px-20">
-        {/* Logo */}
-        <Link
-          href="/"
-          className={cx(
-            "shrink-0 transition-opacity duration-300",
-            mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100",
-          )}
-          aria-hidden={mobileOpen}
-          tabIndex={mobileOpen ? -1 : 0}
-        >
-          <Image
-            src="/header/logo.png"
-            width={120}
-            height={36}
-            alt="Hyfe logo"
-            loading="lazy"
-          />
-        </Link>
+      <header
+        ref={headerRef}
+        style={{ top: topOffset }}
+        className={cx(
+          "fixed left-0 right-0 overflow-visible flex items-center justify-between",
+          mobileOpen ? "h-[100dvh]" : "h-[60px] md:h-[84px]",
+          shouldHideOnScroll || openId != null ? "z-[200000]" : "z-[2000]",
+          mobileOpen
+            ? "bg-white/96 backdrop-blur-sm"
+            : "border-b border-black/[0.12] ring-1 ring-black/[0.05] bg-gradient-to-b from-white/56 via-white/30 to-white/16 backdrop-blur-[28px] backdrop-saturate-150 shadow-[0_12px_30px_rgba(15,23,42,0.12),0_1px_6px_rgba(255,255,255,0.45)_inset]",
+          "transition-[transform,translate,height,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
+          isHeaderReady ? "opacity-100" : "opacity-0 pointer-events-none",
+          shouldHideOnScroll
+            ? "-translate-y-full pointer-events-none"
+            : "translate-y-0 ",
+        )}
+      >
+        {!mobileOpen && (
+          <>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-transparent"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-5 md:inset-x-10 top-[1px] h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+            />
+          </>
+        )}
+        <div className="relative z-10 mx-auto flex w-full items-center justify-between px-4 md:px-10 xl:px-20">
+          {/* Logo */}
+          <Link
+            href="/"
+            className={cx(
+              "shrink-0 transition-opacity duration-300",
+              mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100",
+            )}
+            aria-hidden={mobileOpen}
+            tabIndex={mobileOpen ? -1 : 0}
+          >
+            <Image
+              src="/header/logo.png"
+              width={120}
+              height={36}
+              alt="Hyfe logo"
+              loading="lazy"
+            />
+          </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1 relative">
-          {headerNav.map((item) => {
-            if (item.kind === "cta") return null;
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-1 relative">
+            {headerNav.map((item) => {
+              if (item.kind === "cta") return null;
 
-            if (item.kind === "link") {
+              if (item.kind === "link") {
+                return (
+                  <NavLink
+                    key={item.id}
+                    href={item.href}
+                    className="group rounded-full px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-black/5"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      {item.label}
+                      <LinkIndicator
+                        href={item.href}
+                        className="text-black/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                        internalClassName="w-2 h-4"
+                        externalClassName="w-3.5 h-3.5"
+                      />
+                    </span>
+                  </NavLink>
+                );
+              }
+
+              const isOpen = openId === item.id;
+              const megaItem = item.kind === "mega" ? item : null;
+
+              return (
+                <div
+                  key={item.id}
+                  className="relative  "
+                  onPointerEnter={() => openMenu(item.id)}
+                  onPointerLeave={scheduleClose}
+                >
+                  <TriggerButton
+                    label={item.label}
+                    open={isOpen}
+                    onClick={() =>
+                      setOpenId((v) => (v === item.id ? null : item.id))
+                    }
+                  />
+
+                  {isOpen && item.kind === "dropdown" && (
+                    <div
+                      onPointerEnter={cancelClose}
+                      onPointerLeave={scheduleClose}
+                    >
+                      <DropdownPanel items={item.items} close={close} />
+                    </div>
+                  )}
+
+                  {isOpen && item.kind === "card" && (
+                    <div
+                      onPointerEnter={cancelClose}
+                      onPointerLeave={scheduleClose}
+                    >
+                      <BigCardsPanel items={item.items} close={close} />
+                    </div>
+                  )}
+
+                  {isOpen && megaItem && (
+                    <div
+                      onPointerEnter={cancelClose}
+                      onPointerLeave={scheduleClose}
+                      className="mx-auto backdrop-blur-[20px]!"
+                    >
+                      <MegaPanel
+                        sections={megaItem.sections}
+                        quickLinks={megaItem.quickLinks}
+                        close={close}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-3">
+            {/* CTA */}
+            {(() => {
+              const cta = headerNav.find((x) => x.kind === "cta") as
+                | CtaNavItem
+                | undefined;
+              if (!cta) return null;
               return (
                 <NavLink
-                  key={item.id}
-                  href={item.href}
-                  className="group rounded-full px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-black/5"
+                  href={cta.href}
+                  className={cx(
+                    "hidden sm:inline-flex items-center justify-center group",
+                    "rounded-full px-5 h-11 text-sm font-medium",
+                    "bg-black text-white hover:bg-primary-600 transition-colors",
+                  )}
                 >
                   <span className="inline-flex items-center gap-2">
-                    {item.label}
-                    <LinkIndicator
-                      href={item.href}
-                      className="text-black/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                      internalClassName="w-2 h-4"
-                      externalClassName="w-3.5 h-3.5"
-                    />
+                    {cta.label}
                   </span>
                 </NavLink>
               );
-            }
+            })()}
 
-            const isOpen = openId === item.id;
-            const megaItem = item.kind === "mega" ? item : null;
-
-            return (
-              <div
-                key={item.id}
-                className="relative  "
-                onPointerEnter={() => openMenu(item.id)}
-                onPointerLeave={scheduleClose}
-              >
-                <TriggerButton
-                  label={item.label}
-                  open={isOpen}
-                  onClick={() =>
-                    setOpenId((v) => (v === item.id ? null : item.id))
-                  }
-                />
-
-                {isOpen && item.kind === "dropdown" && (
-                  <div
-                    onPointerEnter={cancelClose}
-                    onPointerLeave={scheduleClose}
-                  >
-                    <DropdownPanel items={item.items} close={close} />
-                  </div>
-                )}
-
-                {isOpen && item.kind === "card" && (
-                  <div
-                    onPointerEnter={cancelClose}
-                    onPointerLeave={scheduleClose}
-                  >
-                    <BigCardsPanel items={item.items} close={close} />
-                  </div>
-                )}
-
-                {isOpen && megaItem && (
-                  <div
-                    onPointerEnter={cancelClose}
-                    onPointerLeave={scheduleClose}
-                    className="mx-auto backdrop-blur-[20px]!"
-                  >
-                    <MegaPanel
-                      sections={megaItem.sections}
-                      quickLinks={megaItem.quickLinks}
-                      close={close}
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
-
-        {/* Right side */}
-        <div className="flex items-center gap-3">
-          {/* CTA */}
-          {(() => {
-            const cta = headerNav.find((x) => x.kind === "cta") as
-              | CtaNavItem
-              | undefined;
-            if (!cta) return null;
-            return (
-              <NavLink
-                href={cta.href}
-                className={cx(
-                  "hidden sm:inline-flex items-center justify-center group",
-                  "rounded-full px-5 h-11 text-sm font-medium",
-                  "bg-black text-white hover:bg-primary-600 transition-colors",
-                )}
-              >
-                <span className="inline-flex items-center gap-2">
-                  {cta.label}
-                </span>
-              </NavLink>
-            );
-          })()}
-
-          {/* Mobile menu button */}
-          <MobileMenu
-            nav={headerNav}
-            open={mobileOpen}
-            onOpenChange={setMobileOpen}
-          />
+            {/* Mobile menu button */}
+            <MobileMenu
+              nav={headerNav}
+              open={mobileOpen}
+              onOpenChange={setMobileOpen}
+            />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
 

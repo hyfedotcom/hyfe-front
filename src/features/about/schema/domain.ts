@@ -1,6 +1,6 @@
 import { SeoSchema } from "@/features/resources";
 import { z } from "zod";
-import { HeroContentRawSchema } from "./raw";
+import { HeroContentRawSchema, TimelineRawSchema } from "./raw";
 import { ContentImageSplitSchema } from "@/features/solutions/schema/hero/domain";
 
 export const HeroContentSchema = HeroContentRawSchema.transform((res) => ({
@@ -9,10 +9,16 @@ export const HeroContentSchema = HeroContentRawSchema.transform((res) => ({
   content: res.content,
 }));
 
+export const TimelineSchema = TimelineRawSchema.transform((res) => ({
+  type: "timeline" as const,
+  column: res.column,
+}));
+
 export const AboutSectonsRawSchema = z.array(
   z.discriminatedUnion("__component", [
     HeroContentSchema,
     ContentImageSplitSchema,
+    TimelineSchema,
   ]),
 );
 
@@ -23,3 +29,6 @@ export const AboutRawSchema = z.looseObject({
 
 export type AboutType = z.infer<typeof AboutRawSchema>;
 export type HeroContentType = z.infer<typeof HeroContentSchema>;
+export type TimelineType = z.infer<typeof TimelineSchema>;
+export type TimelineColumnType = TimelineType["column"][number];
+export type TimelineItem = TimelineColumnType["item"][number];

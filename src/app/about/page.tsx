@@ -1,3 +1,4 @@
+import { HomeParallaxBackground } from "@/components/background/HomeParallaxBackground";
 import getAbout from "@/features/about/api/getAbout";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
 import { notFound } from "next/navigation";
@@ -7,8 +8,8 @@ export default async function About() {
   if (!about.sections) return notFound();
 
   return (
-    <>
+    <div className="relative">
       <PageBuilder sections={about.sections} />
-    </>
+    </div>
   );
 }
