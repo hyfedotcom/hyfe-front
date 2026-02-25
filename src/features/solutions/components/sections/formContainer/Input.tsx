@@ -1,9 +1,10 @@
 "use client";
 
 import type { InputType } from "@/features/solutions/schema/hero/raw";
-import { useId, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export function Input({
+  inputId,
   input,
   value,
   onChange,
@@ -12,6 +13,7 @@ export function Input({
   onFocus,
   onBlur,
 }: {
+  inputId: string;
   input: InputType;
   value: string;
   onChange: (next: string) => void;
@@ -23,7 +25,6 @@ export function Input({
   const { required, type, label } = input;
   const [isActive, setIsActive] = useState(false);
   const inputLabel = label?.trim() || "Field";
-  const inputId = useId();
   const labelId = `${inputId}-label`;
   const inputName = useMemo(() => {
     const hbName = input.hb_name?.trim();

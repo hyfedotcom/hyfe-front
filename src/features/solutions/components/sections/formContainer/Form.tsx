@@ -4,13 +4,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/buttons/Button";
 import type { FormType } from "@/features/solutions/schema/hero/raw";
 import { Input } from "./Input";
-import { FormEvent, useId, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
+}
+
+function sanitizeIdPart(value: string) {
+  const normalized = value.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const trimmed = normalized.replace(/^-+|-+$/g, "");
+  return trimmed || "field";
 }
 
 export function Form({ form }: { form: FormType }) {
@@ -37,7 +43,7 @@ export function Form({ form }: { form: FormType }) {
   );
   const [website, setWebsite] = useState("");
   const [surfaceHeight, setSurfaceHeight] = useState<number | null>(null);
-  const formStatusId = useId();
+  const formStatusId = `solution-form-status-${sanitizeIdPart(form.formId?.trim() || "default")}`;
 
   const isSubmitting = submitState === "submitting";
   const emailValue =
@@ -217,6 +223,12 @@ export function Form({ form }: { form: FormType }) {
       <div aria-hidden="true" className="resources-glass-overlay" />
       <div aria-hidden="true" className="resources-glass-highlight" />
       {inputs.map((input, i) => {
+        const inputBaseId =
+          input.hb_name?.trim() ||
+          input.label?.trim() ||
+          `${input.type || "text"}-${i + 1}`;
+        const inputId = `solution-form-input-${sanitizeIdPart(inputBaseId)}-${i + 1}`;
+
         return (
           <div
             key={i}
@@ -226,6 +238,7 @@ export function Form({ form }: { form: FormType }) {
             )}
           >
             <Input
+              inputId={inputId}
               input={input}
               value={values[i] ?? ""}
               disabled={isSubmitting}

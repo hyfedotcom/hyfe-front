@@ -122,7 +122,6 @@ export function Sheet({ children, returnPath, share }: Props) {
     const useBack = Boolean(hasInternalBackRef());
 
     pendingNavRef.current = { fallback, useBack };
-    console.log(pendingNavRef.current);
     setOpen(false);
   }, [hasInternalBackRef, returnBackRef]);
 

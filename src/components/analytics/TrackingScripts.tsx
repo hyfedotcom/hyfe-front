@@ -1,10 +1,41 @@
+"use client";
+
 import Script from "next/script";
+import { useEffect, useState } from "react";
+import {
+  ANALYTICS_CONSENT_GRANTED_EVENT,
+  hasAnalyticsConsentInDocument,
+} from "@/core/cookies/analyticsConsent";
 
 const GTM_ID = "GTM-K646M5L";
 const AHREFS_KEY = "oKxNRpsjYqZ73g8TXQbS7w";
 const CLARITY_ID = "i3tshx1j7p";
 
-export function TrackingScripts() {
+export function TrackingScripts({
+  initialEnabled = false,
+}: {
+  initialEnabled?: boolean;
+}) {
+  const [enabled, setEnabled] = useState(
+    () => initialEnabled || hasAnalyticsConsentInDocument(),
+  );
+
+  useEffect(() => {
+    if (enabled) return;
+
+    const onConsentGranted = () => setEnabled(true);
+    window.addEventListener(ANALYTICS_CONSENT_GRANTED_EVENT, onConsentGranted);
+
+    return () => {
+      window.removeEventListener(
+        ANALYTICS_CONSENT_GRANTED_EVENT,
+        onConsentGranted,
+      );
+    };
+  }, [enabled]);
+
+  if (!enabled) return null;
+
   return (
     <>
       {/* Google Tag Manager */}

@@ -2,31 +2,37 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-const COOKIE_NAME = "analytics_consent";
-const COOKIE_VALUE = "granted";
-const COOKIE_DAYS = 365;
+import {
+  ANALYTICS_CONSENT_COOKIE_NAME,
+  ANALYTICS_CONSENT_GRANTED_EVENT,
+  ANALYTICS_CONSENT_GRANTED_VALUE,
+  ANALYTICS_CONSENT_MAX_AGE_SECONDS,
+  hasAnalyticsConsentInDocument,
+} from "@/core/cookies/analyticsConsent";
 
 function setConsentCookie() {
   if (typeof document === "undefined") return;
 
-  const expires = new Date();
-  expires.setDate(expires.getDate() + COOKIE_DAYS);
-
-  document.cookie = [
-    `${COOKIE_NAME}=${encodeURIComponent(COOKIE_VALUE)}`,
+  const expires = new Date(Date.now() + ANALYTICS_CONSENT_MAX_AGE_SECONDS * 1000);
+  const cookieParts = [
+    `${ANALYTICS_CONSENT_COOKIE_NAME}=${encodeURIComponent(ANALYTICS_CONSENT_GRANTED_VALUE)}`,
+    `Max-Age=${ANALYTICS_CONSENT_MAX_AGE_SECONDS}`,
     `expires=${expires.toUTCString()}`,
     "path=/",
     "SameSite=Lax",
-  ].join("; ");
+  ];
+
+  if (window.location.protocol === "https:") {
+    cookieParts.push("Secure");
+  }
+
+  document.cookie = cookieParts.join("; ");
+
+  window.dispatchEvent(new Event(ANALYTICS_CONSENT_GRANTED_EVENT));
 }
 
-export function CookieBanner({
-  initialAccepted,
-}: {
-  initialAccepted: boolean;
-}) {
-  const [isOpen, setIsOpen] = useState(!initialAccepted);
+export function CookieBanner() {
+  const [isOpen, setIsOpen] = useState(() => !hasAnalyticsConsentInDocument());
 
   if (!isOpen) return null;
 

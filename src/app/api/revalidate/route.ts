@@ -104,7 +104,6 @@ export async function POST(req: Request) {
     const slug = getWebhookSlug(body);
 
     console.log("Revalidate webhook:", { model, uid, slug });
-    revalidatePath("/sitemap.xml");
 
     // 1.0 CAREERS LANDING
     if (

@@ -58,8 +58,12 @@ export async function POST(req: NextRequest) {
   try {
     const clientIp = getClientIp(req);
     const userAgent = req.headers.get("user-agent") ?? "unknown";
+    const rateLimitKey =
+      clientIp === "unknown"
+        ? `hubspot:submitForm:${clientIp}:${userAgent}`
+        : `hubspot:submitForm:${clientIp}`;
     const rateLimit = consumeRateLimit({
-      key: `hubspot:submitForm:${clientIp}:${userAgent}`,
+      key: rateLimitKey,
       max: SUBMIT_FORM_MAX_REQUESTS,
       windowMs: SUBMIT_FORM_WINDOW_MS,
     });

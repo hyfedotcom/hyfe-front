@@ -9,9 +9,7 @@ import { getNewsletterForm } from "@/features/newsletter";
 import getGeneral from "@/features/general/api/getGeneral";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
-import { TrackingScripts } from "@/components/analytics/TrackingScripts";
-import { CookieBanner } from "@/components/cookie/CookieBanner";
-import { cookies } from "next/headers";
+import { CookieConsentRuntime } from "@/components/cookie/CookieConsentRuntime";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,14 +23,12 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const newsletter = await getNewsletterForm();
   const general = await getGeneral();
-  const cookieStore = await cookies();
-  const hasAnalyticsConsent = cookieStore.has("analytics_consent");
   const topBannerHeight = general.header.header_banner.label.trim() ? 40 : 0;
 
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <TrackingScripts />
+        <CookieConsentRuntime />
         <JsonLd data={buildOrganizationJsonLd()} id="organization-jsonld" />
         <ScrollToTop />
         <div data-site-header>
@@ -42,7 +38,6 @@ export default async function RootLayout({
         <div data-site-footer>
           <Footer newsletter={newsletter} footer={general.footer} />
         </div>
-        <CookieBanner initialAccepted={hasAnalyticsConsent} />
         <SpeedInsights />
         <Analytics />
       </body>
