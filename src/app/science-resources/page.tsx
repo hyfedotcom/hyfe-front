@@ -47,7 +47,7 @@ export default async function ScienceResources() {
           paragraph: data.paragraph,
         }}
       />
-      <div>
+      <div className="mb-30 md:mb-60">
         <ScienceResourcesClient />
         <div className="space-y-[-100px] md:space-y-[-200px]!  -mt-15">
           <PageBuilder sections={data?.sections} />

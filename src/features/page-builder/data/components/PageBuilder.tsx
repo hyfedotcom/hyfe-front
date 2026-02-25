@@ -12,6 +12,8 @@ const NO_OVERFLOW_TYPES = new Set<PageBuilderSection["type"]>([
 
 export function PageBuilder({ sections }: { sections?: PageBuilderSection[] }) {
   if (!sections?.length) return null;
+  const lastSectionType = sections[sections.length - 1]?.type;
+
   return (
     <>
       {sections.map((section, i) => {
@@ -41,6 +43,11 @@ export function PageBuilder({ sections }: { sections?: PageBuilderSection[] }) {
           </div>
         );
       })}
+      <span
+        aria-hidden
+        className="hidden"
+        data-page-builder-last-section={lastSectionType}
+      />
     </>
   );
 }

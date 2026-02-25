@@ -3,6 +3,12 @@ import { resourceBySlug } from "../resources.query";
 import { parseOrThrow, SlugSchema } from "../resources.schema";
 import { resolveResourceItemsType } from "./resourceType";
 
+function hasEmptyDataArray(value: unknown): boolean {
+  if (!value || typeof value !== "object") return false;
+  const data = (value as { data?: unknown }).data;
+  return Array.isArray(data) && data.length === 0;
+}
+
 export async function getResource({
   type,
   slug,
@@ -20,6 +26,10 @@ export async function getResource({
     tags: [`resource:${itemsType}-${slug}`],
     isDraft: isDraft ?? undefined,
   });
+
+  if (hasEmptyDataArray(resourceData)) {
+    return null;
+  }
 
   const resource = parseOrThrow(SlugSchema, resourceData);
 

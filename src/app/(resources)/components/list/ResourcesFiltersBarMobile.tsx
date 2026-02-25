@@ -40,7 +40,7 @@ export function ResourcesFiltersBarMobile({
       : "resources-glass-search-idle";
 
   return (
-    <div className="md:hidden space-y-2">
+    <div className="md:hidden space-y-2 m-2">
       <div className="flex items-center gap-2">
         <div
           id="resources-mobile-search"

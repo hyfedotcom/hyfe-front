@@ -28,13 +28,15 @@ export function ResourceDetailsHero({
           {title}
         </h1>
         <div className="flex flex-row items-center md:flex-row justify-between gap-6">
-          <div className="flex gap-2">
-            {tags.map((t: { tag: string }, i: number) => (
-              <Link key={i} href={`/${type}`}>
-                <ResourceTag tag={t.tag} />
-              </Link>
-            ))}
-          </div>
+          {tags.length > 0 && (
+            <div className="flex gap-2">
+              {tags.map((t: { tag: string }, i: number) => (
+                <Link key={i} href={`/${type}`}>
+                  <ResourceTag tag={t.tag} />
+                </Link>
+              ))}
+            </div>
+          )}
           <p className="text-[14px] md:text-[16px] text-body-secondary!">
             {formatDateWithDots(date)}
           </p>

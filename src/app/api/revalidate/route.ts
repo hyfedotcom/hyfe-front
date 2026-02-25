@@ -76,7 +76,6 @@ function revalidateSlugCollections(collections: string[]) {
   for (const collection of collections) {
     revalidateTag(`slugs:${collection}`, "max");
   }
-  revalidatePath("/sitemap.xml");
 }
 
 function getWebhookSlug(body: unknown) {
@@ -105,6 +104,7 @@ export async function POST(req: Request) {
     const slug = getWebhookSlug(body);
 
     console.log("Revalidate webhook:", { model, uid, slug });
+    revalidatePath("/sitemap.xml");
 
     // 1.0 CAREERS LANDING
     if (
@@ -279,6 +279,7 @@ export async function POST(req: Request) {
 
     // 5.0 SOLUTION PAGES
     if (uid === "api::solution.solution" || model === "solution") {
+      revalidateTag("solution:forms", "max");
       if (slug) {
         revalidateTag(`solution:${slug}`, "max");
         revalidatePath(`/solutions/${slug}`);

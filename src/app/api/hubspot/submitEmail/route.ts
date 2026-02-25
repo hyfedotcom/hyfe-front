@@ -1,10 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { serverEnv } from "@/core/env.server";
+import { getClientIp } from "@/core/http/getClientIp";
+import { consumeRateLimit } from "@/core/security/rateLimit";
+import { submitNewsletterToHubspot } from "@/core/hubspot/submitNewsletterToHubspot";
+import { isHubspotCaptureOnlyEnabled } from "@/core/hubspot/captureHubspotSubmission";
 
 const HUBSPOT_DRY_RUN = process.env.HUBSPOT_DRY_RUN === "true";
+const HUBSPOT_CAPTURE_ONLY = isHubspotCaptureOnlyEnabled();
+const SUBMIT_EMAIL_MAX_REQUESTS = 10;
+const SUBMIT_EMAIL_WINDOW_MS = 60_000;
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const userAgent = req.headers.get("user-agent") ?? "unknown";
+    const rateLimit = consumeRateLimit({
+      key: `hubspot:submitEmail:${clientIp}:${userAgent}`,
+      max: SUBMIT_EMAIL_MAX_REQUESTS,
+      windowMs: SUBMIT_EMAIL_WINDOW_MS,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
+    }
+
     const form = await req.formData();
 
     const email = String(form.get("email") ?? "").trim();
@@ -18,49 +44,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "email is required" }, { status: 400 });
     }
 
-    if (HUBSPOT_DRY_RUN) {
-      return NextResponse.json({ ok: true, dryRun: true });
-    }
-
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      req.headers.get("x-real-ip") ??
-      undefined;
+    const ip = clientIp === "unknown" ? undefined : clientIp;
 
     const pageUri = req.headers.get("referer") ?? undefined;
     const hutk = req.cookies.get("hubspotutk")?.value; // полезно для атрибуции
 
-    const hsRes = await fetch(
-      `https://api.hsforms.com/submissions/v3/integration/secure/submit/${serverEnv.HUB_ID}/${serverEnv.NEWS_FORM_ID}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${serverEnv.NEWS_FORM_TOKEN}`,
-        },
-        body: JSON.stringify({
-          fields: [{ name: "email", value: email }],
-          context: {
-            ...(hutk ? { hutk } : {}),
-            ...(ip ? { ipAddress: ip } : {}),
-            ...(pageUri ? { pageUri } : {}),
-          },
-          legalConsentOptions: {
-            consent: {
-              consentToProcess: consent,
-              text: "I agree to allow processing of my data.",
-            },
-          },
-        }),
-      },
-    );
+    if (HUBSPOT_CAPTURE_ONLY) {
+      const capture = await submitNewsletterToHubspot({
+        email,
+        consent,
+        ip,
+        pageUri,
+        hutk,
+        captureOnly: true,
+        captureSource: "submitEmail:newsletter",
+      });
 
-    const data = await hsRes.json().catch(() => ({}));
+      return NextResponse.json({
+        ok: true,
+        captureOnly: true,
+        capturedTo: capture.capturedTo,
+      });
+    }
 
-    if (!hsRes.ok) {
+    if (HUBSPOT_DRY_RUN) {
+      return NextResponse.json({ ok: true, dryRun: true });
+    }
+
+    const newsletterSubmit = await submitNewsletterToHubspot({
+      email,
+      consent,
+      ip,
+      pageUri,
+      hutk,
+    });
+
+    if (!newsletterSubmit.ok) {
       return NextResponse.json(
-        { error: "HubSpot rejected submission", details: data },
-        { status: hsRes.status },
+        { error: "HubSpot rejected submission", details: newsletterSubmit.data },
+        { status: newsletterSubmit.status },
       );
     }
 

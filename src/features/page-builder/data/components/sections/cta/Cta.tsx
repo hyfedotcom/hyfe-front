@@ -6,7 +6,7 @@ import Image from "next/image";
 export function Cta({ section }: { section: CTASectionSchemaType }) {
   return (
     <div className="relative overflow-hidden">
-      <div className="w-screen h-[140px] rounded-b-[100px] bg-white"></div>
+      <div className="w-screen h-[40px] md:h-[140px] rounded-b-[60px] md:rounded-b-[100px] bg-white"></div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1920"
@@ -22,7 +22,10 @@ export function Cta({ section }: { section: CTASectionSchemaType }) {
             fill="url(#cta_blur_gradient)"
           />
         </g>
-        <g className="svg-blur-fallback" filter="url(#cta_blur_filter_fallback)">
+        <g
+          className="svg-blur-fallback"
+          filter="url(#cta_blur_filter_fallback)"
+        >
           <path
             d="M-388 531.555C-204.407 531.555 -206.5 828.554 -63 531.555C80.5 234.556 305 808.553 466 531.555C627 254.557 733.5 939.053 1030 531.555C1326.5 124.057 1330.73 531.555 1488 531.555C1614.81 531.555 1750 10.5563 1884 531.555C2018 1052.55 2158.82 531.555 2309 531.555V1497.56H-388V531.555Z"
             fill="url(#cta_blur_gradient)"
@@ -91,23 +94,29 @@ export function Cta({ section }: { section: CTASectionSchemaType }) {
             />
           </div>
         </SectionContainer>
-        <div className="w-[1260px] h-[400px] md:h-[950px]  relative scale-120 translate-x-[10%] ">
+        <div className="w-[1260px] h-[400px] sm:h-[400px] md:h-[750px] lg:h-[950px]  relative scale-120 translate-x-[10%] ">
           <Image
             src="/home/watch.png"
             alt="cough monitor smart watch"
             width={700}
             height={700}
-            className="z-1 w-screen md:w-[70vw] absolute  lg:w-[700px] h-auto lg:object-cover md:translate-y-[-25%] lg:translate-y-[20%] md:left-1/4"
+            className="z-1 w-[100vw] sm:w-[70vw] absolute lg:w-[700px] h-auto lg:object-cover -translate-y-1/2 top-[50%] md:top-[30%] lg:top-[60%] max-md:translate-x-[20%] max-lg:translate-x-1/2 lg:-right-[15%]"
           ></Image>
           <Image
-            className="absolute inset-0 object-contain object-cover object-top md:object-left "
+            className="hidden lg:block absolute inset-0 object-contain object-cover object-top md:object-left "
             src={"/home/honeycombs.png"}
             alt={"CoughMonitor Suite "}
             fill
           />
         </div>
+        <Image
+          className="lg:hidden absolute inset-0 object-contain object-cover object-top md:object-left z-[-1]"
+          src={"/home/honeycombs.png"}
+          alt={"CoughMonitor Suite "}
+          fill
+        />
       </div>
-      <div className="w-screen h-[140px] rounded-t-[100px] bg-white"></div>
+      <div className="w-screen h-[60px] md:h-[140px] rounded-t-[60px] md:rounded-t-[100px] bg-white"></div>
     </div>
   );
 }

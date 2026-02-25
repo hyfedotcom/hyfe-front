@@ -1,4 +1,5 @@
 import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
+import ResourceTypePage from "@/app/(resources)/components/layout/ResourceTypePage";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 import {
@@ -81,7 +82,7 @@ export default async function DynamicTypePage({
   const { type } = await params;
 
   if (isResourceType(type)) {
-    return null;
+    return <ResourceTypePage type={type} />;
   }
 
   const legalPage = await getPrivacyTermPage(type);

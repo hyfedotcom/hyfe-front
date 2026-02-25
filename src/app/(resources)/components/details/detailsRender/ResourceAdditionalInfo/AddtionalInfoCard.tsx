@@ -6,12 +6,12 @@ export const AddtionalInfoCard = forwardRef<
   HTMLDivElement,
   { label: string; url: string; className?: string }
 >(({ label, url, className }, ref) => {
-  const isLongLabel = label.length >= 50;
+  const isLongLabel = label.length >= 100;
 
   return (
     <div
       ref={ref}
-      className={`${isLongLabel ? "w-[340px]" : "w-[240px]"} min-w-[240px] shrink-0 self-stretch ${className ?? ""}`}
+      className={`${isLongLabel ? "w-[340px]" : "w-[240px]"} min-w-[240px] shrink-0 self-stretch min-h-[300px] ${className ?? ""}`}
     >
       <SmartLink href={url}>
         <div className="group relative h-full overflow-hidden rounded-[18px] border-2 border-border bg-activ p-4 transition-colors duration-200 hover:border-primary">

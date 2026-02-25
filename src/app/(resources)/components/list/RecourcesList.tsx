@@ -3,30 +3,43 @@
 import { ResourceCard } from "@/features/resources/client";
 import type { ResourceCardType } from "@/features/resources/data/resources.types";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import { ResourcesFiltersBar } from "./ResourcesFiltersBar";
 
+const SEARCH_DEBOUNCE_MS = 300;
+
+function parsePageParam(value: string | null) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 1) return 1;
+  return Math.floor(parsed);
+}
+
 export function RecourcesList({
   data,
   type,
   tags,
+  initialPage = 1,
 }: {
   data: ResourceCardType[];
   type: string;
   tags: string[];
+  initialPage?: number;
 }) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(10);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const searchParams = useSearchParams();
   const width = useWindowSize();
   const isMobile = (width ?? 0) <= 768;
   const isDown = useIsScrollingDown(10);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const cardsStartRef = useRef<HTMLDivElement | null>(null);
+  const searchValueRef = useRef("");
   const [isPinned, setIsPinned] = useState(false);
 
   const scrollToCardsStart = useCallback(() => {
@@ -60,8 +73,29 @@ export function RecourcesList({
     [scrollToCardsStart],
   );
 
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      const prev = searchValueRef.current.trim();
+      const next = value.trim();
+      if (prev.length === 0 && next.length > 0) {
+        scrollToCardsStart();
+      }
+      searchValueRef.current = value;
+      setSearch(value);
+    },
+    [scrollToCardsStart],
+  );
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(search);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
   const filteredList = useMemo(() => {
-    if (activeTags.length === 0 && search.length === 0) return data;
+    if (activeTags.length === 0 && debouncedSearch.length === 0) return data;
 
     const tagsData =
       activeTags.length > 0
@@ -71,8 +105,8 @@ export function RecourcesList({
         : data;
 
     const searchData = () => {
-      if (search !== "" && tagsData.length > 0) {
-        const searchTokens = search
+      if (debouncedSearch !== "" && tagsData.length > 0) {
+        const searchTokens = debouncedSearch
           .toLowerCase()
           .replace(/\s+/g, " ")
           .replace(/-/g, " ")
@@ -95,19 +129,43 @@ export function RecourcesList({
     };
 
     return searchData();
-  }, [activeTags, data, search]);
+  }, [activeTags, data, debouncedSearch]);
 
   const hasSearch = search.trim().length > 0;
+  const hasAppliedSearch = debouncedSearch.trim().length > 0;
   const hasFilters = activeTags.length > 0 || hasSearch;
+  const hasAppliedFilters = activeTags.length > 0 || hasAppliedSearch;
   const isDesktopSearchOpen = !isMobile && (isSearchFocused || hasSearch);
   const mobileFiltersOpen = isMobile && isMobileFiltersOpen;
+  const pageSize = 20;
+  const pageFromUrl = parsePageParam(searchParams.get("page"));
+  const safeInitialPage = Number.isFinite(initialPage)
+    ? Math.max(1, Math.floor(initialPage))
+    : 1;
+  const currentPage = pageFromUrl || safeInitialPage;
   const total = filteredList.length;
-  const shown = Math.min(visibleCount, total);
+  const maxPage = Math.max(1, Math.ceil(total / pageSize));
+  const activePage = hasAppliedFilters ? 1 : Math.min(currentPage, maxPage);
+  const shown = hasAppliedFilters
+    ? total
+    : Math.min(activePage * pageSize, total);
   const visibleList = filteredList.slice(0, shown);
+  const hasNextPage = !hasAppliedFilters && activePage < maxPage;
+  const nextPage = activePage + 1;
+  const pageHref = (page: number) => (page <= 1 ? `/${type}` : `/${type}?page=${page}`);
+  const detailHref = (slug: string) => {
+    const base = `/${type}/${slug}`;
+    if (!hasAppliedFilters && activePage > 1) {
+      return `${base}?page=${activePage}`;
+    }
+    return base;
+  };
 
   const clearAllFilters = useCallback(() => {
     setActiveTags([]);
     setSearch("");
+    setDebouncedSearch("");
+    searchValueRef.current = "";
     scrollToCardsStart();
   }, [scrollToCardsStart]);
 
@@ -140,11 +198,6 @@ export function RecourcesList({
   }, []);
 
   useEffect(() => {
-    const set = () => setVisibleCount(isMobile ? 10 : 20);
-    set();
-  }, [isMobile, search, activeTags]);
-
-  useEffect(() => {
     if (!isMobile) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -172,7 +225,7 @@ export function RecourcesList({
         isDesktopSearchOpen={isDesktopSearchOpen}
         mobileFiltersOpen={mobileFiltersOpen}
         onToggleTag={toggleTag}
-        onSearchChange={setSearch}
+        onSearchChange={handleSearchChange}
         onSearchFocus={() => setIsSearchFocused(true)}
         onSearchBlur={() => setIsSearchFocused(false)}
         onClearAllFilters={clearAllFilters}
@@ -186,7 +239,7 @@ export function RecourcesList({
         {visibleList.map((c) => (
           <Link
             className="block h-full w-full"
-            href={`/${type}/${c.slug}`}
+            href={detailHref(c.slug)}
             key={c.slug}
             scroll={false}
           >
@@ -197,24 +250,32 @@ export function RecourcesList({
       </div>
 
       <div className="flex flex-col items-center gap-2 px-4 ">
-        {shown < total && (
-          <button
-            type="button"
-            onClick={() =>
-              setVisibleCount((prev) =>
-                Math.min(prev + (isMobile ? 10 : 20), total),
-              )
-            }
+        {hasNextPage && (
+          <Link
+            href={pageHref(nextPage)}
+            scroll={false}
             className="cursor-pointer inline-flex items-center justify-center rounded-full border-2 font-semibold! border-primary px-5 py-2 text-sm text-black  hover:bg-black/5 transition-colors"
           >
-            {isMobile
-              ? `Load ${total - shown > 10 ? 10 : total - shown} more`
-              : `Load ${total - shown > 20 ? 20 : total - shown} more`}
-          </button>
+            {`Load ${total - shown > pageSize ? pageSize : total - shown} more`}
+          </Link>
         )}
         <div className="text-[12px] text-body-secondary ">
           Showing {shown} of {total}
         </div>
+        {!hasAppliedFilters && (
+          <nav className="sr-only" aria-label="Resources pagination">
+            {activePage > 1 && (
+              <Link rel="prev" href={pageHref(activePage - 1)} scroll={false}>
+                Previous page
+              </Link>
+            )}
+            {hasNextPage && (
+              <Link rel="next" href={pageHref(nextPage)} scroll={false}>
+                Next page
+              </Link>
+            )}
+          </nav>
+        )}
       </div>
     </section>
   );

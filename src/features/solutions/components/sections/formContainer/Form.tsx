@@ -77,11 +77,11 @@ export function Form({ form }: { form: FormType }) {
   const hasRequiredConsent = consent.some((item) => item.required);
   const hasValidationErrors =
     inputErrorMessages.some(Boolean) || requiredConsentErrors.some(Boolean);
+  // CMS can provide newsletter consent with privacy_link=true; only requiredness
+  // should decide whether this checkbox is treated as newsletter opt-in.
   const subscribeToNewsletter =
     cough_news_subscription &&
-    consent.some(
-      (item, i) => consentValues[i] && !item.required && !item.privacy_link,
-    );
+    consent.some((item, i) => consentValues[i] && !item.required);
   const surfaceClassName =
     "space-y-5 max-w-[650px] w-full md:w-1/2 resources-glass-surface rounded-[40px] p-4 py-6 md:p-10 bg-gradient-to-br from-white via-white/10 to-primary-100 overflow-visible!";
   const shouldLockSurfaceHeight =

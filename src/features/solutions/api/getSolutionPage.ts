@@ -27,17 +27,29 @@ export default async function getSolutionPage({ slug }: { slug: string }) {
     tags: [`solution:${slug}`],
   });
 
-  const secrionsOrder = (
-    solutionSkeletonRaw as solutionSkeleton
-  ).data[0].sections.map((e) => e.__component);
+  const skeletonItems = (solutionSkeletonRaw as solutionSkeleton | null)?.data;
+  const firstSkeleton = Array.isArray(skeletonItems) ? skeletonItems[0] : undefined;
+
+  if (!firstSkeleton || !Array.isArray(firstSkeleton.sections)) {
+    return null;
+  }
+
+  const sectionsOrder = firstSkeleton.sections.map((e) => e.__component);
 
   const solutionRaw = await StrapiFetch({
     path: `/api/solutions`,
-    query: SolutionQueryBuild(slug, secrionsOrder),
+    query: SolutionQueryBuild(slug, sectionsOrder),
     tags: [`solution:${slug}`],
   });
 
+  if (!solutionRaw) {
+    return null;
+  }
+
   const solutionFirst = parseOrThrow(SolutionCollectionSchema, solutionRaw);
+  if (!Array.isArray(solutionFirst) || solutionFirst.length === 0) {
+    return null;
+  }
 
   const sections: PageBuilderSection[] = solutionFirst[0].sections ?? [];
 

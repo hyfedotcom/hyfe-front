@@ -13,7 +13,11 @@ export async function generateStaticParams() {
   );
 }
 
-export default async function ResourceTypePage({ type }: { type: string }) {
+export default async function ResourceTypePage({
+  type,
+}: {
+  type: string;
+}) {
   const data = await getResourcesList({ type });
 
   if (!data) notFound();
@@ -27,7 +31,12 @@ export default async function ResourceTypePage({ type }: { type: string }) {
       <SeoStructuredData seo={landing.seo} id="resource-type-seo-jsonld" />
       <div className=" mx-auto md:space-y-5">
         <ResourcesListHero data={landing} />
-        <RecourcesList tags={tags} data={list} type={type} />
+        <RecourcesList
+          tags={tags}
+          data={list}
+          type={type}
+          initialPage={1}
+        />
         <ResourcesNavTabs type={type} />
       </div>
     </div>

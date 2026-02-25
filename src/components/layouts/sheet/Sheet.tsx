@@ -48,7 +48,7 @@ export function Sheet({ children, returnPath, share }: Props) {
     const scrollbarW = window.innerWidth - document.documentElement.clientWidth;
 
     // body.style.position = "fixed";
-    body.style.position = "hidden";
+    body.style.overflow = "hidden";
     // body.style.top = `-${scrollY}px`;
     body.style.left = "0";
     body.style.right = "0";
@@ -57,7 +57,7 @@ export function Sheet({ children, returnPath, share }: Props) {
 
     return () => {
       const top = body.style.top;
-      body.style.position = "";
+      body.style.overflow = "";
       body.style.top = "";
       body.style.left = "";
       body.style.right = "";
@@ -166,7 +166,13 @@ export function Sheet({ children, returnPath, share }: Props) {
   return (
     <div ref={sheetRootRef} className="max-w-screen fixed inset-0 z-1000000 ">
       <button
-        className="absolute inset-0 bg-black/40 cursor-pointer"
+        className={[
+          "absolute inset-0 cursor-pointer bg-black/40",
+          "transition-[opacity,backdrop-filter] duration-300 ease-out",
+          open
+            ? "opacity-100 backdrop-blur-[2px] pointer-events-auto"
+            : "opacity-0 backdrop-blur-0 pointer-events-none",
+        ].join(" ")}
         onClick={() => close()}
         aria-label="Close"
       />

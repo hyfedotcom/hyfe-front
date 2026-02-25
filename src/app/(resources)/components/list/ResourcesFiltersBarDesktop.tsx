@@ -30,31 +30,37 @@ export function ResourcesFiltersBarDesktop({
   onClearAllFilters,
 }: ResourcesFiltersBarDesktopProps) {
   return (
-    <div className="hidden min-w-0 md:flex items-center gap-3">
+    <div className="hidden min-w-0 md:flex items-center">
       {uniqueTags.length > 0 && (
-        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-scroll">
+        <div className="flex min-w-0 flex-1 items-center overflow-visible">
           {hasFilters && (
             <button
               type="button"
               onClick={onClearAllFilters}
-              className="resources-glass-pill-surface resources-glass-pill-action flex h-10 w-10 shrink-0 items-center justify-center"
+              className="resources-glass-pill-surface resources-glass-pill-action mx-2 my-2 flex h-10 w-10 shrink-0 items-center justify-center md:mx-3 md:my-3"
               aria-label="Clear search and filters"
             >
               {cross}
             </button>
           )}
-          <div className="min-w-0 flex-1">
-            <div className="-my-2 flex min-w-0 gap-2 overflow-x-auto px-1 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {uniqueTags.map((tag) => (
-                <ResourceTag
-                  key={tag}
-                  tag={tag}
-                  active={activeTags.includes(tag)}
-                  onClick={() => onToggleTag(tag)}
-                  glass
-                  className="shrink-0"
-                />
-              ))}
+          <div className="min-w-0 flex-1 overflow-visible">
+            <div className="">
+              <div className="flex min-w-0 gap-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                {uniqueTags.map((tag, index) => (
+                  <ResourceTag
+                    key={tag}
+                    tag={tag}
+                    active={activeTags.includes(tag)}
+                    onClick={() => onToggleTag(tag)}
+                    glass
+                    className={clsx(
+                      "shrink-0",
+                      index === 0 && "ml-3",
+                      index === uniqueTags.length - 1 && "mr-3",
+                    )}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -62,9 +68,20 @@ export function ResourcesFiltersBarDesktop({
 
       {uniqueTags.length === 0 && <div className="flex-1" />}
 
+      {uniqueTags.length === 0 && hasFilters && (
+        <button
+          type="button"
+          onClick={onClearAllFilters}
+          className="resources-glass-pill-surface resources-glass-pill-action mr-2 my-2 flex h-10 w-10 shrink-0 items-center justify-center md:mr-3 md:my-3"
+          aria-label="Clear search and filters"
+        >
+          {cross}
+        </button>
+      )}
+
       <label
         className={clsx(
-          "resources-glass-search-shell group relative ml-auto flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors",
+          "resources-glass-search-shell group relative ml-auto mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3",
           isDesktopSearchOpen
             ? "resources-glass-search-open"
             : "resources-glass-search-idle",

@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { serverEnv } from "@/core/env.server";
+import { getClientIp } from "@/core/http/getClientIp";
+import { consumeRateLimit } from "@/core/security/rateLimit";
+import {
+  captureHubspotSubmission,
+  isHubspotCaptureOnlyEnabled,
+} from "@/core/hubspot/captureHubspotSubmission";
+import { getAllowedHubspotFormIds } from "@/core/hubspot/getAllowedHubspotFormIds";
+import { submitNewsletterToHubspot } from "@/core/hubspot/submitNewsletterToHubspot";
 
 const HUBSPOT_DRY_RUN = process.env.HUBSPOT_DRY_RUN === "true";
+const HUBSPOT_CAPTURE_ONLY = isHubspotCaptureOnlyEnabled();
+const SUBMIT_FORM_MAX_REQUESTS = 20;
+const SUBMIT_FORM_WINDOW_MS = 60_000;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SubmitFormSchema = z.object({
   formId: z.string().min(1),
@@ -20,9 +32,58 @@ const SubmitFormSchema = z.object({
     .min(1),
 });
 
+function resolveNewsletterEmail({
+  payloadEmail,
+  fields,
+}: {
+  payloadEmail?: string;
+  fields: Array<{ name: string; value: string }>;
+}) {
+  const explicitEmail = payloadEmail?.trim();
+  if (explicitEmail && EMAIL_RE.test(explicitEmail)) return explicitEmail;
+
+  const emailByFieldName = fields.find(
+    (field) => /email/i.test(field.name) && EMAIL_RE.test(field.value.trim()),
+  )?.value;
+  if (emailByFieldName) return emailByFieldName.trim();
+
+  const emailByValue = fields.find((field) =>
+    EMAIL_RE.test(field.value.trim()),
+  )?.value;
+
+  return emailByValue?.trim();
+}
+
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const userAgent = req.headers.get("user-agent") ?? "unknown";
+    const rateLimit = consumeRateLimit({
+      key: `hubspot:submitForm:${clientIp}:${userAgent}`,
+      max: SUBMIT_FORM_MAX_REQUESTS,
+      windowMs: SUBMIT_FORM_WINDOW_MS,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
+    }
+
     const payload = SubmitFormSchema.parse(await req.json());
+    const formId = payload.formId.trim();
+    const allowedFormIds = await getAllowedHubspotFormIds();
+    const isAllowedFormId = Boolean(formId) && allowedFormIds.has(formId);
+
+    if (!formId || (!isAllowedFormId && !HUBSPOT_CAPTURE_ONLY)) {
+      return NextResponse.json({ error: "Unsupported formId" }, { status: 403 });
+    }
 
     const honey = payload.website?.trim();
     if (honey) return NextResponse.json({ ok: true });
@@ -38,16 +99,80 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No form fields provided" }, { status: 400 });
     }
 
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      req.headers.get("x-real-ip") ??
-      undefined;
+    const ip = clientIp === "unknown" ? undefined : clientIp;
     const pageUri = req.headers.get("referer") ?? undefined;
     const hutk = req.cookies.get("hubspotutk")?.value;
-    const emailFromFields = fields.find(
-      (field) => field.name.toLowerCase() === "email",
-    )?.value;
-    const newsletterEmail = payload.newsletterEmail?.trim() || emailFromFields;
+    const newsletterEmail = resolveNewsletterEmail({
+      payloadEmail: payload.newsletterEmail,
+      fields,
+    });
+    const primaryEndpoint = `https://api.hsforms.com/submissions/v3/integration/secure/submit/${serverEnv.HUB_ID}/${formId}`;
+    const primaryPayload = {
+      fields,
+      context: {
+        ...(hutk ? { hutk } : {}),
+        ...(ip ? { ipAddress: ip } : {}),
+        ...(pageUri ? { pageUri } : {}),
+      },
+      ...(typeof payload.consent === "boolean"
+        ? {
+            legalConsentOptions: {
+              consent: {
+                consentToProcess: payload.consent,
+                text: "I agree to allow processing of my data.",
+              },
+            },
+          }
+        : {}),
+    };
+
+    if (HUBSPOT_CAPTURE_ONLY) {
+      const primaryCapturedTo = await captureHubspotSubmission({
+        source: "submitForm:primary",
+        endpoint: primaryEndpoint,
+        payload: primaryPayload,
+      });
+
+      if (!payload.subscribeToNewsletter) {
+        return NextResponse.json({
+          ok: true,
+          captureOnly: true,
+          capturedTo: [primaryCapturedTo],
+        });
+      }
+
+      if (!newsletterEmail) {
+        return NextResponse.json({
+          ok: true,
+          captureOnly: true,
+          capturedTo: [primaryCapturedTo],
+          newsletter: {
+            attempted: false,
+            ok: false,
+            reason: "newsletter email is missing",
+          },
+        });
+      }
+
+      const newsletterCapture = await submitNewsletterToHubspot({
+        email: newsletterEmail,
+        consent: true,
+        ip,
+        pageUri,
+        hutk,
+        captureOnly: true,
+        captureSource: "submitForm:newsletter",
+      });
+
+      return NextResponse.json({
+        ok: true,
+        captureOnly: true,
+        capturedTo: [primaryCapturedTo, newsletterCapture.capturedTo].filter(
+          Boolean,
+        ),
+        newsletter: { attempted: true, ok: true, captureOnly: true },
+      });
+    }
 
     if (HUBSPOT_DRY_RUN) {
       if (!payload.subscribeToNewsletter) {
@@ -77,34 +202,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const hsRes = await fetch(
-      `https://api.hsforms.com/submissions/v3/integration/secure/submit/${serverEnv.HUB_ID}/${payload.formId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${serverEnv.NEWS_FORM_TOKEN}`,
-        },
-        body: JSON.stringify({
-          fields,
-          context: {
-            ...(hutk ? { hutk } : {}),
-            ...(ip ? { ipAddress: ip } : {}),
-            ...(pageUri ? { pageUri } : {}),
-          },
-          ...(typeof payload.consent === "boolean"
-            ? {
-                legalConsentOptions: {
-                  consent: {
-                    consentToProcess: payload.consent,
-                    text: "I agree to allow processing of my data.",
-                  },
-                },
-              }
-            : {}),
-        }),
+    const hsRes = await fetch(primaryEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${serverEnv.NEWS_FORM_TOKEN}`,
       },
-    );
+      body: JSON.stringify(primaryPayload),
+    });
 
     const data = await hsRes.json().catch(() => ({}));
 
@@ -130,40 +235,21 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const newsletterHsRes = await fetch(
-      `https://api.hsforms.com/submissions/v3/integration/secure/submit/${serverEnv.HUB_ID}/${serverEnv.NEWS_FORM_ID}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${serverEnv.NEWS_FORM_TOKEN}`,
-        },
-        body: JSON.stringify({
-          fields: [{ name: "email", value: newsletterEmail }],
-          context: {
-            ...(hutk ? { hutk } : {}),
-            ...(ip ? { ipAddress: ip } : {}),
-            ...(pageUri ? { pageUri } : {}),
-          },
-          legalConsentOptions: {
-            consent: {
-              consentToProcess: true,
-              text: "I agree to allow processing of my data.",
-            },
-          },
-        }),
-      },
-    );
+    const newsletterSubmit = await submitNewsletterToHubspot({
+      email: newsletterEmail,
+      consent: true,
+      ip,
+      pageUri,
+      hutk,
+    });
 
-    const newsletterData = await newsletterHsRes.json().catch(() => ({}));
-
-    if (!newsletterHsRes.ok) {
+    if (!newsletterSubmit.ok) {
       return NextResponse.json({
         ok: true,
         newsletter: {
           attempted: true,
           ok: false,
-          details: newsletterData,
+          details: newsletterSubmit.data,
         },
       });
     }

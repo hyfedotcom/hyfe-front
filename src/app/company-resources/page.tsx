@@ -40,7 +40,7 @@ export default async function ScienceResources() {
         <SeoStructuredData seo={data.seo} id="company-resources-seo-jsonld" />
       )}
       <ResourcesListHero data={data} />
-      <div>
+      <div className="mb-30 md:mb-60">
         <CompanyResourcesClient />
         <div className="space-y-[-100px] md:space-y-[-200px]!  -mt-15">
           <PageBuilder sections={data?.sections} />

@@ -12,12 +12,15 @@ import { Sheet } from "@/components/layouts/sheet/Sheet";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 import { buildArticleJsonLd } from "@/components/seo/jsonLdBuilders";
+import ResourceTypePage from "@/app/(resources)/components/layout/ResourceTypePage";
+import { notFound } from "next/navigation";
+import { isResourceType } from "@/features/resources/data/api/resourceType";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
 type PageProps = {
-  params: { slug: string; type: string };
+  params: Promise<Params>;
 };
 
 type Params = { slug: string; type: string };
@@ -49,9 +52,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   try {
     const { slug, type } = await params;
-    const resource = await getResource({ type, slug });
 
-    if (!resource.seo) {
+    if (!isResourceType(type)) {
       return {
         title: "Page not found",
         description: "This page does not exist.",
@@ -59,10 +61,12 @@ export async function generateMetadata({
       };
     }
 
-    if (!resource) {
+    const resource = await getResource({ type, slug });
+
+    if (!resource || !resource.seo) {
       return {
-        title: "Page",
-        description: "Default description",
+        title: "Page not found",
+        description: "This page does not exist.",
         robots: { index: false, follow: false },
       };
     }
@@ -78,10 +82,21 @@ export async function generateMetadata({
   }
 }
 
-export default async function ResourceSingle({ params }: PageProps) {
+export default async function ResourceSingle({
+  params,
+}: PageProps) {
   const { slug, type } = await params;
 
+  if (!isResourceType(type)) {
+    return notFound();
+  }
+
+  const returnPath = `/${type}`;
+
   const resource = await getResource({ type, slug });
+  if (!resource) {
+    return notFound();
+  }
   const citationForShare =
     type === "publications" && resource.citation?.trim()
       ? resource.citation.trim()
@@ -94,6 +109,7 @@ export default async function ResourceSingle({ params }: PageProps) {
 
   return (
     <>
+      <ResourceTypePage type={type} />
       <JsonLd
         data={buildArticleJsonLd({
           resource,
@@ -103,7 +119,7 @@ export default async function ResourceSingle({ params }: PageProps) {
       />
       <SeoStructuredData seo={resource.seo} id="resource-seo-jsonld" />
       <Sheet
-        returnPath={`/${type}`}
+        returnPath={returnPath}
         share={{
           citation: citationForShare,
         }}

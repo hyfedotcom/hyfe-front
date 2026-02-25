@@ -1,10 +1,11 @@
 "use client";
 
 import { NavLink } from "@/features/header/helpers/header.helpers";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NewsletterFormType } from "@/features/newsletter";
 import { NewsletterSignupForm } from "@/features/newsletter/components/NewsletterSignupForm";
 import type { FooterType } from "@/features/general/schema/domain";
+import { usePathname } from "next/navigation";
 
 type FooterLink = {
   label: string;
@@ -25,12 +26,35 @@ export function Footer({
   newsletter: NewsletterFormType;
   footer?: FooterType | null;
 }) {
+  const pathname = usePathname();
+  const [hasCtaBeforeFooter, setHasCtaBeforeFooter] = useState(false);
   const navigationGroups: FooterGroup[] = footer?.navigation_groups ?? [];
   const legalLinks: FooterLink[] = footer?.legal_links ?? [];
   const copyrightText = footer?.copyright_text?.trim() || FALLBACK_COPYRIGHT;
+  const footerTopSpacingClass = hasCtaBeforeFooter
+    ? " "
+    : "rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] pt-15 md:pt-20";
+
+  useEffect(() => {
+    const syncFooterSpacing = () => {
+      const markers = document.querySelectorAll<HTMLElement>(
+        "[data-page-builder-last-section]",
+      );
+      const marker = markers.item(markers.length - 1);
+      setHasCtaBeforeFooter(
+        marker?.dataset.pageBuilderLastSection === "cta"
+      );
+    };
+
+    syncFooterSpacing();
+    const frame = window.requestAnimationFrame(syncFooterSpacing);
+    return () => window.cancelAnimationFrame(frame);
+  }, [pathname]);
 
   return (
-    <footer className="px-4 md:px-10 xl:px-20 pt-20 pb-10 rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] bg-white space-y-[60px]">
+    <footer
+      className={`px-4 md:px-10 xl:px-20 ${footerTopSpacingClass} pb-10  bg-white space-y-[60px] z-1000 relative`}
+    >
       <div
         className=" space-y-8 mt-2  text-center! mx-auto"
         aria-labelledby="news-subscription-title-footer"
@@ -38,7 +62,7 @@ export function Footer({
         <div className="space-y-3">
           <h3
             id="news-subscription-title-footer"
-            className="text-[28px]! md:text-[40px]! text-balance max-w-[1000px] mx-auto"
+            className="text-[24px]! md:text-[40px]! text-balance max-w-[1000px] mx-auto"
           >
             {newsletter.title}
           </h3>
