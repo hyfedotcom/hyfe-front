@@ -30,7 +30,7 @@ export function ResourcesFiltersBarDesktop({
   onClearAllFilters,
 }: ResourcesFiltersBarDesktopProps) {
   return (
-    <div className="hidden min-w-0 md:flex items-center">
+    <div className={`${ uniqueTags.length === 0 && "pl-3"} hidden min-w-0 md:flex items-center`}>
       {uniqueTags.length > 0 && (
         <div className="flex min-w-0 flex-1 items-center overflow-visible">
           {hasFilters && (

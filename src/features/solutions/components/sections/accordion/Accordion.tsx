@@ -10,7 +10,7 @@ export function Accordion({ section }: { section: AccordionType }) {
     <SectionContainer className="bg-white z-100 relative pt-[100px] md:pt-[140px]">
       <div className=" space-y-15">
         <ContentContainer
-          classContainer="text-center max-w-[900px] mx-auto flex flex-col items-center"
+          classContainer="text-left md:text-center max-w-[900px] mx-auto flex flex-col items-center"
           classH="text-balance"
           classP="text-balance"
           content={section}

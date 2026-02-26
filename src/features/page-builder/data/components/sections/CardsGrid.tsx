@@ -7,25 +7,25 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
-const MOBILE_PARAGRAPH_HEIGHT_THRESHOLD_PX = 70;
+const MOBILE_PARAGRAPH_LENGTH_THRESHOLD_CHARS = 120;
 
 export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   const [sizes, setSizes] = useState({
     viewportWidth: 0,
     contentWidth: 0,
   });
-  const [paragraphHeightPx, setParagraphHeightPx] = useState(0);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const width = useWindowSize();
-  const isMobile = width <= 768;
+  const isMobile = width > 0 ? width <= 768 : false;
   const hasCta = Boolean(section.ctas?.length);
+  const paragraphLength = section.paragraph?.replace(/\s+/g, " ").trim().length ?? 0;
+  const hasLongParagraph = paragraphLength > MOBILE_PARAGRAPH_LENGTH_THRESHOLD_CHARS;
   const shouldDisableMobileCardsScroll =
     isMobile &&
     hasCta &&
-    paragraphHeightPx > MOBILE_PARAGRAPH_HEIGHT_THRESHOLD_PX;
+    hasLongParagraph;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -54,42 +54,21 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
     observer.observe(viewport);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [section.cards.length]);
-
-  useEffect(() => {
-    const root = contentRef.current;
-    if (!root) return;
-
-    const paragraph = root.querySelector(
-      ".cards-grid-paragraph",
-    ) as HTMLElement | null;
-
-    if (!paragraph) return;
-
-    const updateParagraphHeight = () => {
-      setParagraphHeightPx(Math.ceil(paragraph.getBoundingClientRect().height));
-    };
-
-    updateParagraphHeight();
-
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", updateParagraphHeight);
-      return () => window.removeEventListener("resize", updateParagraphHeight);
-    }
-
-    const observer = new ResizeObserver(updateParagraphHeight);
-    observer.observe(paragraph);
-    return () => observer.disconnect();
-  }, [section.paragraph, width]);
+  }, [isMobile, section.cards.length, shouldDisableMobileCardsScroll]);
 
   const maxX = Math.min(sizes.viewportWidth - sizes.contentWidth, 0);
+  const hasMeasuredWidths = sizes.viewportWidth > 0 && sizes.contentWidth > 0;
+  const likelyOverflowWithoutMeasure = isMobile
+    ? section.cards.length > 1
+    : section.cards.length > 3;
   const shouldCheckOverflow = () => {
     if (shouldDisableMobileCardsScroll) return false;
     if (isMobile) return true;
     return isMobile || (section.cards.length > 3 && !isMobile);
   };
   const hasHorizontalScroll =
-    shouldCheckOverflow() && (sizes.viewportWidth === 0 || maxX < -1);
+    shouldCheckOverflow() &&
+    (hasMeasuredWidths ? maxX < -1 : likelyOverflowWithoutMeasure);
   const scrollHeight = hasHorizontalScroll
     ? Math.max(section.cards.length, 1) * 600
     : undefined;
@@ -104,7 +83,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
       <div
         className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-20 md:top-30" : ""}`}
       >
-        <div ref={contentRef}>
+        <div>
           <ContentContainer
             content={section}
             classContainer="px-4 md:px-10 xl:px-20 text-left md:text-center mx-auto"

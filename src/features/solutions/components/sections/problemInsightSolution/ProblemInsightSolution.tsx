@@ -9,9 +9,7 @@ import { SolutionCard } from "./SolutionsCard";
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
-
-const HERO_STATS_BG_BLUR_DATA_URL =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAEARoABQAAAAEAAAA+ARsABQAAAAEAAABGASgAAwAAAAEAAgAAh2kABAAAAAEAAABOAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADKADAAQAAAABAAAAEAAAAACFk7TpAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL0lEQVQoFZWS0UpCQRCGv92zHUMJE7zwIgjqNpAuu9L36GV8hqCn8K6n6AmCiMC6CaNMxPSouzvNakk34WkOc3ZmZ/75Z3bX8If0emJTqNPBdruIMUQw4uThqsLhcc4i5IT7SPXDY6sGe92giDWMz3jd/xQpXuizdBQ3F7xXj7B5Az/yjEczgo9UWieYrEVYGiV6ZDC4pcnEMb27hKytwTpxIYSiIIYVs2ETsXVEwcE/s5ifgx06xm9nIG2EHBE19ScSkanVPaMKUQ50glO1nxyT1Z4a2TqQgilJKbe+OipaTBVqjjmp0kZ+1m93u6T9xKXFHEEByd0liVm/lJztyv0VtwmQtJwIa0BqZ3dLm5Lrlv7JoI+gfP3N0OUZdN50B+UBOqnTdryCfKlj0lf1BfebcqHLiU9tAAAAAElFTkSuQmCC";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 function ScrollRevealItem({
   progress,
@@ -46,6 +44,8 @@ export function ProblemInsightSolution({
   section: ProblemInsightSolutionType;
 }) {
   const { insight, problem, solution } = section;
+  const width = useWindowSize();
+  const isMobileLayout = width > 0 ? width < 1000 : false;
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -56,9 +56,9 @@ export function ProblemInsightSolution({
   const watchLeftY = useTransform(scrollYProgress, [0, 1], [-540, 540]);
 
   const totalItems = problem.length + insight.length + 1;
-  const base = 0.15;
-  const revealShift = -0.12;
-  const span = 0.7;
+  const base = isMobileLayout ? 0.13 : 0.15;
+  const revealShift = isMobileLayout ? -0.17 : -0.12;
+  const span = isMobileLayout ? 0.68 : 0.7;
   const step = totalItems > 0 ? span / totalItems : span;
   const getRange = (index: number) => {
     const start = Math.max(base + index * step + revealShift, 0);
@@ -72,14 +72,14 @@ export function ProblemInsightSolution({
         <div ref={sectionRef} className="absolute inset-0 -z-0">
           <motion.div
             style={{ y: watchRightY }}
-            className="absolute top-[60%] -translate-x-[10%] -right-[20%] z-1"
+            className="absolute top-[60%] -translate-x-[10%] -right-[60%] md:-right-[20%] lg:-right-[30%]  xl:-right-[30%] 2xl:-right-[15%] z-1"
           >
             <Image
               src="/home/watch.png"
               alt="cough monitor smart watch"
               width={700}
               height={700}
-              className="md:w-[70vw] lg:w-[700px] h-auto lg:object-cover"
+              className="w-[100vw] md:w-[400px] lg:w-[500px] xl:w-[700px] h-auto lg:object-cover"
             />
           </motion.div>
           <motion.div
@@ -91,7 +91,7 @@ export function ProblemInsightSolution({
               alt="cough monitor smart watch"
               width={700}
               height={700}
-              className="md:w-[70vw] lg:w-[700px] h-auto lg:object-cover scale-80"
+              className="w-[100vw] md:w-[400px]  lg:w-[500px] xl:w-[700px] h-auto lg:object-cover scale-80"
             />
           </motion.div>
           <svg
@@ -148,7 +148,7 @@ export function ProblemInsightSolution({
           </svg>
          
         </div>
-        <ContentContainer content={section} />
+        <ContentContainer content={section} classContainer="text-left md:text-center"/>
         <div>
           <div
             className="w-full flex max-[1000px]:flex-col gap-5 mb-[160px] justify-between items-stretch    min-[1000px]:[&>*:nth-child(2)]:mt-[200px]

@@ -19,6 +19,7 @@ import InsightsIcon from "@/shared/icons/resources/InsightsIcon";
 import NewsIcon from "@/shared/icons/resources/NewsIcon";
 import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
 import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
+import { Button } from "@/components/ui/buttons/Button";
 
 export type ResourcesLists = ResourceCardListType[];
 export type ResourceTypes = Array<{ type: ResourcesTypes }>;
@@ -70,6 +71,7 @@ export function FeedContainer({
     if (!hasResources) return 0;
     return Math.min(activeResource, resources.length - 1);
   }, [activeResource, hasResources, resources.length]);
+  const activeType = type[normalizedIndex]?.type;
 
   const moveIndicator = useCallback((index: number) => {
     const btn = buttonRef.current[index];
@@ -131,119 +133,129 @@ export function FeedContainer({
         />
       )}
 
-      <div className="relative w-max max-w-full">
-        <div
-          ref={tabListRef}
-          role="tablist"
-          aria-label="Resource feed categories"
-          className={cx(
-            "relative flex w-full max-w-full items-center gap-1 rounded-full bg-bg-100 p-1",
-            "overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-          )}
-        >
-          <span
-            aria-hidden
+      <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-12 md:gap-5">
+        <div className="relative w-max max-w-full">
+          <div
+            ref={tabListRef}
+            role="tablist"
+            aria-label="Resource feed categories"
             className={cx(
-              "pointer-events-none absolute top-1 bottom-1 rounded-full bg-white",
-              "shadow-[0_8px_24px_rgba(46,53,66,0.08)] transition-[width,transform,opacity] duration-300 ease-out",
-              !indicator.ready && "opacity-0",
+              "relative flex w-full max-w-full items-center gap-1 rounded-full bg-bg-100 p-1",
+              "overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
             )}
-            style={{
-              width: indicator.width,
-              transform: `translateX(${indicator.left}px)`,
-            }}
-          />
+          >
+            <span
+              aria-hidden
+              className={cx(
+                "pointer-events-none absolute top-1 bottom-1 rounded-full bg-white",
+                "shadow-[0_8px_24px_rgba(46,53,66,0.08)] transition-[width,transform,opacity] duration-300 ease-out",
+                !indicator.ready && "opacity-0",
+              )}
+              style={{
+                width: indicator.width,
+                transform: `translateX(${indicator.left}px)`,
+              }}
+            />
 
-          {type.map((entry, index) => {
-            const isActive = index === normalizedIndex;
-            const meta = RESOURCE_META[entry.type];
-            const panelId = `${tabListId}-panel-${index}`;
-            const tabId = `${tabListId}-tab-${index}`;
+            {type.map((entry, index) => {
+              const isActive = index === normalizedIndex;
+              const meta = RESOURCE_META[entry.type];
+              const panelId = `${tabListId}-panel-${index}`;
+              const tabId = `${tabListId}-tab-${index}`;
 
-            return (
-              <button
-                key={entry.type}
-                ref={(node) => {
-                  buttonRef.current[index] = node;
-                }}
-                id={tabId}
-                role="tab"
-                type="button"
-                aria-selected={isActive}
-                aria-controls={panelId}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => {
-                  setActiveResource(index);
-                  moveIndicator(index);
-                  buttonRef.current[index]?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                  });
-                }}
-                onKeyDown={(event) => {
-                  if (!type.length) return;
-
-                  const goTo = (nextIndex: number) => {
-                    setActiveResource(nextIndex);
-                    moveIndicator(nextIndex);
-                    buttonRef.current[nextIndex]?.focus();
-                    buttonRef.current[nextIndex]?.scrollIntoView({
+              return (
+                <button
+                  key={entry.type}
+                  ref={(node) => {
+                    buttonRef.current[index] = node;
+                  }}
+                  id={tabId}
+                  role="tab"
+                  type="button"
+                  aria-selected={isActive}
+                  aria-controls={panelId}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => {
+                    setActiveResource(index);
+                    moveIndicator(index);
+                    buttonRef.current[index]?.scrollIntoView({
                       behavior: "smooth",
                       block: "nearest",
                       inline: "center",
                     });
-                  };
+                  }}
+                  onKeyDown={(event) => {
+                    if (!type.length) return;
 
-                  if (event.key === "ArrowRight") {
-                    event.preventDefault();
-                    goTo((index + 1) % type.length);
-                    return;
-                  }
+                    const goTo = (nextIndex: number) => {
+                      setActiveResource(nextIndex);
+                      moveIndicator(nextIndex);
+                      buttonRef.current[nextIndex]?.focus();
+                      buttonRef.current[nextIndex]?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
+                      });
+                    };
 
-                  if (event.key === "ArrowLeft") {
-                    event.preventDefault();
-                    goTo((index - 1 + type.length) % type.length);
-                    return;
-                  }
+                    if (event.key === "ArrowRight") {
+                      event.preventDefault();
+                      goTo((index + 1) % type.length);
+                      return;
+                    }
 
-                  if (event.key === "Home") {
-                    event.preventDefault();
-                    goTo(0);
-                    return;
-                  }
+                    if (event.key === "ArrowLeft") {
+                      event.preventDefault();
+                      goTo((index - 1 + type.length) % type.length);
+                      return;
+                    }
 
-                  if (event.key === "End") {
-                    event.preventDefault();
-                    goTo(type.length - 1);
-                  }
-                }}
-                className={cx(
-                  "relative z-10 shrink-0 rounded-full px-4 py-2.5 md:px-5 md:py-3",
-                  "transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
-                )}
-              >
-                <span
+                    if (event.key === "Home") {
+                      event.preventDefault();
+                      goTo(0);
+                      return;
+                    }
+
+                    if (event.key === "End") {
+                      event.preventDefault();
+                      goTo(type.length - 1);
+                    }
+                  }}
                   className={cx(
-                    "flex items-center gap-2 text-[15px] leading-none md:text-[18px]",
-                    isActive ? "font-medium text-body" : "font-normal text-body-secondary",
-                    "transition-colors duration-200",
-                    "cursor-pointer"
+                    "relative z-10 shrink-0 rounded-full px-4 py-2.5 md:px-5 md:py-3",
+                    "transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45",
                   )}
                 >
-                  <meta.Icon
+                  <span
                     className={cx(
-                      "h-5 w-5 md:h-6 md:w-6",
-                      isActive ? "text-primary" : "text-body-secondary",
+                      "flex items-center gap-2 text-[15px] leading-none md:text-[18px]",
+                      isActive
+                        ? "font-medium text-body"
+                        : "font-normal text-body-secondary",
                       "transition-colors duration-200",
+                      "cursor-pointer",
                     )}
-                  />
-                  {meta.label}
-                </span>
-              </button>
-            );
-          })}
+                  >
+                    <meta.Icon
+                      className={cx(
+                        "h-5 w-5 md:h-6 md:w-6",
+                        isActive ? "text-primary" : "text-body-secondary",
+                        "transition-colors duration-200",
+                      )}
+                    />
+                    {meta.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        <Button
+          label="View all"
+          url={activeType ? `/${activeType}` : "/"}
+          classNameProp="justify-between sm:w-max"
+        />
       </div>
 
       <div
