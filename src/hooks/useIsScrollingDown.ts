@@ -2,13 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 
+let lastKnownScrollDirectionDown = false;
+
 export function useIsScrollingDown(threshold = 8) {
-  const [isDown, setIsDown] = useState(false);
+  const [isDown, setIsDown] = useState(lastKnownScrollDirectionDown);
   const lastY = useRef(0);
   const cumulativeDelta = useRef(0);
   const ticking = useRef(false);
 
   useEffect(() => {
+    const setDirection = (next: boolean) => {
+      lastKnownScrollDirectionDown = next;
+      setIsDown((prev) => (prev === next ? prev : next));
+    };
+
     const trigger = Math.max(1, threshold);
     lastY.current = window.scrollY;
 
@@ -21,10 +28,10 @@ export function useIsScrollingDown(threshold = 8) {
       cumulativeDelta.current += diff;
 
       if (cumulativeDelta.current >= trigger) {
-        setIsDown(true);
+        setDirection(true);
         cumulativeDelta.current = 0;
       } else if (cumulativeDelta.current <= -trigger) {
-        setIsDown(false);
+        setDirection(false);
         cumulativeDelta.current = 0;
       }
     };

@@ -43,9 +43,9 @@ export function ResourcesFiltersBar({
   onCloseMobilePanels,
 }: ResourcesFiltersBarProps) {
   const containerClassName = clsx(
-    "sticky top-0 z-[100] w-full px-4 md:px-10 pt-3 md:pt-3 xl:px-20",
+    "sticky z-[100] w-full px-4 md:px-10 pt-3 md:pt-3 xl:px-20",
     "duration-200",
-    isPinned && !isDown && "translate-y-[60px] md:translate-y-[80px]",
+    isPinned && !isDown ? "top-[60px] md:top-[80px]" : "top-0",
   );
   const searchPlaceholder = `Search ${formatResourceTypeLabel(type)}`;
 
