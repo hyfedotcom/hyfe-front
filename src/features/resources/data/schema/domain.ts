@@ -69,13 +69,26 @@ export const SeoDomainSchema = z.object({
   image: z.union([MediaDomainSchema, z.undefined()]),
 });
 
+const normalizeStructuredData = (
+  value: z.input<typeof SeoRawSchema>["structured_data"],
+) => {
+  if (!value) return undefined;
+  if (typeof value === "string") return value;
+
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return undefined;
+  }
+};
+
 export const SeoSchema = SeoRawSchema.transform((s) => ({
   title: s.meta_title ?? undefined,
   description: s.meta_description ?? undefined,
   keywords: s.keywords ?? undefined,
   robots: s.meta_robots ?? undefined,
   canonical: s.canonical_URL ?? undefined,
-  structuredData: s.structured_data ?? undefined,
+  structuredData: normalizeStructuredData(s.structured_data),
   image: s.meta_image ? MediaSchema.parse(s.meta_image) : undefined,
 })).pipe(SeoDomainSchema);
 

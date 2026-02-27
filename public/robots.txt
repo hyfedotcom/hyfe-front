@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://hyfe.vercel.app/
+Host: https://www.hyfe.com/
 
 # Sitemaps
-Sitemap: https://hyfe.vercel.app/sitemap.xml
+Sitemap: https://www.hyfe.com/sitemap.xml

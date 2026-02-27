@@ -12,7 +12,6 @@ type ResourcesFiltersBarProps = {
   hasFilters: boolean;
   isPinned: boolean;
   isDown: boolean;
-  lockStickyPosition?: boolean;
   isDesktopSearchOpen: boolean;
   mobileFiltersOpen: boolean;
   onToggleTag: (tag: string) => void;
@@ -33,7 +32,6 @@ export function ResourcesFiltersBar({
   hasFilters,
   isPinned,
   isDown,
-  lockStickyPosition = false,
   isDesktopSearchOpen,
   mobileFiltersOpen,
   onToggleTag,
@@ -46,11 +44,8 @@ export function ResourcesFiltersBar({
 }: ResourcesFiltersBarProps) {
   const containerClassName = clsx(
     "sticky top-0 z-[100] w-full px-4 md:px-10 pt-3 md:pt-3 xl:px-20",
-    !lockStickyPosition && "duration-200",
-    !lockStickyPosition &&
-      isPinned &&
-      !isDown &&
-      "translate-y-[60px] md:translate-y-[80px]",
+    "duration-200",
+    isPinned && !isDown && "translate-y-[60px] md:translate-y-[80px]",
   );
   const searchPlaceholder = `Search ${formatResourceTypeLabel(type)}`;
 

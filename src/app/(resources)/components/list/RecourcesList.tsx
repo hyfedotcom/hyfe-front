@@ -3,7 +3,7 @@
 import { ResourceCard } from "@/features/resources/client";
 import type { ResourceCardType } from "@/features/resources/data/resources.types";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
@@ -33,7 +33,6 @@ export function RecourcesList({
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const width = useWindowSize();
   const isMobile = (width ?? 0) <= 768;
@@ -41,7 +40,9 @@ export function RecourcesList({
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const cardsStartRef = useRef<HTMLDivElement | null>(null);
   const searchValueRef = useRef("");
-  const [isPinned, setIsPinned] = useState(false);
+  const [isPinned, setIsPinned] = useState<boolean>(() =>
+    typeof window !== "undefined" ? window.scrollY > 0 : false,
+  );
 
   const scrollToCardsStart = useCallback(() => {
     requestAnimationFrame(() => {
@@ -63,10 +64,6 @@ export function RecourcesList({
   const uniqueTags = useMemo(() => {
     return Array.from(new Set(tags)).filter(Boolean);
   }, [tags]);
-  const isDetailRoute = useMemo(() => {
-    if (!pathname) return false;
-    return pathname.startsWith(`/${type}/`);
-  }, [pathname, type]);
 
   const toggleTag = useCallback(
     (tag: string) => {
@@ -227,7 +224,6 @@ export function RecourcesList({
         hasFilters={hasFilters}
         isPinned={isPinned}
         isDown={isDown}
-        lockStickyPosition={isDetailRoute}
         isDesktopSearchOpen={isDesktopSearchOpen}
         mobileFiltersOpen={mobileFiltersOpen}
         onToggleTag={toggleTag}

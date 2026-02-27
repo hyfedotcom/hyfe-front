@@ -22,7 +22,8 @@ export const SeoRawSchema = z.looseObject({
   keywords: z.string().nullish(),
   meta_robots: z.string().nullish(),
   canonical_URL: z.string().nullish(),
-  structured_data: z.string().nullish(), // обычно textarea с JSON-LD
+  // Strapi may return JSON-LD as string or any parsed JSON value.
+  structured_data: z.unknown().nullish(),
   meta_image: MediaRawSchema.nullish(), // если это media
 });
 
