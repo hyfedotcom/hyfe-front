@@ -27,24 +27,22 @@ export function CardProductSteps({
 }: {
   section: CardProductStepsType;
 }) {
-  
   return (
     <SectionContainer>
       <div className="max-w-[1760px] mx-auto  space-y-15 bg-gray">
-        <ContentContainer content={section} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  gap-5  pt-4 md:pt-6 pb-10 bg-card px-4 md:pl-5 pl- md:pr-0 rounded-[26px]">
+        <ContentContainer
+          content={section}
+          classContainer="text-left md:text-center mx-auto!"
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center md:grid-cols-4  gap-5  pt-4 md:pt-6 pb-10 bg-card px-4 md:pl-5 pl- md:pr-0 rounded-[26px]">
           {section.cards &&
             section.cards.map((card, index) => (
-              <div
-                className=""
+              <Card
+                data={card}
+                position={shapePositions[index]}
+                index={index + 1}
                 key={index}
-              >
-                <Card
-                  data={card}
-                  position={shapePositions[index]}
-                  index={index + 1}
-                />
-              </div>
+              />
             ))}
         </div>
       </div>

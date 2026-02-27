@@ -6,8 +6,8 @@ export function ProductCard({ card }: { card: CardCtaType }) {
   const { cta, description, image, title } = card;
   return (
     <div className="w-full flex-col sm:flex-row items-center justify-between flex bg-card rounded-[20px] border  border-border hover:bg-activ hover:border-primary overflow-hidden">
-      <div className="space-y-10 p-5 pt-10 md:p-7 w-full sm:max-w-[45%]">
-        <div className="space-y-5">
+      <div className="space-y-8 p-5 pt-10 md:p-7 w-full sm:max-w-[45%]">
+        <div className="space-y-4">
           <h3 className="text-balance">{title}</h3>
           {description && (
             <p className="body-medium text-balance">{description}</p>

@@ -6,17 +6,19 @@ export default function SmartLink({
   href,
   children,
   className,
+  scroll = true,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
+  scroll?: boolean;
 }) {
   const hrefNormalized = normalizeHref(href);
   const isInternal = isInternalHref(href);
   const classes = className ?? "flex h-full w-full";
 
   return isInternal ? (
-    <Link className={classes} href={hrefNormalized}>
+    <Link className={classes} href={hrefNormalized} scroll={scroll}>
       {children}
     </Link>
   ) : (

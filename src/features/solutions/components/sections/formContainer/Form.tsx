@@ -5,9 +5,17 @@ import { Button } from "@/components/ui/buttons/Button";
 import type { FormType } from "@/features/solutions/schema/hero/raw";
 import { Input } from "./Input";
 import { FormEvent, useRef, useState } from "react";
-
-type SubmitState = "idle" | "submitting" | "success" | "error";
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import type { SubmitState } from "@/shared/forms/constants";
+import { FORM_MESSAGES } from "@/shared/forms/constants";
+import {
+  FormErrorAlert,
+  FormSubmittingStatus,
+  FormSuccessStatus,
+} from "@/shared/forms/FormFeedback";
+import {
+  validateEmailField,
+  validateRequiredField,
+} from "@/shared/forms/validation";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -55,15 +63,9 @@ export function Form({ form }: { form: FormType }) {
   const inputErrorMessages = inputs.map((input, i) => {
     const value = values[i]?.trim() ?? "";
     if (input.type === "email") {
-      if (input.required && !value)
-        return "Please enter a valid email address.";
-      if (value && !EMAIL_RE.test(value)) {
-        return "Please enter a valid email address.";
-      }
-      return null;
+      return validateEmailField(value, Boolean(input.required));
     }
-    if (input.required && !value) return "Please fill out this field.";
-    return null;
+    return validateRequiredField(value, Boolean(input.required));
   });
   const showInputError = inputErrorMessages.map(
     (message, i) =>
@@ -166,49 +168,22 @@ export function Form({ form }: { form: FormType }) {
       setSubmitState("success");
       setServerError(null);
     } catch (error) {
-      const fallback =
-        "We couldn't submit your request right now. Please try again or email press@hyfe.com.";
       setSubmitState("error");
-      setServerError(error instanceof Error ? error.message : fallback);
+      setServerError(
+        error instanceof Error ? error.message : FORM_MESSAGES.fallbackSubmitError,
+      );
     }
   }
 
   if (submitState === "success") {
     return (
-      <div
-        role="status"
-        aria-live="polite"
+      <FormSuccessStatus
         style={successSurfaceStyle}
-        className={`${surfaceClassName} border-[#1F7A4D]/20 bg-[#ECFDF3]! flex items-center flex-col text-center! justify-center`}
-      >
-        <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#1F7A4D] text-white relative z-10">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden
-          >
-            <path
-              d="M4 9.5L7.1 12.6L14 5.7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <div>
-          {" "}
-          <h3 className="mb-3 text-[24px] leading-[120%] font-semibold text-[#0F5132] relative z-10">
-            Request submitted
-          </h3>
-          <p className="mt-2 body-large text-[#17603C]! relative z-10">
-            Thanks for your request
-          </p>
-        </div>
-      </div>
+        align="center"
+        title={FORM_MESSAGES.successRequestTitle}
+        message={FORM_MESSAGES.successRequestBody}
+        className={`${surfaceClassName} flex items-center flex-col text-center! justify-center`}
+      />
     );
   }
 
@@ -320,7 +295,7 @@ export function Form({ form }: { form: FormType }) {
                   "border-[#B42318]! ring-2 ring-[#B42318]/40 ring-offset-1 ring-offset-white focus-visible:border-[#B42318]! focus-visible:ring-[#B42318]/25!",
               )}
             />
-            <span className="text-[14px] leading-[150%] text-black">
+            <span className="text-[14px] text-left! leading-[150%] text-black">
               {consentItem.label}{" "}
               {consentItem.privacy_link ? (
                 <Link href="/privacy" className="underline underline-offset-2">
@@ -340,7 +315,7 @@ export function Form({ form }: { form: FormType }) {
                   "left-0 top-[calc(100%+6px)]",
                 )}
               >
-                Please confirm this checkbox before submitting.
+                {FORM_MESSAGES.requiredConsent}
               </div>
             ) : null}
           </label>
@@ -356,33 +331,13 @@ export function Form({ form }: { form: FormType }) {
         aria-hidden
       />
 
-      {isSubmitting ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className="inline-flex items-center gap-2 text-[14px] text-black/70"
-        >
-          <span className="h-4 w-4 rounded-full border-2 border-black/20 border-t-black/70 animate-spin" />
-          Submitting your request...
-        </div>
-      ) : null}
+      {isSubmitting ? <FormSubmittingStatus /> : null}
 
       {submitState === "error" ? (
-        <div
+        <FormErrorAlert
           id={formStatusId}
-          role="alert"
-          className="rounded-[14px] border border-[#FECACA] bg-[#FEF2F2] px-4 py-3 text-[14px] leading-[140%] text-[#991B1B]"
-        >
-          {serverError ||
-            "We could not submit your request right now. Please try again or email press@hyfe.com."}{" "}
-          <a
-            className="underline underline-offset-2 font-medium"
-            href="mailto:press@hyfe.com"
-          >
-            press@hyfe.com
-          </a>
-          .
-        </div>
+          message={serverError}
+        />
       ) : null}
 
       <Button

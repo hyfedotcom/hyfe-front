@@ -55,19 +55,12 @@ export function NavLink({
 
   const handleClick = () => {
     if (onClick) onClick();
-    if (!hrefNormalized.startsWith("#")) {
-      const root = document.documentElement;
-      const prevBehavior = root.style.scrollBehavior;
-      root.style.scrollBehavior = "auto";
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      root.style.scrollBehavior = prevBehavior;
-    }
   };
 
   return (
     <Link
       href={hrefNormalized}
-      scroll={true}
+      scroll={!hrefNormalized.startsWith("#")}
       onClick={handleClick}
       className={className}
     >

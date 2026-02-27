@@ -20,12 +20,11 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
   const width = useWindowSize();
   const isMobile = width > 0 ? width <= 768 : false;
   const hasCta = Boolean(section.ctas?.length);
-  const paragraphLength = section.paragraph?.replace(/\s+/g, " ").trim().length ?? 0;
-  const hasLongParagraph = paragraphLength > MOBILE_PARAGRAPH_LENGTH_THRESHOLD_CHARS;
-  const shouldDisableMobileCardsScroll =
-    isMobile &&
-    hasCta &&
-    hasLongParagraph;
+  const paragraphLength =
+    section.paragraph?.replace(/\s+/g, " ").trim().length ?? 0;
+  const hasLongParagraph =
+    paragraphLength > MOBILE_PARAGRAPH_LENGTH_THRESHOLD_CHARS;
+  const shouldDisableMobileCardsScroll = isMobile && hasCta && hasLongParagraph;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -81,7 +80,7 @@ export function CardsGrid({ section }: { section: CardsGridSectionType }) {
       style={{ height: scrollHeight }}
     >
       <div
-        className={`space-y-6 md:space-y-10 ${hasHorizontalScroll ? "sticky top-20 md:top-30" : ""}`}
+        className={`space-y-8 ${section.ctas?.length && section.ctas?.length > 0 && "md:space-y-15"} ${hasHorizontalScroll ? "sticky top-20 md:top-30" : ""}`}
       >
         <div>
           <ContentContainer

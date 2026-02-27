@@ -24,13 +24,15 @@ export function ResourceFeed({
           />
         </div>
         {list && (
-          <div className="flex items-stretch gap-4 overflow-x-auto pb-2 -mx-4 md:mx-0 md:grid md:auto-rows-fr md:grid-cols-2 md:overflow-visible md:pb-0 lg:grid-cols-4">
+          <div className="flex max-md:px-4 items-stretch gap-3 lg:gap-4 overflow-x-auto pb-2 -mx-4 md:mx-0 md:grid md:auto-rows-fr md:grid-cols-2 md:overflow-visible md:pb-0 lg:grid-cols-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {list.map((c, i) => (
               <Link
                 href={`/${c.type}/${c.slug}`}
                 key={i}
                 scroll={false}
-                className="block flex-none h-full self-stretch w-[75vw] max-w-[320px] first:ml-4 last:mr-4 md:w-auto md:max-w-none md:first:ml-0 md:last:mr-0"
+                className={
+                  "snap-start flex self-stretch flex-none w-[82vw] max-w-[340px] sm:w-[66vw] md:w-auto md:max-w-none md:h-full"
+                }
               >
                 <ResourceCard card={c} />
               </Link>

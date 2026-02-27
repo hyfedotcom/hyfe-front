@@ -56,7 +56,11 @@ export function FeedContainer({
   meta?: ResourceFeedMeta;
 }) {
   const [activeResource, setActiveResource] = useState(0);
-  const [indicator, setIndicator] = useState({ width: 0, left: 0, ready: false });
+  const [indicator, setIndicator] = useState({
+    width: 0,
+    left: 0,
+    ready: false,
+  });
   const [panelMinHeight, setPanelMinHeight] = useState<number>();
 
   const tabListRef = useRef<HTMLDivElement | null>(null);
@@ -112,7 +116,9 @@ export function FeedContainer({
     const panel = panelRef.current[normalizedIndex];
     if (!panel || typeof ResizeObserver === "undefined") return;
 
-    const observer = new ResizeObserver(() => updatePanelHeight(normalizedIndex));
+    const observer = new ResizeObserver(() =>
+      updatePanelHeight(normalizedIndex),
+    );
     observer.observe(panel);
 
     return () => observer.disconnect();
@@ -134,21 +140,27 @@ export function FeedContainer({
       )}
 
       <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-12 md:gap-5">
-        <div className="relative w-max max-w-full">
+        <div className="relative w-max max-w-full ">
           <div
             ref={tabListRef}
             role="tablist"
             aria-label="Resource feed categories"
             className={cx(
-              "relative flex w-full max-w-full items-center gap-1 rounded-full bg-bg-100 p-1",
+              "relative flex w-full max-w-full items-center gap-1 rounded-full resources-glass-surface px-2.5 py-1.5",
               "overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
             )}
           >
+            <div aria-hidden="true" className="resources-glass-overlay" />
+            <div aria-hidden="true" className="resources-glass-highlight" />
+            <div
+              aria-hidden="true"
+              className="resources-glass-bar-content absolute inset-0"
+            ></div>
             <span
               aria-hidden
               className={cx(
-                "pointer-events-none absolute top-1 bottom-1 rounded-full bg-white",
-                "shadow-[0_8px_24px_rgba(46,53,66,0.08)] transition-[width,transform,opacity] duration-300 ease-out",
+                "-translate-x-2 md:-translate-x-2 pointer-events-none absolute top-2 md:top-1.5 bottom-2 md:bottom-1.5 rounded-full box-border border-1 border-black/20 bg-gradient-to-tl from-primary/50 via-white to-white text-black",
+                " transition-[width,transform,opacity] duration-300 ease-out",
                 !indicator.ready && "opacity-0",
               )}
               style={{
@@ -280,8 +292,8 @@ export function FeedContainer({
               inert={!isActive}
               className={cx(
                 "w-full transition-all duration-300 ease-out",
-                "flex items-stretch gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-                "md:pb-0 md:pl-0 md:pr-0 md:grid md:auto-rows-fr md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
+                "flex items-stretch gap-3 lg:gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+                "md:pb-0 md:pl-0 md:pr-0 md:grid md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
                 isActive
                   ? "relative z-10 opacity-100 translate-y-0 pointer-events-auto"
                   : "absolute inset-0 z-0 opacity-0 translate-y-2 pointer-events-none",
@@ -291,8 +303,8 @@ export function FeedContainer({
                 <Link
                   key={`${card.slug}-${cardIndex}`}
                   className={cx(
-                    "snap-start block flex-none h-full self-stretch w-[82vw] max-w-[340px]",
-                    "sm:w-[66vw] md:w-auto md:max-w-none",
+                    "snap-start flex self-stretch flex-none w-[82vw] max-w-[340px]",
+                    "sm:w-[66vw] md:w-auto md:max-w-none md:h-full",
                   )}
                   href={`/${card.type}/${card.slug}`}
                 >

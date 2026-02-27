@@ -62,7 +62,7 @@ export function TabSlider({ card }: { card: CardType[] }) {
                   aria-hidden={index !== activ}
                 >
                   <div className="overflow-hidden">
-                    <p className="min-lg:pl-[72px] mt-3 md:mt-0 text-left">
+                    <p className="min-lg:pl-[72px] mt-3 md:mt-0 text-left text-body">
                       {c.description}
                     </p>
                   </div>

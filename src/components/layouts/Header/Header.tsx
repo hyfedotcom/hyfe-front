@@ -40,6 +40,7 @@ import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 import { HeaderBanner } from "./HeaderBanner";
 import type { HeaderType } from "@/features/general/schema/domain";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
+import { usePathname } from "next/navigation";
 
 const subscribeNoop = () => () => {};
 
@@ -146,7 +147,11 @@ export function Header({
   const [scrollY, setScrollY] = useState(0);
   const [isHeaderReady, setIsHeaderReady] = useState(false);
   const isScrollingDown = useIsScrollingDown(10);
+  const pathname = usePathname();
   const headerRef = useRef<HTMLElement | null>(null);
+  const syncScrollY = useCallback((y: number) => {
+    setScrollY((prev) => (prev === y ? prev : y));
+  }, []);
   const topOffset = Math.max(topBannerHeight - scrollY, 0);
   const shouldHideOnScroll =
     isScrollingDown && scrollY >= 56 && openId === null && !mobileOpen;
@@ -194,24 +199,22 @@ export function Header({
     const onPop = () => {
       close();
       setMobileOpen(false);
+      requestAnimationFrame(() => syncScrollY(window.scrollY));
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [close]);
+  }, [close, syncScrollY]);
 
   useEffect(() => {
-    const rafId = requestAnimationFrame(() => setIsHeaderReady(true));
+    const rafId = requestAnimationFrame(() => {
+      syncScrollY(window.scrollY);
+      setIsHeaderReady(true);
+    });
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [syncScrollY]);
 
   useEffect(() => {
     let ticking = false;
-
-    const syncScrollY = (y: number) => {
-      setScrollY((prev) => (prev === y ? prev : y));
-    };
-
-    syncScrollY(window.scrollY);
 
     const onScroll = () => {
       if (ticking) return;
@@ -228,7 +231,12 @@ export function Header({
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [syncScrollY]);
+
+  useEffect(() => {
+    const rafId = requestAnimationFrame(() => syncScrollY(window.scrollY));
+    return () => cancelAnimationFrame(rafId);
+  }, [pathname, syncScrollY]);
 
   return (
     <>

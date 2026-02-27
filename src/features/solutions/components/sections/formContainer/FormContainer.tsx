@@ -21,7 +21,7 @@ export function FormContainer({ section }: { section: FormContiner }) {
                     aria-hidden="true"
                     className="w-2 h-2 block rounded-full bg-primary-700"
                   />
-                  <span>{item.label}</span>
+                  <span className="text-[16px] md:text-[20px]">{item.label}</span>
                 </li>
               ))}
             </ul>

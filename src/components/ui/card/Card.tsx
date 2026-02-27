@@ -19,7 +19,7 @@ export function Card({
           className="object-cover"
         />
       </div>
-      <div className="p-6 space-y-3  border-t border-border">
+      <div className=" p-5 md:p-6 space-y-3  border-t border-border">
         <h3 className="text-[20px]! font-medium! md:text-[24px]!">{title}</h3>
         <p className="body-medium">{description}</p>
       </div>

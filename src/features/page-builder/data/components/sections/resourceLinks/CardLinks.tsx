@@ -26,15 +26,15 @@ export function CardLink({ card }: { card: CardLinkType }) {
   return (
     <Link
       href={`/${linkHref}`}
-      className="bg-card border flex flex-col justify-between border-border rounded-[20px] p-5 space-y-8 group/card cursor-pointer touch-manipulation transition-[border-color,background-color,box-shadow,transform] duration-300 hover:border-primary active:border-primary hover:bg-activ active:bg-activ hover:shadow-hover active:shadow-hover active:scale-[0.98]"
+      className="bg-card border flex flex-col justify-between border-border rounded-[20px] p-4 md:p-5 space-y-6 md:space-y-8 group/card cursor-pointer touch-manipulation transition-[border-color,background-color,box-shadow,transform] duration-300 hover:border-primary active:border-primary hover:bg-activ active:bg-activ hover:shadow-hover active:shadow-hover active:scale-[0.98]"
     >
       <div className="p-3 rounded-full bg-white w-max">
         {Icon && <Icon className="text-primary min-w-8 min-h-8" />}
       </div>
-      <div className="space-y-3 ">
-        <h4>{title}</h4>
-        <div className="flex flex-row justify-between md:flex-col lg:flex-row gap-4 md:items-end">
-          <p className="body-medium">{description}</p>
+      <div className=" space-y-3 ">
+        <h3 className="text-[18px]! md:text-[24px]!">{title}</h3>
+        <div className="flex flex-row  justify-between md:flex-col lg:flex-row gap-4 md:items-end">
+          <p className="text-[14px] md:text-[16px] text-body">{description}</p>
           <ButtonArrow className="bg-black text-white" />
         </div>
       </div>

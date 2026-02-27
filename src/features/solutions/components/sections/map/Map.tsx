@@ -47,11 +47,11 @@ export function Map({ section }: { section: SolutionMapType }) {
     <SectionContainer className="max-md:px-0!">
       <div className="space-y-10 md:space-y-15">
         <div className="max-md:px-4">
-          <ContentContainer content={section} />
+          <ContentContainer content={section} classContainer="mx-auto text-left md:text-center"/>
         </div>
         <div className="mx-auto w-full">
           <div className="overflow-x-auto overflow-y-hidden md:overflow-visible [-webkit-overflow-scrolling:touch]">
-            <div className="relative w-[1120px] min-w-[1120px] md:w-full md:min-w-0 md:max-w-[1760px]">
+            <div className="relative w-[1120px] min-w-[1120px] max-md:mx-4 md:w-full md:min-w-0 md:max-w-[1760px]">
               <Image
                 className="w-full h-auto rounded-[20px] border border-border bg-bg-100"
                 src="/solution/Countries.svg"

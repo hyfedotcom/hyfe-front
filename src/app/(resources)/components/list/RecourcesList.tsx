@@ -240,7 +240,7 @@ export function RecourcesList({
       />
       <div
         ref={cardsStartRef}
-        className="flex w-full flex-col items-stretch gap-4 px-4 md:gap-5 md:px-10 sm:grid sm:auto-rows-fr sm:grid-cols-2 sm:items-stretch lg:grid-cols-3 xl:grid-cols-4 xl:px-20"
+        className="flex w-full flex-col items-stretch gap-4 px-4 md:gap-5 md:px-10 sm:grid sm:grid-cols-2 sm:items-stretch lg:grid-cols-3 xl:grid-cols-4 xl:px-20"
       >
         {visibleList.map((c) => (
           <Link

@@ -14,9 +14,9 @@ export function Card({
   const { title, image, description } = data;
 
   return (
-    <div className="group mb-auto">
+    <div className="group mb-auto  mx-auto">
       {image?.url && (
-        <div className="relative w-full max-w-[330px] h-full  sm:max-w-[401px] max-h-[380px] bg-[#F7F7F9] rounded-[20px] overflow-hidden">
+        <div className="relative w-full sm:max-w-[330px] h-full  sm:max-w-[401px] max-h-[380px] bg-[#F7F7F9] rounded-[20px] overflow-hidden">
           <Image
             src={image.url}
             alt={image.alt ?? ""}
