@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 import { buildFaqJsonLd } from "@/components/seo/jsonLdBuilders";
 import { FAQSection } from "./FAQSection";
+import FAQContainer from "./FAQContainer";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -47,11 +48,7 @@ export default async function FAQ({}) {
               <p>{paragraph}</p>
             </div>
           </main>
-          <div className="space-y-25">
-            {sections.map((s, i) => (
-              <FAQSection key={i} section={s}></FAQSection>
-            ))}
-          </div>
+          <FAQContainer sections={sections} />
         </div>
       </div>
     </div>

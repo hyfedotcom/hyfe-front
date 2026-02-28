@@ -5,7 +5,6 @@ import FAQItem from "./FAQItem";
 import { useState } from "react";
 
 export function FAQSection({ section }: { section: FaqSectionType }) {
-  const { faqs, title } = section;
   const [active, setActive] = useState<null | number>(null);
 
   function toggle(i: number) {
@@ -14,13 +13,15 @@ export function FAQSection({ section }: { section: FaqSectionType }) {
 
   return (
     <section
-      id={title.replace(/ /g, "-").trim().toLowerCase()}
+      id={section ? section.title.replace(/ /g, "-").trim().toLowerCase() : "1"}
       className="w-full  space-y-5 "
     >
-      <h2 className="mb-5 text-[22px]! md:text-[32px]! lg:min-w-[600px] xl:min-w-[800px] 2xl:min-w-[1000px]">{title}</h2>
+      <h2 className="mb-5 text-[22px]! md:text-[32px]! lg:min-w-[600px] xl:min-w-[800px] 2xl:min-w-[1000px]">
+        {section ? section.title : `Finded: FAQ`}
+      </h2>
 
       <div className="space-y-4 w-full ">
-        {faqs?.map((f, i) => (
+        {section.faqs?.map((f, i) => (
           <FAQItem
             key={i}
             answer={f.answer}

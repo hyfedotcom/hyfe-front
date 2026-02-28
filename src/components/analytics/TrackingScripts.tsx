@@ -70,11 +70,6 @@ export function TrackingScripts({
             t=l.createElement(r); t.async=1; t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t,y);
           })(window, document, "clarity", "script", "${CLARITY_ID}");
-
-          // Clarity docs currently show mixed key casing across pages.
-          // Send both variants to ensure consent is picked up consistently.
-          clarity('consentv2', { ad_storage: "denied", analytics_storage: "granted" });
-          clarity('consentv2', { ad_Storage: "denied", analytics_Storage: "granted" });
         `}
       </Script>
     </>

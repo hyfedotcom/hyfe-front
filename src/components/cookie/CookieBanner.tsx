@@ -7,15 +7,20 @@ import {
   ANALYTICS_CONSENT_GRANTED_EVENT,
   ANALYTICS_CONSENT_GRANTED_VALUE,
   ANALYTICS_CONSENT_MAX_AGE_SECONDS,
+  COOKIE_BANNER_DISMISSED_COOKIE_NAME,
+  COOKIE_BANNER_DISMISSED_VALUE,
   hasAnalyticsConsentInDocument,
+  hasCookieBannerDismissedInDocument,
 } from "@/core/cookies/analyticsConsent";
 
-function setConsentCookie() {
+function setCookie(name: string, value: string) {
   if (typeof document === "undefined") return;
 
-  const expires = new Date(Date.now() + ANALYTICS_CONSENT_MAX_AGE_SECONDS * 1000);
+  const expires = new Date(
+    Date.now() + ANALYTICS_CONSENT_MAX_AGE_SECONDS * 1000,
+  );
   const cookieParts = [
-    `${ANALYTICS_CONSENT_COOKIE_NAME}=${encodeURIComponent(ANALYTICS_CONSENT_GRANTED_VALUE)}`,
+    `${name}=${encodeURIComponent(value)}`,
     `Max-Age=${ANALYTICS_CONSENT_MAX_AGE_SECONDS}`,
     `expires=${expires.toUTCString()}`,
     "path=/",
@@ -27,12 +32,24 @@ function setConsentCookie() {
   }
 
   document.cookie = cookieParts.join("; ");
+}
+
+function setConsentCookie() {
+  setCookie(ANALYTICS_CONSENT_COOKIE_NAME, ANALYTICS_CONSENT_GRANTED_VALUE);
 
   window.dispatchEvent(new Event(ANALYTICS_CONSENT_GRANTED_EVENT));
 }
 
+function setBannerDismissedCookie() {
+  setCookie(COOKIE_BANNER_DISMISSED_COOKIE_NAME, COOKIE_BANNER_DISMISSED_VALUE);
+}
+
 export function CookieBanner() {
-  const [isOpen, setIsOpen] = useState(() => !hasAnalyticsConsentInDocument());
+  const [isOpen, setIsOpen] = useState(
+    () =>
+      !hasCookieBannerDismissedInDocument() &&
+      !hasAnalyticsConsentInDocument(),
+  );
 
   if (!isOpen) return null;
 
@@ -50,6 +67,7 @@ export function CookieBanner() {
         <button
           type="button"
           onClick={() => {
+            setBannerDismissedCookie();
             setConsentCookie();
             setIsOpen(false);
           }}
