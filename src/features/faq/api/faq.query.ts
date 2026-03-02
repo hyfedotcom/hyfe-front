@@ -2,7 +2,7 @@ export const faqLandingQuery = {
   fields: ["title", "paragraph"],
   populate: {
     faq_groups: {
-      fields: [" group_name"],
+      fields: ["group_name"],
     },
     seo: {
       fields: [
@@ -22,7 +22,7 @@ export const faqLandingQuery = {
 
 export const faqItemQuery = {
   pagination: { pageSize: 1000 },
-  fields: ["question", "answer"],
+  fields: ["id", "question", "answer"],
   populate: {
     faq_group: {
       fields: ["group_name"],

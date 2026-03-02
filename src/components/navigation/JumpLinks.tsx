@@ -7,7 +7,9 @@ export function JumpLinks({
   items,
   activeId,
   onSelect,
+  className = "w-full"
 }: {
+  className?: string,
   items: JumpLinkItem[];
   activeId: string;
   onSelect: (id: string) => void;
@@ -40,7 +42,7 @@ export function JumpLinks({
   }, [activeId, items.length]);
 
   return (
-    <div className="w-full">
+    <div className={className}>
       <div className="resources-glass-surface rounded-[30px] lg:hidden">
         <div aria-hidden="true" className="resources-glass-overlay" />
         <div aria-hidden="true" className="resources-glass-highlight" />

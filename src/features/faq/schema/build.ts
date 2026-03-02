@@ -8,6 +8,7 @@ import { FaqItemRawSchema, FaqLandingRawSchema } from "./raw";
 export const FaqItemForBuildSchema = FaqItemRawSchema.transform((item) => ({
   groupTitle: item.faq_group?.group_name ?? "Other",
   qa: {
+    sourceId: item.id != null ? String(item.id) : undefined,
     question: item.question,
     answer: item.answer,
   },

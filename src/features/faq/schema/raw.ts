@@ -8,6 +8,7 @@ export const FaqGroupRawSchema = z.object({
 });
 
 export const FaqItemRawSchema = z.object({
+  id: z.union([z.number(), z.string()]).optional(),
   question: z.string(),
   answer: ResourceBlockContentSchema,
   faq_group: FaqGroupRawSchema.nullish(), // важное: не ломаемся, если null

@@ -1,44 +1,15 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
-import {
-  ANALYTICS_CONSENT_GRANTED_EVENT,
-  hasAnalyticsConsentInDocument,
-} from "@/core/cookies/analyticsConsent";
 
 const GTM_ID = "GTM-K646M5L";
 const AHREFS_KEY = "oKxNRpsjYqZ73g8TXQbS7w";
 const CLARITY_ID = "i3tshx1j7p";
 
-export function TrackingScripts({
-  initialEnabled = false,
-}: {
-  initialEnabled?: boolean;
-}) {
-  const [enabled, setEnabled] = useState(
-    () => initialEnabled || hasAnalyticsConsentInDocument(),
-  );
-
-  useEffect(() => {
-    if (enabled) return;
-
-    const onConsentGranted = () => setEnabled(true);
-    window.addEventListener(ANALYTICS_CONSENT_GRANTED_EVENT, onConsentGranted);
-
-    return () => {
-      window.removeEventListener(
-        ANALYTICS_CONSENT_GRANTED_EVENT,
-        onConsentGranted,
-      );
-    };
-  }, [enabled]);
-
-  if (!enabled) return null;
-
+export function TrackingScripts() {
   return (
     <>
-      {/* Google Tag Manager */}
+      {/* High-priority analytics: let GTM own Google tags to avoid duplicate gtag loads. */}
       <Script id="gtm-init" strategy="afterInteractive">
         {`
           (function(w,d,s,l,i){
@@ -54,15 +25,20 @@ export function TrackingScripts({
         `}
       </Script>
 
-      {/* Ahrefs Web Analytics */}
+      {/* Deferred analytics: load non-critical third-party trackers after window load. */}
+      <Script
+        id="hs-script-loader"
+        src="https://js.hs-scripts.com/20037908.js"
+        strategy="lazyOnload"
+      />
+
       <Script
         src="https://analytics.ahrefs.com/analytics.js"
         data-key={AHREFS_KEY}
         defer
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
 
-      {/* Microsoft Clarity */}
       <Script id="clarity-init" strategy="afterInteractive">
         {`
           (function(c,l,a,r,i,t,y){
@@ -70,6 +46,11 @@ export function TrackingScripts({
             t=l.createElement(r); t.async=1; t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t,y);
           })(window, document, "clarity", "script", "${CLARITY_ID}");
+
+          window.clarity('consentv2', {
+            ad_Storage: "denied",
+            analytics_Storage: "granted"
+          });
         `}
       </Script>
     </>

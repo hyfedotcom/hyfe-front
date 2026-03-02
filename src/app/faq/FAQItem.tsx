@@ -23,12 +23,11 @@ export default function FAQItem({
     <div
       data-open={active}
       className={[
-        "group w-full lg:min-w-[600px] xl:min-w-[800px] 2xl:min-w-[1000px] rounded-[20px] bg-card  border hover:border-primary rounded-[20px] hover:shadow-hover duration-300",
+        "group w-full  rounded-[20px] bg-card  border hover:border-primary rounded-[20px] hover:shadow-hover duration-300",
         active ? "border-primary shadow-hover" : "border-border",
         className,
       ].join(" ")}
     >
-      {/* Кликается только шапка */}
       <button
         type="button"
         onClick={onToggle}
@@ -66,7 +65,6 @@ export default function FAQItem({
           </svg>
         </span>
       </button>
-
       {/* Раскрытие/схлопывание — grid подход */}
       <div
         id={contentId}

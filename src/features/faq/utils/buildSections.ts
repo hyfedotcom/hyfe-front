@@ -13,6 +13,7 @@ export function buildSections({
   includeEmptySections?: boolean;
 }): FaqSectionType[] {
   const map = new Map<string, FaqSectionType>();
+  let fallbackId = 0;
 
   const getOrCreate = (title: string) => {
     const key = title || otherTitle;
@@ -25,7 +26,11 @@ export function buildSections({
 
   // 1) раскидываем все вопросы по секциям (ничего не теряем)
   for (const item of items) {
-    getOrCreate(item.groupTitle).faqs.push(item.qa);
+    getOrCreate(item.groupTitle).faqs.push({
+      id: item.qa.sourceId ?? `faq-${fallbackId++}`,
+      question: item.qa.question,
+      answer: item.qa.answer,
+    });
   }
 
   // 2) строим порядок: сначала landing order, потом "все остальные группы", потом Other (если есть)

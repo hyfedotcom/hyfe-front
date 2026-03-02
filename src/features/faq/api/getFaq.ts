@@ -36,10 +36,8 @@ export async function getFaqPage() {
     itemsRaw,
   );
 
-  if (!landing.groupOrder) return null;
-
   const sections = buildSections({
-    groupOrder: landing.groupOrder,
+    groupOrder: landing.groupOrder ?? [],
     items,
   });
   return FaqPageSchema.parse({

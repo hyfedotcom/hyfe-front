@@ -1,16 +1,27 @@
 "use client";
 
 import { JumpLinks } from "@/components/navigation/JumpLinks";
+import { SearchInput } from "@/components/ui/search/SearchInput";
 import { FaqSectionType } from "@/features/faq/schema/faq.schema";
+import { filterFaqSections } from "@/features/faq/utils/filterSections";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
-  const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");
-
+  const slugify = (s: string) => s.replace(/\s+/g, "-").trim().toLowerCase();
+  const search = useSearchParams().get("search");
+  const filteredSections = useMemo(
+    () => filterFaqSections(sections, search),
+    [sections, search],
+  );
   const items = useMemo(
-    () => sections.map((s) => ({ id: slugify(s.title), label: s.title })),
-    [sections],
+    () =>
+      filteredSections.map((section) => ({
+        id: slugify(section.title),
+        label: section.title,
+      })),
+    [filteredSections],
   );
 
   const { activeId } = useActiveSection(
@@ -82,12 +93,19 @@ export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
   }, [clearAutoScrollLock]);
 
   return (
-    <div className="w-full max-w-[340px]">
-      <JumpLinks
-        items={items}
-        activeId={forcedActiveId ?? activeId}
-        onSelect={onSelect}
+    <div className="w-full max-sm:flex-col max-lg:flex max-lg:flex-row-reverse max-lg:justify-between max-sm:gap-1 max-lg:gap-4">
+      <SearchInput
+        placeholder="Search"
+        className="mr-auto lg:mb-8! w-full max-sm:max-w-full! max-lg:max-w-1/3! lg:w-[80%]! md:mr-0!"
       />
+      {items.length > 0 && (
+        <JumpLinks
+          className="w-full max-sm:max-w-full max-lg:max-w-2/3"
+          items={items}
+          activeId={forcedActiveId ?? activeId}
+          onSelect={onSelect}
+        />
+      )}
     </div>
   );
 }

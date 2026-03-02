@@ -7,6 +7,7 @@ import {
 /* --------------------------- UI (final page contract) ------------------------ */
 
 export const FaqQaSchema = z.object({
+  id: z.string(),
   question: z.string(),
   answer: ResourceBlockContentSchema,
 });

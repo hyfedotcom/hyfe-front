@@ -130,7 +130,7 @@ export function HeroStatsScene({
                 quality={80}
                 sizes="100vw"
                 loading="eager"
-                onLoadingComplete={() => setIsMapReady(true)}
+                onLoad={() => setIsMapReady(true)}
                 className="w-[1000px] max-[768px]:max-w-none md:w-[200vw] h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
               <Image
