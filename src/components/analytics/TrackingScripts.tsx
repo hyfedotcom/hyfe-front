@@ -3,13 +3,29 @@
 import Script from "next/script";
 
 const GTM_ID = "GTM-K646M5L";
+const GOOGLE_TAG_ID = "G-FDYY62BKMY";
 const AHREFS_KEY = "oKxNRpsjYqZ73g8TXQbS7w";
 const CLARITY_ID = "i3tshx1j7p";
 
 export function TrackingScripts() {
   return (
     <>
-      {/* High-priority analytics: let GTM own Google tags to avoid duplicate gtag loads. */}
+      <Script
+        id="google-tag-src"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}`}
+        strategy="afterInteractive"
+      />
+
+      <Script id="google-tag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GOOGLE_TAG_ID}');
+        `}
+      </Script>
+
+      {/* GTM still loads separately for container-managed tags. */}
       <Script id="gtm-init" strategy="afterInteractive">
         {`
           (function(w,d,s,l,i){
