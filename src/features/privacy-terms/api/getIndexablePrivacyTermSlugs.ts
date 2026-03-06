@@ -1,5 +1,8 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
-import { parseOrThrow, StrapiCollectionSchema } from "@/features/shared/schema/strapi.schema";
+import {
+  parseOrThrow,
+  StrapiCollectionSchema,
+} from "@/features/shared/schema/strapi.schema";
 import { z } from "zod";
 import { privacyTermIndexableSlugsQuery } from "./privacyTerms.query";
 
@@ -30,6 +33,6 @@ export async function getIndexablePrivacyTermSlugs() {
   );
 
   return items
-    .filter((item) => !hasNoIndex(item.seo?.meta_robots))
+    .filter((item) => !hasNoIndex(item.seo?.meta_robots?.toLocaleLowerCase()))
     .map((item) => item.slug);
 }

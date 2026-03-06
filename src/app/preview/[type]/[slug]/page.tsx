@@ -1,6 +1,6 @@
 import { getResource, ResourceType } from "@/features/resources";
-import { ResourceDetails } from "@/app/(resources)/components/details/ResourceDetails";
-import { ResourceDetailsHero } from "@/app/(resources)/components/details/ResourceDetailsHero";
+import { ResourceDetails } from "@/app/(resources + privacy)/components/details/ResourceDetails";
+import { ResourceDetailsHero } from "@/app/(resources + privacy)/components/details/ResourceDetailsHero";
 import { draftMode } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: Params }) {
   const blocks = await buildResourceDetailsBlocks({
     blocks: resource.blocks,
     resourceType: type as ResourceType,
+    slugException: slug,
   });
 
   return (
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Params }) {
       </div>
       <ResourceDetailsHero data={resource} type={type} />
       <ResourceDetails
+        closeMode="close"
         data={blocks}
         resourceType={type as ResourceType}
       />

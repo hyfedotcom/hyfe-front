@@ -301,6 +301,7 @@ export function FeedContainer({
             >
               {resourceCards.map((card, cardIndex) => (
                 <Link
+                  scroll={false}
                   key={`${card.slug}-${cardIndex}`}
                   className={cx(
                     "snap-start flex self-stretch flex-none w-[82vw] max-w-[340px]",

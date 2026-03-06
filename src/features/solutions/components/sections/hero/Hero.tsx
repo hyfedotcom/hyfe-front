@@ -26,7 +26,7 @@ export function Hero({ section }: { section: SolutionsHeroType }) {
           </h1>
           <p className="body-large text-balance text-black!">{paragraph}</p>
         </div>
-        <div className="flex gap-4 md:gap-5 flex-col md:flex-row items-center justify-center px-4 md:px-10 lg:px-20">
+        <div className="flex gap-4 md:gap-5 flex-col md:flex-row items-center justify-center px-4 md:px-10 xl:px-20">
           {ctas?.map((c, i) => (
             <Button
               key={i}

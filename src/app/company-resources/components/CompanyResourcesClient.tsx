@@ -1,6 +1,6 @@
 "use client";
 
-import { ResourceButton } from "@/app/(resources)/components/ui/ResourceButton";
+import { ResourceButton } from "@/app/(resources + privacy)/components/ui/ResourceButton";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useEffect, useRef, useState } from "react";

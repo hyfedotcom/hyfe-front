@@ -1,4 +1,3 @@
-// src/features/faq/api/getFaqPage.ts
 import { z } from "zod";
 import StrapiFetch from "@/core/strapi/strapiFetch";
 import { faqItemQuery, faqLandingQuery } from "./faq.query";

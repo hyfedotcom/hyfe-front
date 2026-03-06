@@ -18,9 +18,11 @@ const isRelatedBlock = (block: ResourceBlockType): block is RelatedBlock =>
 export async function buildResourceDetailsBlocks({
   blocks,
   resourceType,
+  slugException,
 }: {
   blocks: ResourceBlockType[];
   resourceType: ResourceType;
+  slugException: string;
 }): Promise<ResourceBlockRenderable[]> {
   const relatedBlocks = blocks.filter(isRelatedBlock);
   if (!relatedBlocks.length) return blocks as ResourceBlockRenderable[];
@@ -31,7 +33,7 @@ export async function buildResourceDetailsBlocks({
   });
 
   const autoList = needsAutoList
-    ? (await getResourcesList({ type: resourceType }))?.list ?? []
+    ? ((await getResourcesList({ type: resourceType }))?.list ?? [])
     : [];
 
   const manualSlugsByType = new Map<ResourceType, Set<string>>();
@@ -81,7 +83,11 @@ export async function buildResourceDetailsBlocks({
 
     return {
       ...block,
-      resolvedCards: resolvedCards.slice(0, 4),
+      resolvedCards: resolvedCards
+        .filter((c) => {
+          return c.slug !== slugException;
+        })
+        .slice(0, 4),
     };
   });
 }

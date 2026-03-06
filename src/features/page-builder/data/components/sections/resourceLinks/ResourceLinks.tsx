@@ -13,7 +13,7 @@ export function ResourceLinks({
     <SectionContainer>
       <div className="space-y-10 md:space-y-15 bg-white">
         <ContentContainer content={section} classContainer="text-left! md:text-center! mx-auto"/>
-        <div className="flex  flex-col md:flex-row gap-3 md:gap-5 max-w-[1220px] mx-auto">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4 max-w-[1220px] mx-auto">
           {links.map((l, i) => (
             <CardLink card={l} key={i} />
           ))}

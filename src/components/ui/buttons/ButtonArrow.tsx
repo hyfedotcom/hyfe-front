@@ -14,7 +14,7 @@ export function ButtonArrow({
   return (
     <button
       className={clsx(
-        "relative w-[50px] min-w-[50px] h-[50px] min-h-[50px] rounded-full flex items-center justify-center overflow-hidden cursor-pointer transition-colors",
+        "relative w-[40px] min-w-[40px] h-[40px] min-h-[40px] md:w-[50px] md:min-w-[50px] md:h-[50px] md:min-h-[50px] rounded-full flex items-center justify-center overflow-hidden cursor-pointer transition-colors",
         className,
       )}
       aria-label={arialLabel}
@@ -22,7 +22,7 @@ export function ButtonArrow({
       {/* первая стрелка (базовая) */}
       <svg
         className={clsx(
-          "absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out",
+          "absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out max-sm:w-[20px]",
           "group-hover/card:translate-x-full group-hover/card:opacity-0",
           "group-active/card:translate-x-full group-active/card:opacity-0",
           isActive && "translate-x-full opacity-0",

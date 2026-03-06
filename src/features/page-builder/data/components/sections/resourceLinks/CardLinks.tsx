@@ -52,7 +52,7 @@ export function CardLink({ card }: { card: CardLinkItem }) {
           {icon}
         </div>
       )}
-      <div className=" space-y-3 ">
+      <div className=" space-y-2 md:space-y-3 ">
         <h3 className="text-[18px]! md:text-[24px]!">{title}</h3>
         <div className="flex flex-row  justify-between md:flex-col lg:flex-row gap-4 md:items-end">
           <p className="text-[14px] md:text-[16px] text-body">{description}</p>

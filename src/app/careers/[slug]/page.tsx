@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { LocationsType } from "../components/LocationsType";
 import { TimeZone } from "../components/TimeZone";
 import { EmploymentType } from "../components/EmploymentType";
-import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
+import { RichText } from "@/app/(resources + privacy)/components/details/detailsRender/RichText";
 import { Button } from "@/components/ui/buttons/Button";
 import { Sheet } from "@/components/layouts/sheet/Sheet";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
@@ -66,7 +66,11 @@ export default async function VacancySingle({ params }: { params: Props }) {
     title,
   } = vacancy;
   return (
-    <Sheet returnPath="/careers">
+    <Sheet
+      returnPath="/careers"
+      animation={false}
+      ariaLabel="Vacancy details"
+    >
       <div className="max-w-[950px] mt-10 space-y-10 md:space-y-16 mx-auto py-10 md:py-14 px-4 md:px-10">
         <main className="space-y-6 md:space-y-10">
           <div className="space-y-4 md:space-y-6">

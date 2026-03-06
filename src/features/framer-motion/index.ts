@@ -9,6 +9,7 @@ import {
   useTransform,
   AnimatePresence,
   useMotionTemplate,
+  useMotionValueEvent,
 } from "framer-motion";
 
 export {
@@ -19,4 +20,5 @@ export {
   useTransform,
   AnimatePresence,
   useMotionTemplate,
+  useMotionValueEvent,
 };

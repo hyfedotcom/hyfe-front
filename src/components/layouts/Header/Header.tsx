@@ -41,6 +41,7 @@ import { HeaderBanner } from "./HeaderBanner";
 import type { HeaderType } from "@/features/general/schema/domain";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import { usePathname } from "next/navigation";
+import { lockBodyScroll } from "@/shared/utils/bodyScrollLock";
 
 const subscribeNoop = () => () => {};
 
@@ -70,7 +71,7 @@ function buildHeaderNavFromCms(header: HeaderType): NavItem[] {
   if ((header.product_items?.length ?? 0) > 0) {
     nav.push({
       id: "product",
-      label: "Product",
+      label: "Products",
       kind: "card",
       items: header.product_items.map((item, idx) =>
         toNavLink(item, `product-${idx}`),
@@ -439,11 +440,7 @@ function MobileMenu({
 
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    return lockBodyScroll();
   }, [open]);
 
   useEffect(() => {

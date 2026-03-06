@@ -1,7 +1,7 @@
 import { LocationsType } from "@/app/careers/components/LocationsType";
 import { Sheet } from "@/components/layouts/sheet/Sheet";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
-import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
+import { RichText } from "@/app/(resources + privacy)/components/details/detailsRender/RichText";
 import { getSlugs } from "@/features/shared/api/getSlugs";
 import { getMember } from "@/features/team/api/getMembers";
 import { Metadata } from "next";
@@ -37,9 +37,13 @@ export default async function Member({ params }: { params: Props }) {
   const { slug } = await params;
   const member = await getMember(slug);
   if (!member) notFound();
-  const { biography, image, job, linkedin, location, name, twitter } = member;
+  const { biography, image, job, location, name } = member;
   return (
-    <Sheet returnPath="/team">
+    <Sheet
+      returnPath="/team"
+      animation={false}
+      ariaLabel="Team member details"
+    >
       <div className="max-w-[970px] mx-auto pt-10 px-4 md:px-10">
         <div className="relative w-[160px] h-[160px] sm:w-[240px] sm:h-[240px] lg:w-[320px] lg:h-[320px] mb-10">
           <Image

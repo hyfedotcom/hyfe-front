@@ -17,7 +17,7 @@ export function ProductCard({ card }: { card: CardCtaType }) {
           label={cta[0].label}
           url={cta[0].url}
           classNameProp="w-max"
-          tag="button"
+          tag="span"
           arrow={true}
           indicatorInternalClassName="w-[7px] h-[13px]"
         />

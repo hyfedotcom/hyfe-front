@@ -6,7 +6,7 @@ const HERO_STATS_BG_BLUR_DATA_URL =
 export function HeroContent({ section }: { section: HeroContentType }) {
   const { content, title, type } = section;
   return (
-    <main className="pt-[140px] px-4 md:px-10 lg:px-20 relative">
+    <main className="pt-[140px] px-4 md:px-10 xl:px-20 relative">
       <div
         className="absolute inset-0 rotate-180 z-[-1] translate-y-[-20%]" 
         style={{

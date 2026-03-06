@@ -1,8 +1,16 @@
-export function normalizeHref(rawHref: string) {
+export function normalizeHref(rawHref: string | undefined) {
   const href = (rawHref ?? "").trim();
   if (!href) return href;
 
   if (href.startsWith("/") || href.startsWith("#")) return href;
+  if (href === "https://www.hyfe.com") return "/";
+  if (href === "https://www.hyfe.ai") return "/";
+  if (href === "https://hyfe.ai") return "/";
+  if (href === "https://hyfe.com") return "/";
+  if (href === "https://www.hyfe.com/") return "/";
+  if (href === "https://www.hyfe.ai/") return "/";
+  if (href === "https://hyfe.ai/") return "/";
+  if (href === "https://hyfe.com/") return "/";
 
   if (/^(mailto:|tel:|sms:)/i.test(href)) return href;
 
@@ -20,5 +28,9 @@ export function normalizeHref(rawHref: string) {
 
 export function isInternalHref(rawHref: string) {
   const normalized = normalizeHref(rawHref);
-  return normalized.startsWith("/") || normalized.startsWith("#");
+  return (
+    normalized.startsWith("/") ||
+    normalized.startsWith("#") ||
+    normalized.startsWith("https://www.hyfe.ai")
+  );
 }

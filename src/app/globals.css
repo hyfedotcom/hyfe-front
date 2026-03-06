@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-html {
-  /* scroll-behavior: smooth; */
-}
+/* html {
+  scroll-behavior: smooth;
+} */
 
 @theme {
   --color-black: #2e3542;
@@ -287,18 +287,18 @@ h1 {
 h2,
 .h2-class {
   /* 28px → 48px */
-  @apply text-[clamp(28px,3.2vw+16px,40px)] leading-[126%] font-medium text-heading;
+  @apply text-[26px] md:text-[30px] lg:text-[34px] xl:text-[38px] 2xl:text-[40px] leading-[126%] font-medium text-heading;
 }
 
 h3 {
   /* 22px → 32px */
-  @apply text-[clamp(22px,2.2vw+14px,32px)] leading-[126%] font-medium text-heading;
+  @apply text-[22px] md:text-[26] lg:text-[30px] xl:text-[34px]  leading-[126%] font-medium text-heading;
 }
 
 h4,
 .h4-class {
   /* 18px → 24px */
-  @apply text-[20px] md:text-[clamp(18px,1.6vw+12px,24px)] leading-[126%] font-medium text-heading;
+  @apply text-[20px] md:text-[22px] lg:text-[24px] leading-[126%] font-medium text-heading;
 }
 
 body {

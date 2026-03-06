@@ -34,7 +34,8 @@ export function ScrollToTop() {
 
     if (pathname === prev) return;
 
-    const shouldSkip = isModalRoute(pathname) || isModalRoute(prev);
+    const nextIsModal = isModalRoute(pathname);
+    const shouldSkip = nextIsModal;
 
     if (!shouldSkip) {
       scrollToTopImmediate();

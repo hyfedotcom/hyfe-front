@@ -1,5 +1,5 @@
 import { ResourceBlockContent } from "@/features/resources";
-import { RichText } from "@/app/(resources)/components/details/detailsRender/RichText";
+import { RichText } from "@/app/(resources + privacy)/components/details/detailsRender/RichText";
 import * as React from "react";
 
 type FaqItemProps = {
@@ -74,7 +74,7 @@ export default function FAQItem({
         ].join(" ")}
       >
         <div className="overflow-hidden">
-          <div className="px-5 text-sm leading-relaxed text-white/80 w-full break-words max-w-[95%] [&_p:last-child]:mb-5">
+          <div className="px-5 text-sm leading-relaxedw-full break-words max-w-[95%] [&_p:last-child]:mb-5">
             <RichText bodySize="body-medium" blocks={answer} />
           </div>
         </div>

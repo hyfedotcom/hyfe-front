@@ -10,6 +10,8 @@ import getGeneral from "@/features/general/api/getGeneral";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { CookieConsentRuntime } from "@/components/cookie/CookieConsentRuntime";
+import { SheetNavigationProvider } from "@/context/sheet/sheetNavigationContext";
+import { WindowProvider } from "@/context/window/windowContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,7 +22,8 @@ const poppins = Poppins({
 
 export default async function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  sheet,
+}: Readonly<{ children: React.ReactNode; sheet: React.ReactNode }>) {
   const newsletter = await getNewsletterForm();
   const general = await getGeneral();
   const topBannerHeight = general.header.header_banner.label.trim() ? 40 : 0;
@@ -34,7 +37,12 @@ export default async function RootLayout({
         <div data-site-header>
           <Header header={general.header} topBannerHeight={topBannerHeight} />
         </div>
-        {children}
+        <WindowProvider>
+          <SheetNavigationProvider>
+            {children}
+            {sheet}
+          </SheetNavigationProvider>
+        </WindowProvider>
         <div data-site-footer>
           <Footer newsletter={newsletter} footer={general.footer} />
         </div>

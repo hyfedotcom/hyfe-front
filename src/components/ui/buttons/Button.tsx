@@ -20,7 +20,7 @@ export function Button({
   version?: "black" | "white";
   color?: "white" | "black" | "yellow";
   arrow?: boolean;
-  tag?: "Link" | "button" | "a";
+  tag?: "Link" | "button" | "a" | "span";
   classNameProp?: string;
   type?: "button" | "submit";
   indicatorInternalClassName?: string;
@@ -98,6 +98,9 @@ export function Button({
     );
   }
 
+  if (tag === "span") {
+    return <span className={className}>{content}</span>;
+  }
   if (!isInternal) {
     return (
       <a

@@ -1,32 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
+import { useWindowMetrics } from "@/context/window/windowContext";
 
 const HERO_STATS_BG_BLUR_DATA_URL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAEARoABQAAAAEAAAA+ARsABQAAAAEAAABGASgAAwAAAAEAAgAAh2kABAAAAAEAAABOAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADKADAAQAAAABAAAAEAAAAACFk7TpAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL0lEQVQoFZWS0UpCQRCGv92zHUMJE7zwIgjqNpAuu9L36GV8hqCn8K6n6AmCiMC6CaNMxPSouzvNakk34WkOc3ZmZ/75Z3bX8If0emJTqNPBdruIMUQw4uThqsLhcc4i5IT7SPXDY6sGe92giDWMz3jd/xQpXuizdBQ3F7xXj7B5Az/yjEczgo9UWieYrEVYGiV6ZDC4pcnEMb27hKytwTpxIYSiIIYVs2ETsXVEwcE/s5ifgx06xm9nIG2EHBE19ScSkanVPaMKUQ50glO1nxyT1Z4a2TqQgilJKbe+OipaTBVqjjmp0kZ+1m93u6T9xKXFHEEByd0liVm/lJztyv0VtwmQtJwIa0BqZ3dLm5Lrlv7JoI+gfP3N0OUZdN50B+UBOqnTdryCfKlj0lf1BfebcqHLiU9tAAAAAElFTkSuQmCC";
-
-function useIsMobileBreakpoint(maxWidth: number) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(`(max-width: ${maxWidth}px)`);
-    const update = () => setIsMobile(media.matches);
-
-    update();
-
-    if (typeof media.addEventListener === "function") {
-      media.addEventListener("change", update);
-      return () => media.removeEventListener("change", update);
-    }
-
-    media.addListener(update);
-    return () => media.removeListener(update);
-  }, [maxWidth]);
-
-  return isMobile;
-}
 
 function ScrollRevealItem({
   progress,
@@ -61,8 +41,28 @@ export function HeroStatsScene({
   stats: Record<string, string>[];
 }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const isMobile = useIsMobileBreakpoint(768);
+
+  const { width, height, isReady } = useWindowMetrics();
+  const isMobile = width < 768;
   const [isMapReady, setIsMapReady] = useState(false);
+
+  const getResponsiveRatio = () => {
+    if (!isReady) return 1;
+
+    let baseScale;
+    if (width < 768) baseScale = 2;
+    else if (width < 1024) baseScale = 1.4;
+    else if (width < 1220) baseScale = 1.3;
+    else if (width < 1520) baseScale = 1.2;
+    else if (width < 1920) baseScale = 1.1;
+    else baseScale = 1.1;
+
+    const aspectRatio = width / height;
+
+    return baseScale * aspectRatio;
+  };
+
+  const ratio = getResponsiveRatio();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -73,10 +73,15 @@ export function HeroStatsScene({
   const revealStart = 0.4;
   const revealSpan = 0.4;
   const step = totalItems > 0 ? revealSpan / totalItems : revealSpan;
-
+  console.log(ratio);
   const mapY = useTransform(scrollYProgress, [0, 0.2], [0, -120]);
   const mapTitleY = useTransform(scrollYProgress, [0.95, 1], [0, -45]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, !isMobile ? 1.5 : 1]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [ratio > 2.2 ? 0 : 1, 1],
+  );
 
   const getRange = (index: number) => {
     const start = revealStart + index * step;
@@ -87,7 +92,7 @@ export function HeroStatsScene({
   return (
     <div
       ref={sectionRef}
-      className="w-full relative h-auto min-h-[200vh] md:min-h-[160vh] pt-150"
+      className="w-full relative h-auto min-h-[200vh] md:min-h-[160vh] pt-0"
     >
       <div>
         <div
@@ -103,10 +108,13 @@ export function HeroStatsScene({
               backgroundSize: "cover, cover",
             }}
           />
-          <div className="sticky top-0 h-[100vh] flex items-end justify-center overflow-hidden">
+          <motion.div
+            style={{ opacity: opacity }}
+            className="sticky top-0 h-screen flex items-end justify-center overflow-hidden"
+          >
             <motion.div
               style={{ y: mapTitleY }}
-              className={`resources-glass-surface-strong opacity-100! backdrop-blur-[10px] w:max min-w-[200px] md:w-max rounded-[30px] absolute bottom-4 py-1.5 px-4 z-10 text-center left-1/2 -translate-x-1/2 transition-opacity duration-200 ${
+              className={`resources-glass-surface-strong opacity-100!  backdrop-blur-[10px] w:max min-w-[200px] md:w-max rounded-[30px] absolute bottom-4 py-1.5 px-4 z-10 text-center left-1/2 -translate-x-1/2 transition-opacity duration-200 ${
                 isMapReady ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -143,12 +151,12 @@ export function HeroStatsScene({
                 className="absolute top-0 left-0 w-[1000px] max-w-none w-full h-auto object-contain object-bottom origin-bottom translate-y-[10%]"
               />
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </div>
       {stats.length > 0 && (
-        <div className="relative min-h-[120vh] md:min-h-[150vh]">
-          <div className="sticky top-1/2 -translate-y-1/2">
+        <div className="relative min-h-[120vh] md:min-h-[150vh] pointer-events-none z-1000">
+          <div className="sticky top-20 translate-y-[40%] md:translate-y-[20%] lg:translate-y-0">
             <div className="grid grid-cols-2 grid-rows-2 md:flex flex-col lg:flex-row gap-3 px-4 xl:px-20 pb-20 md:pb-[329px]">
               {stats.map((stat, i) => {
                 const [start, end] = getRange(i);
