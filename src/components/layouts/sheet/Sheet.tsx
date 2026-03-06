@@ -32,14 +32,9 @@ export function Sheet({
   const router = useRouter();
   const sheetRootRef = useRef<HTMLDivElement | null>(null);
 
-  function lastPathElement(url: string) {
-    const path = url.split("/");
-    return path[path.length - 1];
-  }
-
   const path = usePathname();
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const pathRef = useRef(lastPathElement(path));
+  const pathRef = useRef(path);
   const { setNextCloseFallback, consumeCloseFallback } =
     useSheetNavigationState();
 
@@ -61,7 +56,7 @@ export function Sheet({
 
   useEffect(() => {
     const div = scrollRef.current;
-    if (lastPathElement(path) === pathRef.current) return;
+    if (path === pathRef.current) return;
 
     if (!div) return;
 
@@ -70,8 +65,8 @@ export function Sheet({
       behavior: "smooth",
     });
 
-    pathRef.current = lastPathElement(path);
-  }, [path, pathRef]);
+    pathRef.current = path;
+  }, [path]);
 
   useEffect(() => {
     if (!isAnimation) return;
@@ -141,13 +136,12 @@ export function Sheet({
     isClosingRef.current = false;
     setIsClosingState(false);
 
-    console.log(pending?.link)
     if (pending?.link) router.push(pending.link, { scroll: true });
     else router.back();
   }, [router]);
 
   const close = useCallback(
-    (href?: string, fallbackPath?: string, scroll?: boolean) => {
+    (href?: string, fallbackPath?: string) => {
       if (isClosingRef.current) return;
       isClosingRef.current = true;
       setIsClosingState(true);

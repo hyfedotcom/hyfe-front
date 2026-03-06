@@ -5,7 +5,7 @@ import { createContext } from "react";
 // type Transition = "idle" | "exiting" | "entering";
 // "простой" | "выход" | "вход";
 type IsClosing = boolean;
-type Close = (href?: string, fallbackPath?: string, scroll?: boolean) => void;
+type Close = (href?: string, fallbackPath?: string) => void;
 // type isOpen = boolean;
 // type CloseThenNavigate = () => void;
 

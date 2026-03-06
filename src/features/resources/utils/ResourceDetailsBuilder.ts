@@ -84,9 +84,7 @@ export async function buildResourceDetailsBlocks({
     return {
       ...block,
       resolvedCards: resolvedCards
-        .filter((c) => {
-          return c.slug !== slugException;
-        })
+        .filter((c) => c.slug !== slugException)
         .slice(0, 4),
     };
   });

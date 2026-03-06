@@ -25,8 +25,11 @@ export function parseOrThrow<T extends z.ZodTypeAny>(
 ): z.infer<T> {
   const r = schema.safeParse(data);
   if (!r.success) {
-    // дерево удобно, когда вложенные структуры
-    console.error(z.treeifyError(r.error));
+    const tree = z.treeifyError(r.error);
+    console.error("Zod parse error", {
+      issues: r.error.issues,
+      tree,
+    });
     throw new Error("Invalid API response");
   }
   return r.data;

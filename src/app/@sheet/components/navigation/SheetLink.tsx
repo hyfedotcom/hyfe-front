@@ -11,14 +11,12 @@ export function SheetLink({
   children,
   mode,
   fallbackPath,
-  scroll,
 }: {
   href: string;
   className?: string;
   children: React.ReactNode;
   mode: "close" | "swap";
   fallbackPath?: string;
-  scroll?: boolean;
 }) {
   const context = useContext(SheetContext);
   const isInternal = isInternalHref(href);
@@ -29,7 +27,7 @@ export function SheetLink({
     if (isSimpleLeftClick && isInternal) {
       e.preventDefault();
       if (context?.isClosing) return;
-      context?.close(href, fallbackPath, scroll);
+      context?.close(href, fallbackPath);
     }
   };
 

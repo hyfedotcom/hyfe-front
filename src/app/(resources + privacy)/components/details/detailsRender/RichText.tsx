@@ -253,6 +253,7 @@ function renderInline(
             key={key}
             href={href}
             target="_blank"
+            rel="noopener noreferrer"
             className="underline text-blue-400 underline-offset-4 hover:opacity-80"
           >
             {label}

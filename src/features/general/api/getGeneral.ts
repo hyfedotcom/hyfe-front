@@ -10,6 +10,22 @@ import {
 } from "@/features/shared/schema/strapi.schema";
 import { HeaderSchema } from "../schema/domain";
 
+const GENERAL_FALLBACK = {
+  header: {
+    header_banner: {
+      label: "",
+      url: "",
+    },
+    product_items: [],
+    solutions_items: [],
+    company_items: [],
+    resource_quick_links: [],
+    resource_sections: [],
+    cta: null,
+  },
+  footer: null,
+};
+
 function isPopulateValidationError(error: unknown) {
   return (
     error instanceof Error &&
@@ -51,10 +67,15 @@ export default async function getGeneral() {
     }
   }
 
-  const general = parseOrThrow(
-    StrapiCollectionSchema(HeaderSchema),
-    generalRaw,
-  );
+  if (!generalRaw) {
+    console.error("getGeneral: empty CMS payload, using fallback");
+    return GENERAL_FALLBACK;
+  }
 
-  return general;
+  try {
+    return parseOrThrow(StrapiCollectionSchema(HeaderSchema), generalRaw);
+  } catch (error) {
+    console.error("getGeneral: invalid CMS payload, using fallback", error);
+    return GENERAL_FALLBACK;
+  }
 }

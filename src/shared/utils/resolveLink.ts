@@ -17,7 +17,7 @@ export function normalizeHref(rawHref: string | undefined) {
   try {
     const url = new URL(href);
     const host = url.host.toLowerCase().replace(/^www\./, "");
-    if (host === "hyfe.com") {
+    if (host === "hyfe.com" || host === "hyfe.ai") {
       return `${url.pathname}${url.search}${url.hash}` || "/";
     }
     return href;
@@ -28,9 +28,13 @@ export function normalizeHref(rawHref: string | undefined) {
 
 export function isInternalHref(rawHref: string) {
   const normalized = normalizeHref(rawHref);
-  return (
-    normalized.startsWith("/") ||
-    normalized.startsWith("#") ||
-    normalized.startsWith("https://www.hyfe.ai")
-  );
+  if (normalized.startsWith("/") || normalized.startsWith("#")) return true;
+
+  try {
+    const url = new URL(normalized);
+    const host = url.host.toLowerCase().replace(/^www\./, "");
+    return host === "hyfe.com" || host === "hyfe.ai";
+  } catch {
+    return false;
+  }
 }
