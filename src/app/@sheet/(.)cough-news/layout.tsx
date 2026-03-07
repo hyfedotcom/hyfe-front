@@ -3,6 +3,8 @@ import { SheetNewsTimelineContainer } from "@/components/ui/timeline/SheetNewsTi
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <Sheet ariaLabel="Cough news details">
-    <SheetNewsTimelineContainer>{children}</SheetNewsTimelineContainer>
+    {/* <SheetNewsTimelineContainer> */}
+    {children}
+    {/* </SheetNewsTimelineContainer> */}
   </Sheet>
 }

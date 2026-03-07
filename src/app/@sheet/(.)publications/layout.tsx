@@ -7,6 +7,8 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return <Sheet ariaLabel="Publication details">
-    <SheetNewsTimelineContainer>{children}</SheetNewsTimelineContainer>
+    {/* <SheetNewsTimelineContainer> */}
+    {children}
+    {/* </SheetNewsTimelineContainer> */}
   </Sheet>;
 }

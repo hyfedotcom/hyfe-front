@@ -122,7 +122,7 @@ export default async function ResourceSingle({ params }: PageProps) {
         animation={false}
         ariaLabel="Resource details"
       >
-        <SheetNewsTimelineContainer>
+        {/* <SheetNewsTimelineContainer> */}
           <SheetShare citation={citationForShare} />
           <div className="max-w-screen relative overflow-hidden">
             <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
@@ -134,7 +134,7 @@ export default async function ResourceSingle({ params }: PageProps) {
               />
             </div>
           </div>
-        </SheetNewsTimelineContainer>
+        {/* </SheetNewsTimelineContainer> */}
       </Sheet>
     </>
   );
