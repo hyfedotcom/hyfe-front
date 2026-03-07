@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31536000,
+    deviceSizes: [320, 640, 750, 1080, 1920]
   },
   async redirects() {
     return [
@@ -60,7 +61,7 @@ const nextConfig: NextConfig = {
         destination: "/team/:slug",
         permanent: true,
       },
-        {
+      {
         source: "/team-members/:slug/",
         destination: "/team/:slug",
         permanent: true,

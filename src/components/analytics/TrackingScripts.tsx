@@ -13,10 +13,10 @@ export function TrackingScripts() {
       <Script
         id="google-tag-src"
         src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
 
-      <Script id="google-tag-init" strategy="afterInteractive">
+      <Script id="google-tag-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -26,7 +26,7 @@ export function TrackingScripts() {
       </Script>
 
       {/* GTM still loads separately for container-managed tags. */}
-      <Script id="gtm-init" strategy="afterInteractive">
+      <Script id="gtm-init" strategy="lazyOnload">
         {`
           (function(w,d,s,l,i){
             w[l]=w[l]||[];
@@ -55,7 +55,7 @@ export function TrackingScripts() {
         strategy="lazyOnload"
       />
 
-      <Script id="clarity-init" strategy="afterInteractive">
+      <Script id="clarity-init" strategy="lazyOnload">
         {`
           (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
