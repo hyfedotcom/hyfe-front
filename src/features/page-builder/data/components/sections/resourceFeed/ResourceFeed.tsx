@@ -34,7 +34,7 @@ export function ResourceFeed({
                   "snap-start flex self-stretch flex-none w-[82vw] max-w-[340px] sm:w-[66vw] md:w-auto md:max-w-none md:h-full"
                 }
               >
-                <ResourceCard card={c} />
+                <ResourceCard card={c} renderMode={"full"} />
               </Link>
             ))}
           </div>

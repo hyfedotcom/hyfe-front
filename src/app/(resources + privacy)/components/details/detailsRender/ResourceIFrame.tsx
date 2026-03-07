@@ -1,3 +1,7 @@
+"use client";
+
+import Iframe from "@/components/ui/video/Iframe";
+
 type PageProps = {
   url?: string | undefined;
   title: string | undefined;
@@ -12,15 +16,7 @@ export function ResourceIFrame({ block }: { block: PageProps }) {
         {title && <h2>{title}</h2>}
         {description && <p className="body-small">{description}</p>}
       </div>
-      <iframe
-        src={url!}
-        title="Video"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-        className="w-full aspect-video rounded-2xl"
-      />
+      {url ? <Iframe url={url} /> : null}
     </div>
   );
 }

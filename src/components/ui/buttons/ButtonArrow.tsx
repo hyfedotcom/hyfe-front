@@ -25,6 +25,7 @@ export function ButtonArrow({
           "absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out max-sm:w-[20px]",
           "group-hover/card:translate-x-full group-hover/card:opacity-0",
           "group-active/card:translate-x-full group-active/card:opacity-0",
+          "group-hover:translate-x-full group-hover:opacity-0 ",
           isActive && "translate-x-full opacity-0",
         )}
         width="25"
@@ -45,6 +46,7 @@ export function ButtonArrow({
           "absolute left-0 -translate-x-full opacity-0 transition-all duration-300 ease-out",
           "group-hover/card:left-1/2 group-hover/card:-translate-x-1/2 group-hover/card:opacity-100",
           "group-active/card:left-1/2 group-active/card:-translate-x-1/2 group-active/card:opacity-100",
+          "group-hover:left-[75%]  group-hover:opacity-100",
           isActive &&
             `left-[75%] -translate-x-1/3 opacity-100 ${activTextcolor}`,
         )}

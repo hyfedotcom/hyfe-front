@@ -22,8 +22,8 @@ export default function FAQContainer({
   return (
     <div className="space-y-25 max-w-[1000px]">
       {filteredSections.length > 0 ? (
-        filteredSections.map((s) => (
-          <FAQSection key={s.title} section={s}></FAQSection>
+        filteredSections.map((s, i) => (
+          <FAQSection key={`${s.title}-${i}`} section={s}></FAQSection>
         ))
       ) : (
         <div className="w-full max-w-[1000px] h-[300px] p-4 md:p-10 xl:p-20 bg-gradient-to-bl rounded-2xl from-primary-100/40 via-primary-100/40 to-primary-100/40 flex items-center justify-center">

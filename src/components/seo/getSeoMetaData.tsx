@@ -22,6 +22,7 @@ export function getSeoMetadata(seo?: SeoType): Metadata {
   const keywordsValue = hasText(keywords) ? keywords : undefined;
   const canonicalValue = hasText(canonical) ? canonical : undefined;
   const robotsValue = hasText(robots) ? robots : undefined;
+  const robotsNormalized = robotsValue?.toLowerCase();
   const hasImage = Boolean(image?.url?.trim());
   const hasStructuredData = hasText(structuredData);
 
@@ -61,8 +62,8 @@ export function getSeoMetadata(seo?: SeoType): Metadata {
     },
     robots: robotsValue
       ? {
-          index: !robotsValue.includes("noindex"),
-          follow: !robotsValue.includes("nofollow"),
+          index: !robotsNormalized?.includes("noindex"),
+          follow: !robotsNormalized?.includes("nofollow"),
         }
       : undefined,
   };

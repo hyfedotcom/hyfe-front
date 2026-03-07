@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
-import { ResourcesFiltersBar } from "./ResourcesFiltersBar";
+import { ResourcesFiltersBar } from "../ResourcesFiltersBar";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -17,16 +17,18 @@ function parsePageParam(value: string | null) {
   return Math.floor(parsed);
 }
 
-export function RecourcesList({
+export function RecourcesListFull({
   data,
   type,
   tags,
   initialPage = 1,
+  renderMode,
 }: {
   data: ResourceCardType[];
   type: string;
   tags: string[];
   initialPage?: number;
+  renderMode: "full" | "detail-canonical" | "detail-sheet";
 }) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -154,7 +156,8 @@ export function RecourcesList({
   const visibleList = filteredList.slice(0, shown);
   const hasNextPage = !hasAppliedFilters && activePage < maxPage;
   const nextPage = activePage + 1;
-  const pageHref = (page: number) => (page <= 1 ? `/${type}` : `/${type}?page=${page}`);
+  const pageHref = (page: number) =>
+    page <= 1 ? `/${type}` : `/${type}?page=${page}`;
   const detailHref = (slug: string) => {
     const base = `/${type}/${slug}`;
     if (!hasAppliedFilters && activePage > 1) {
@@ -214,7 +217,7 @@ export function RecourcesList({
 
   return (
     <section className="relative space-y-6 md:space-y-8">
-      <div ref={sentinelRef} aria-hidden className="my-0!"/>
+      <div ref={sentinelRef} aria-hidden className="my-0!" />
       <ResourcesFiltersBar
         type={type}
         uniqueTags={uniqueTags}
@@ -246,7 +249,7 @@ export function RecourcesList({
             scroll={false}
           >
             {" "}
-            <ResourceCard card={c} />
+            <ResourceCard card={c} renderMode={renderMode} />
           </Link>
         ))}
       </div>

@@ -13,6 +13,9 @@ import { CookieConsentRuntime } from "@/components/cookie/CookieConsentRuntime";
 import { SheetNavigationProvider } from "@/context/sheet/sheetNavigationContext";
 import { WindowProvider } from "@/context/window/windowContext";
 
+export const dynamic = "force-static";
+export const revalidate = 86400;
+
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",

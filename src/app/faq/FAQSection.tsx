@@ -20,7 +20,7 @@ export function FAQSection({ section }: { section: FaqSectionType }) {
         {section.title}
       </h2>
 
-      <div className="space-y-4 w-full ">
+      <div className="space-y-2 md:space-y-4 w-full ">
         {section.faqs?.map((f) => (
           <FAQItem
             key={f.id}

@@ -60,7 +60,7 @@ export function ResourcesRelated({
                 pl-[max(1rem,calc((100vw-870px)/2))]
                 pr-[max(1rem,calc((100vw-870px)/2))]"
         >
-          {cards.map((card, index) => (
+          {cards.map((card) => (
             <div data-card key={card.slug}>
               <SheetLink
                 mode={closeMode}
@@ -70,7 +70,7 @@ export function ResourcesRelated({
                   closeMode === "close" ? `/${resourceType}` : undefined
                 }
               >
-                <ResourceCard card={card} />
+                <ResourceCard card={card} renderMode="full" />
               </SheetLink>
             </div>
           ))}

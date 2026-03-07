@@ -4,9 +4,18 @@ export function useActiveSection(ids: string[], topOffsetPx = 260) {
   const [activeId, setActiveId] = useState<string>(ids[0] ?? "");
   const idsRef = useRef(ids);
   const idsKey = ids.join("|");
+  const elementsByIdRef = useRef<Record<string, HTMLElement | null>>({});
 
   useEffect(() => {
     idsRef.current = ids;
+  }, [ids, idsKey]);
+
+  useEffect(() => {
+    const nextElements: Record<string, HTMLElement | null> = {};
+    for (const id of ids) {
+      nextElements[id] = document.getElementById(id);
+    }
+    elementsByIdRef.current = nextElements;
   }, [ids, idsKey]);
 
   useEffect(() => {
@@ -20,9 +29,17 @@ export function useActiveSection(ids: string[], topOffsetPx = 260) {
 
       let nextId = currentIds[0];
       for (const id of currentIds) {
-        const el = document.getElementById(id);
+        let el = elementsByIdRef.current[id];
+        if (!el) {
+          el = document.getElementById(id);
+          if (el) {
+            elementsByIdRef.current[id] = el;
+          }
+        }
         if (!el) continue;
+
         const top = el.getBoundingClientRect().top - topOffsetPx;
+
         if (top <= 0) {
           nextId = id;
           continue;

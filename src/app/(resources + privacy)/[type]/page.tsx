@@ -1,4 +1,5 @@
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
+import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 import {
   getIndexablePrivacyTermSlugs,
   getPrivacyTermPage,
@@ -56,6 +57,26 @@ export async function generateMetadata({
   }
 }
 
-export default async function DynamicTypePage() {
-  return <></>;
+export default async function DynamicTypePage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { type } = await params;
+
+  if (!isResourceType(type)) {
+    return null;
+  }
+
+  const data = await getResourcesList({ type });
+  if (!data?.landing?.seo) {
+    return null;
+  }
+
+  return (
+    <SeoStructuredData
+      seo={data.landing.seo}
+      id={`resource-type-seo-jsonld-${type}`}
+    />
+  );
 }

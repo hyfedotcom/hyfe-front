@@ -106,6 +106,9 @@ export function ResourcesFiltersBarDesktop({
           />
         </svg>
         <input
+          id="resources-search-desktop"
+          name="resources-search-desktop"
+          aria-label={searchPlaceholder}
           type="search"
           className="h-full w-full bg-transparent pl-2 pr-1 text-[13px] leading-[100%] text-black outline-none placeholder:text-black/45"
           value={search}

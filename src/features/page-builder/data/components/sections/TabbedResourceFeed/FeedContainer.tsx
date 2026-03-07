@@ -309,7 +309,7 @@ export function FeedContainer({
                   )}
                   href={`/${card.type}/${card.slug}`}
                 >
-                  <ResourceCard card={card} />
+                  <ResourceCard card={card}  renderMode="full"/>
                 </Link>
               ))}
             </div>

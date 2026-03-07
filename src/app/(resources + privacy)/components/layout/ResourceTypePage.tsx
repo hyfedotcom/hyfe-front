@@ -1,8 +1,7 @@
-import { RecourcesList, ResourcesListHero } from "@/features/resources/client";
 import { getResourcesList } from "@/features/resources";
 import { ResourcesNavTabs } from "@/app/(resources + privacy)/components/navigation/ResourcesNavTabs";
 import { notFound } from "next/navigation";
-import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
+import { ResourceTypePageListMode } from "./ResourceTypePageListMode";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -13,11 +12,7 @@ export async function generateStaticParams() {
   );
 }
 
-export default async function ResourceTypePage({
-  type,
-}: {
-  type: string;
-}) {
+export default async function ResourceTypePage({ type }: { type: string }) {
   const data = await getResourcesList({ type });
 
   if (!data) notFound();
@@ -28,14 +23,12 @@ export default async function ResourceTypePage({
 
   return (
     <div className="w-full space-y-10 relative pb-[100px] md:pb-[140px]">
-      <SeoStructuredData seo={landing.seo} id="resource-type-seo-jsonld" />
       <div className=" mx-auto md:space-y-5">
-        <ResourcesListHero data={landing} />
-        <RecourcesList
+        <ResourceTypePageListMode
+          landing={landing}
+          list={list}
           tags={tags}
-          data={list}
           type={type}
-          initialPage={1}
         />
         <ResourcesNavTabs type={type} />
       </div>

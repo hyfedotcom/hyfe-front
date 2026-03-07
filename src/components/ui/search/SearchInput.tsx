@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 export function SearchInput({
   placeholder,
@@ -17,6 +17,7 @@ export function SearchInput({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const timeoutRef = useRef<number | null>(null);
   const draftValueRef = useRef(value);
+  const inputId = useId();
 
   const syncUrl = (nextValue: string) => {
     draftValueRef.current = nextValue;
@@ -39,7 +40,7 @@ export function SearchInput({
       if (currentUrl !== nextUrl) {
         router.replace(nextUrl, { scroll: false });
       }
-    }, 500);
+    }, 200);
   };
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export function SearchInput({
 
   return (
     <label
+      htmlFor={inputId}
       className={` ${className}  resources-glass-search-shell group relative  mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3 resources-glass-search-open resources-glass-search-idle backdrop-blur-sm`}
     >
       <svg
@@ -89,6 +91,7 @@ export function SearchInput({
       </svg>
       <input
         ref={inputRef}
+        id={inputId}
         className="h-full w-full bg-transparent pl-2 pr-1 text-[13px] leading-[100%] text-black outline-none placeholder:text-black/45"
         type="search"
         placeholder={placeholder}

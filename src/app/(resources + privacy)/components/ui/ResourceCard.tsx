@@ -3,8 +3,17 @@ import TagPlate from "./ResourceTagChip";
 import { ResourceCardType } from "../../../../features/resources/data/resources.types";
 import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
 
-export function ResourceCard({ card }: { card: ResourceCardType }) {
+export function ResourceCard({
+  card,
+  renderMode,
+}: {
+  card: ResourceCardType;
+  renderMode: "full" | "detail-canonical" | "detail-sheet";
+}) {
   const { cover, date, excerpt, title, tags, type } = card;
+  const isOptimizedMode = renderMode !== "full";
+  const responsiveSizes =
+    "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw";
 
   return (
     <div
@@ -16,6 +25,10 @@ export function ResourceCard({ card }: { card: ResourceCardType }) {
         src={cover.url || ""}
         width={cover.width ?? 300}
         height={cover.height ?? 220}
+        sizes={responsiveSizes}
+        quality={renderMode === "full" ? 90 : 40}
+        loading={isOptimizedMode ? "lazy" : undefined}
+        fetchPriority={isOptimizedMode ? "low" : undefined}
         alt={cover.alt ?? `Image resource about ${title}`}
         className={`${type === "publications" && "object-top-left"} w-full h-46 md:h-65 object-cover`}
       />

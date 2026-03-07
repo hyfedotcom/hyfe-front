@@ -3,21 +3,31 @@ import { ResourceDetails } from "@/app/(resources + privacy)/components/details/
 import { ResourceDetailsHero } from "@/app/(resources + privacy)/components/details/ResourceDetailsHero";
 import { draftMode } from "next/headers";
 import Link from "next/link";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { buildResourceDetailsBlocks } from "@/features/resources/utils/ResourceDetailsBuilder";
 
 type Params = {
   type: string;
   slug: string;
-  isEnabled: boolean;
 };
 
-export default async function Page({ params }: { params: Params }) {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug, type } = await params;
   const { isEnabled } = await draftMode();
-  const isDraft = isEnabled;
 
-  const resource = await getResource({ type, slug, isDraft });
+  if (!isEnabled) return notFound();
+
+  const resource = await getResource({ type, slug, isDraft: true });
 
   if (!resource) return notFound();
   const blocks = await buildResourceDetailsBlocks({
@@ -27,8 +37,8 @@ export default async function Page({ params }: { params: Params }) {
   });
 
   return (
-    <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[260px] px-4 md:px-10 z-10000 relative">
-      <div className="fixed -translate-x-1/2 left-1/2 top-0 w-screen  bg-white shadow-classic">
+    <div className="w-full min-[1200px]:w-[70%] mx-auto max-w-258 pt-[260px] px-4 md:px-10 z-100000 relative">
+      <div className="fixed -translate-x-1/2 left-1/2 top-0 w-screen  bg-white shadow-classic z-10000">
         <div className="mx-auto w-max py-4  flex gap-4 items-center">
           You are using the draft mode
           <Link

@@ -237,7 +237,7 @@ export function Sheet({
           aria-label={ariaLabel}
           className={[
             "absolute left-0 right-0 bottom-0 top-0 bg-white mt-10 pt-0 ",
-            "transition-transform duration-300 ease-out",
+            "transition-transform duration-400 ease-out",
             open ? "translate-y-0" : "translate-y-full",
             "max-h-[100dvh] rounded-t-[28px] md:rounded-t-[40px]",
             "overflow-hidden flex flex-col",

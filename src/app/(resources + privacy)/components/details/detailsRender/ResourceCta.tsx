@@ -1,5 +1,3 @@
-"use client";
-
 import { SheetLink } from "@/app/@sheet/components/navigation/SheetLink";
 import { ButtonArrow } from "@/components/ui/buttons/ButtonArrow";
 import type {
@@ -7,7 +5,6 @@ import type {
   ResourceType,
 } from "@/features/resources/data/resources.types";
 import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
-import { useState } from "react";
 
 type LinkPolicy = "close" | "swap" | "auto";
 
@@ -51,12 +48,10 @@ export function ResourceCta({
   currentType: ResourceType;
   linkPolicy: LinkPolicy;
 }) {
-  const [isHover, setIsHover] = useState<number | null>(null);
-
   return (
     <div className="space-y-5 mb-15">
       {block.title && <h3 className="mt-20">{block.title}</h3>}
-      <div className={`grid grid-cols-2 gap-3  ${!block.title && "-mt-8"}`}>
+      <div className={`space-y-4  ${!block.title && "-mt-8"}`}>
         {block.cta.map((e: { url: string; label: string }, i: number) => {
           const href = normalizeHref(e.url);
           const isInternal = isInternalHref(href);
@@ -66,23 +61,18 @@ export function ResourceCta({
             mode === "close" && target ? `/${target.type}` : undefined;
 
           const content = (
-            <div className="flex flex-col justify-between flex-1 h-full w-full ">
-              <span className="text-balance text-[16px] md:text-[20px] font-semibold! ">
+            <div className="flex flex-row justify-between items-center flex-1 h-full w-full ">
+              <span className="text-balance text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-medium ">
                 {e.label}
               </span>
-              <ButtonArrow
-                isActive={isHover === i}
-                className="bg-black text-white ml-auto"
-              />
+              <ButtonArrow className="bg-black text-white ml-auto " />
             </div>
           );
 
           return (
             <span
               key={i}
-              className="p-4 md:p-5 w-full flex  h-[200px] text-black! bg-primary-100 border border-border hover:bg-primary-200 hover:border-primary duration-300 rounded-[20px] hover:shadow-hover"
-              onMouseEnter={() => setIsHover(i)}
-              onMouseLeave={() => setIsHover(null)}
+              className="p-4 md:p-5 w-full flex group  text-black! bg-primary-100 border border-border hover:bg-primary-200 hover:border-primary duration-300 rounded-[20px] hover:shadow-hover"
             >
               {isInternal ? (
                 <SheetLink

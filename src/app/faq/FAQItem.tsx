@@ -35,11 +35,11 @@ export default function FAQItem({
         aria-controls={contentId}
         className={`
           flex w-full items-center justify-between gap-3
-          text-left cursor-pointer px-5 ${active ? "pb-3" : "pb-5"} pt-5
+          text-left cursor-pointer px-4 md:px-5 ${active ? "pb-3" : "pb-4 md:pb-5"} pt-4 md:pt-5
           min-w-0 duration-300
         `}
       >
-        <h4 className="text-[20px]! flex-1 min-w-0 break-words whitespace-normal font-medium!">
+        <h4 className="text-[16px]! md:text-[20px]! flex-1 min-w-0 break-words whitespace-normal font-medium!">
           {question}
         </h4>
 
@@ -74,7 +74,7 @@ export default function FAQItem({
         ].join(" ")}
       >
         <div className="overflow-hidden">
-          <div className="px-5 text-sm leading-relaxedw-full break-words max-w-[95%] [&_p:last-child]:mb-5">
+          <div className="px-5 text-sm leading-relaxe dw-full break-words max-w-[95%] [&_p:last-child]:mb-5">
             <RichText bodySize="body-medium" blocks={answer} />
           </div>
         </div>
