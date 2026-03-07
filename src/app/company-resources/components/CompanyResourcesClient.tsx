@@ -1,8 +1,8 @@
 "use client";
 
 import { ResourceButton } from "@/app/(resources + privacy)/components/ui/ResourceButton";
+import { useWindowMetrics } from "@/context/window/windowContext";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
-import { useWindowSize } from "@/hooks/useWindowSize";
 import { useEffect, useRef, useState } from "react";
 
 export function CompanyResourcesClient() {
@@ -11,7 +11,8 @@ export function CompanyResourcesClient() {
   const [isPinned, setIsPinned] = useState(false);
   const isDown = useIsScrollingDown(10);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const isMobile = useWindowSize() <= 768;
+  const { width } = useWindowMetrics();
+  const isMobile = width <= 768;
 
   useEffect(() => {
     const el = sentinelRef.current;

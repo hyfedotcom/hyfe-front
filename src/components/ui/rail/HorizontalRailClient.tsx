@@ -8,11 +8,13 @@ export function HorizontalRailClient({
   hasManyCards,
   className = "w-full",
   classNameBtn,
+  classScoll = "overflow-x-auto ",
 }: {
   children: React.ReactNode;
   hasManyCards: boolean;
   className?: string;
   classNameBtn?: string;
+  classScoll?: string;
 }) {
   const railRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,7 +82,7 @@ export function HorizontalRailClient({
     <div className={className}>
       <div
         ref={railRef}
-        className="max-w-full overflow-x-auto overscroll-x-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={`${classScoll} ax-w-full overscroll-x-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {children}
       </div>

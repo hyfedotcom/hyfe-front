@@ -5,9 +5,10 @@ import type { ResourceCardType } from "@/features/resources/data/resources.types
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useWindowSize } from "@/hooks/useWindowSize";
+
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import { ResourcesFiltersBar } from "../ResourcesFiltersBar";
+import { useWindowMetrics } from "@/context/window/windowContext";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -36,7 +37,7 @@ export function RecourcesListFull({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const searchParams = useSearchParams();
-  const width = useWindowSize();
+  const { width } = useWindowMetrics();
   const isMobile = (width ?? 0) <= 768;
   const isDown = useIsScrollingDown(10);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -241,7 +242,7 @@ export function RecourcesListFull({
         ref={cardsStartRef}
         className="flex w-full flex-col items-stretch gap-4 px-4 md:gap-5 md:px-10 sm:grid sm:grid-cols-2 sm:items-stretch lg:grid-cols-3 xl:grid-cols-4 xl:px-20"
       >
-        {visibleList.map((c) => (
+        {visibleList.map((c, i) => (
           <Link
             className="block h-full w-full"
             href={detailHref(c.slug)}
@@ -249,7 +250,7 @@ export function RecourcesListFull({
             scroll={false}
           >
             {" "}
-            <ResourceCard card={c} renderMode={renderMode} />
+            <ResourceCard card={c} renderMode={renderMode} index={i} />
           </Link>
         ))}
       </div>

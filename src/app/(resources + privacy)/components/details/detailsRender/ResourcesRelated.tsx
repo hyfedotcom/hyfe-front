@@ -48,6 +48,7 @@ export function ResourcesRelated({
           <h2>{title ?? `Latest in ${resourceTypeLabel}`}</h2>
           {paragraph && <p className="body-small">{paragraph}</p>}
         </div>
+        <Button label={"View All"} url={`/${resourceType}`} classNameProp="justify-between!"/>
       </div>
 
       <HorizontalRailClient

@@ -6,9 +6,11 @@ import { formatDateWithDots } from "@/shared/utils/formatDateWithDots";
 export function ResourceCard({
   card,
   renderMode,
+  index,
 }: {
   card: ResourceCardType;
   renderMode: "full" | "detail-canonical" | "detail-sheet";
+  index?: number;
 }) {
   const { cover, date, excerpt, title, tags, type } = card;
   const isOptimizedMode = renderMode !== "full";
@@ -26,9 +28,16 @@ export function ResourceCard({
         width={cover.width ?? 300}
         height={cover.height ?? 220}
         sizes={responsiveSizes}
-        quality={renderMode === "full" ? 90 : 40}
+        quality={renderMode === "full" ? 70 : 40}
         loading={isOptimizedMode ? "lazy" : undefined}
-        fetchPriority={isOptimizedMode ? "low" : undefined}
+        fetchPriority={
+          isOptimizedMode
+            ? "low"
+            : !isOptimizedMode && index === 0
+              ? "high"
+              : undefined
+        }
+        preload={!isOptimizedMode && index === 0 ? true : false}
         alt={cover.alt ?? `Image resource about ${title}`}
         className={`${type === "publications" && "object-top-left"} w-full h-46 md:h-65 object-cover`}
       />

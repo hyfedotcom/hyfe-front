@@ -40,12 +40,12 @@ export function FAQClient({ sections }: { sections: FaqSectionType[] }) {
     if (containerRef.current) {
       const targetTop = Math.max(
         0,
-        containerRef.current.getBoundingClientRect().top + 200,
+        containerRef.current.getBoundingClientRect().top + 100,
       );
 
       window.scrollTo({
         top: targetTop,
-        behavior: "auto",
+        behavior: "smooth",
       });
 
       hasActiveSearchScrollRef.current = true;

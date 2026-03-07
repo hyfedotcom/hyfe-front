@@ -9,7 +9,7 @@ import { SolutionCard } from "./SolutionsCard";
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useWindowMetrics } from "@/context/window/windowContext";
 
 function ScrollRevealItem({
   progress,
@@ -44,7 +44,7 @@ export function ProblemInsightSolution({
   section: ProblemInsightSolutionType;
 }) {
   const { insight, problem, solution } = section;
-  const width = useWindowSize();
+  const { width } = useWindowMetrics();
   const isMobileLayout = width > 0 ? width < 1000 : false;
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
@@ -146,9 +146,11 @@ export function ProblemInsightSolution({
               </linearGradient>
             </defs>
           </svg>
-         
         </div>
-        <ContentContainer content={section} classContainer="text-left md:text-center"/>
+        <ContentContainer
+          content={section}
+          classContainer="text-left md:text-center"
+        />
         <div>
           <div
             className="w-full flex max-[1000px]:flex-col gap-5 mb-[160px] justify-between items-stretch    min-[1000px]:[&>*:nth-child(2)]:mt-[200px]

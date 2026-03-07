@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import {
   ANALYTICS_CONSENT_COOKIE_NAME,
   ANALYTICS_CONSENT_GRANTED_EVENT,
@@ -44,12 +44,18 @@ function setBannerDismissedCookie() {
   setCookie(COOKIE_BANNER_DISMISSED_COOKIE_NAME, COOKIE_BANNER_DISMISSED_VALUE);
 }
 
+const subscribeNoop = () => () => {};
+
 export function CookieBanner() {
-  const [isOpen, setIsOpen] = useState(
+  const [isDismissedLocally, setIsDismissedLocally] = useState(false);
+  const canShowByCookie = useSyncExternalStore(
+    subscribeNoop,
     () =>
       !hasCookieBannerDismissedInDocument() &&
       !hasAnalyticsConsentInDocument(),
+    () => false,
   );
+  const isOpen = canShowByCookie && !isDismissedLocally;
 
   if (!isOpen) return null;
 
@@ -69,7 +75,7 @@ export function CookieBanner() {
           onClick={() => {
             setBannerDismissedCookie();
             setConsentCookie();
-            setIsOpen(false);
+            setIsDismissedLocally(true);
           }}
           className="cursor-pointer rounded-[8px] bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-85"
         >

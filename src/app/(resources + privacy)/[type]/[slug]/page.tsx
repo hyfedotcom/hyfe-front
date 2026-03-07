@@ -15,6 +15,7 @@ import { buildArticleJsonLd } from "@/components/seo/jsonLdBuilders";
 import { notFound } from "next/navigation";
 import { isResourceType } from "@/features/resources/data/api/resourceType";
 import { SheetShare } from "@/components/layouts/sheet/SheetShare";
+import { SheetNewsTimelineContainer } from "@/components/ui/timeline/SheetNewsTimelineContainer";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -121,17 +122,19 @@ export default async function ResourceSingle({ params }: PageProps) {
         animation={false}
         ariaLabel="Resource details"
       >
-        <SheetShare citation={citationForShare} />
-        <div className="max-w-screen relative overflow-hidden">
-          <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
-            <ResourceDetailsHero data={resource} type={type} />
-            <ResourceDetails
-              data={blocks}
-              resourceType={type as ResourceType}
-              closeMode={"close"}
-            />
+        <SheetNewsTimelineContainer>
+          <SheetShare citation={citationForShare} />
+          <div className="max-w-screen relative overflow-hidden">
+            <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
+              <ResourceDetailsHero data={resource} type={type} />
+              <ResourceDetails
+                data={blocks}
+                resourceType={type as ResourceType}
+                closeMode={"close"}
+              />
+            </div>
           </div>
-        </div>
+        </SheetNewsTimelineContainer>
       </Sheet>
     </>
   );

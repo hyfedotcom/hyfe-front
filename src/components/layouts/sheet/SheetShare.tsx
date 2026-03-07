@@ -1,11 +1,11 @@
 "use client";
 
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useWindowMetrics } from "@/context/window/windowContext";
 import { ICONS } from "@/shared/icons/resources";
 import { useEffect, useRef, useState } from "react";
 
 export function SheetShare({ citation }: { citation?: string }) {
-  const width = useWindowSize();
+  const { width } = useWindowMetrics();
   const isDesktop = width >= 768;
   const [isMobileShareOpen, setIsMobileShareOpen] = useState(false);
   const [isLinkCopied, setIsLinkCopied] = useState(false);

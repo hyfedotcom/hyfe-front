@@ -5,6 +5,7 @@ const isDev = process.env.NODE_ENV === "development";
 const nextConfig: NextConfig = {
   images: {
     dangerouslyAllowLocalIP: isDev,
+    qualities: [40, 70, 75],
     remotePatterns: [
       { protocol: "https", hostname: "*.strapiapp.com" },
       {

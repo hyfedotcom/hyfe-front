@@ -270,7 +270,7 @@ export function Sheet({
             ref={scrollRef}
             className="flex-1 min-h-0 overflow-y-auto overscroll-contain"
           >
-            <div className="w-full absolute top-0 z-100 h-10 md:h-25 bg-gradient-to-b via-white/50 from-white to-white/0"></div>
+            <div className="w-full pointer-events-none absolute top-0 z-100 h-10 md:h-25 bg-gradient-to-b via-white/50 from-white to-white/0"></div>
             {children}
           </div>
         </div>

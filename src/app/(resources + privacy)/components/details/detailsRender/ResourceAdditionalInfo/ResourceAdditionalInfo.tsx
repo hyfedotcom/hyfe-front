@@ -3,7 +3,7 @@
 import { AdditionlInfoType } from "@/features/resources/data/resources.types";
 import { AddtionalInfoCard } from "./AddtionalInfoCard";
 import { useRef } from "react";
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useWindowMetrics } from "@/context/window/windowContext";
 
 export function ResourceAdditionalInfo({
   block,
@@ -12,7 +12,7 @@ export function ResourceAdditionalInfo({
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
-  const width = useWindowSize()
+  const { width } = useWindowMetrics();
 
   function moveCards(dir: "left" | "right") {
     const container = containerRef.current;

@@ -10,6 +10,7 @@ import {
   AnimatePresence,
   useMotionTemplate,
   useMotionValueEvent,
+  useSpring,
 } from "framer-motion";
 
 export {
@@ -21,4 +22,5 @@ export {
   AnimatePresence,
   useMotionTemplate,
   useMotionValueEvent,
+  useSpring,
 };

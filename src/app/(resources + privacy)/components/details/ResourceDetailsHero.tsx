@@ -24,7 +24,7 @@ export function ResourceDetailsHero({
 
   return (
     <div className=" w-full items-center space-y-8 md:space-y-10 pt-6 pb-10 md:pb-10">
-      <div className="space-y-4 md:space-y-6 w-full md:max-w-[60%] mx-auto">
+      <div className="space-y-4 md:space-y-6 w-full md:max-w-[60%] 2xl:w-[50%] mx-auto">
         {tags.length > 0 && (
           <div className="flex justify-start gap-2">
             {tags.map((t: { tag: string }, i: number) => (
@@ -34,7 +34,7 @@ export function ResourceDetailsHero({
             ))}
           </div>
         )}
-        <h1 className="w-full  text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[42px]! text-balance mx-auto! mx-auto">
+        <h1 className="w-full  text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px] text-balance mx-auto! mx-auto">
           {title}
         </h1>
         <div className="flex justify-between items-center gap-5 w-max mr-auto">
@@ -61,8 +61,10 @@ export function ResourceDetailsHero({
         alt={cover.alt ?? title}
         width={cover.width}
         height={cover.height}
-        preload
+        priority
         fetchPriority="high"
+        quality={70}
+        sizes="(max-width: 768px) 100vw, 70vw"
         className="w-full md:w-[70%] max-md:object-left mx-auto max-h-[300px] md:max-h-[400px] lg:max-h-[500px] object-contain border-border border-0 rounded-[20px]"
       ></Image>
     </div>

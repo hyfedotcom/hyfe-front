@@ -1,22 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const TrackingScripts = dynamic(
-  () =>
-    import("@/components/analytics/TrackingScripts").then(
-      (module) => module.TrackingScripts,
-    ),
-  { ssr: false },
-);
-
-const CookieBanner = dynamic(
-  () =>
-    import("@/components/cookie/CookieBanner").then(
-      (module) => module.CookieBanner,
-    ),
-  { ssr: false },
-);
+import { TrackingScripts } from "@/components/analytics/TrackingScripts";
+import { CookieBanner } from "@/components/cookie/CookieBanner";
 
 export function CookieConsentRuntime() {
   return (
