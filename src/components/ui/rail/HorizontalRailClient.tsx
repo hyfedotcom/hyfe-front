@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ButtonAccordion } from "../buttons/ButtonAccordion";
 
 export function HorizontalRailClient({
@@ -15,6 +15,39 @@ export function HorizontalRailClient({
   classNameBtn?: string;
 }) {
   const railRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    let rafId = 0;
+    const clampScrollPosition = () => {
+      rafId = 0;
+      const maxScrollLeft = Math.max(0, rail.scrollWidth - rail.clientWidth);
+      if (rail.scrollLeft < 0) {
+        rail.scrollLeft = 0;
+      } else if (rail.scrollLeft > maxScrollLeft) {
+        rail.scrollLeft = maxScrollLeft;
+      }
+    };
+
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(clampScrollPosition);
+    };
+
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", clampScrollPosition);
+    clampScrollPosition();
+
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      rail.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", clampScrollPosition);
+    };
+  }, []);
 
   function move(side: "left" | "right") {
     const rail = railRef.current;
@@ -31,8 +64,14 @@ export function HorizontalRailClient({
     const cardWidth = firstCard.getBoundingClientRect().width;
 
     const step = side === "left" ? -(cardWidth + gap) : cardWidth + gap;
-    rail.scrollBy({
-      left: step,
+    const maxScrollLeft = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    const targetScrollLeft = Math.min(
+      maxScrollLeft,
+      Math.max(0, rail.scrollLeft + step),
+    );
+
+    rail.scrollTo({
+      left: targetScrollLeft,
       behavior: "smooth",
     });
   }
@@ -41,7 +80,7 @@ export function HorizontalRailClient({
     <div className={className}>
       <div
         ref={railRef}
-        className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="max-w-full overflow-x-auto overscroll-x-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </div>
