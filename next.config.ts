@@ -4,6 +4,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   images: {
+    unoptimized: true,
     dangerouslyAllowLocalIP: isDev,
     qualities: [40, 70, 75],
     remotePatterns: [

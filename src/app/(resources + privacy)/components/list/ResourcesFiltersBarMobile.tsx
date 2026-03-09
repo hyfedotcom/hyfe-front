@@ -1,18 +1,14 @@
 import clsx from "clsx";
 import { ResourceTag } from "@/app/(resources + privacy)/components/ui/ResourceTag";
 import { cross } from "@/shared/icons/icons";
+import { SearchInput } from "@/components/ui/search&Tags/SearchInput";
+import { Tags } from "@/components/ui/search&Tags/Tags";
 
 type ResourcesFiltersBarMobileProps = {
   uniqueTags: string[];
   activeTags: string[];
-  search: string;
   mobileFiltersOpen: boolean;
-  hasSearch: boolean;
   hasFilters: boolean;
-  onToggleTag: (tag: string) => void;
-  onSearchChange: (value: string) => void;
-  onSearchFocus: () => void;
-  onSearchBlur: () => void;
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
 };
@@ -20,19 +16,12 @@ type ResourcesFiltersBarMobileProps = {
 export function ResourcesFiltersBarMobile({
   uniqueTags,
   activeTags,
-  search,
   mobileFiltersOpen,
-  hasSearch,
   hasFilters,
-  onToggleTag,
-  onSearchChange,
-  onSearchFocus,
-  onSearchBlur,
   onClearAllFilters,
   onToggleMobileFilters,
 }: ResourcesFiltersBarMobileProps) {
   const hasActiveTags = activeTags.length > 0;
-  const isSearchActive = hasSearch || mobileFiltersOpen;
   const filtersButtonStateClass = hasActiveTags
     ? "border-white/85 ring-1 ring-primary/45 bg-gradient-to-tl from-primary/50 via-white to-white shadow-[0_8px_18px_rgba(15,23,42,0.12),0_1px_4px_rgba(255,255,255,0.72)_inset]"
     : mobileFiltersOpen
@@ -42,46 +31,7 @@ export function ResourcesFiltersBarMobile({
   return (
     <div className="md:hidden space-y-2 m-2">
       <div className="flex items-center gap-2">
-        <div
-          id="resources-mobile-search"
-          className={clsx(
-            "resources-glass-search-shell relative flex h-11 w-full items-center px-3",
-            isSearchActive
-              ? "resources-glass-search-open"
-              : "resources-glass-search-idle",
-          )}
-        >
-          <svg
-            className="pointer-events-none h-5 w-5 shrink-0 text-black/55"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <path
-              d="M21 21l-4.35-4.35"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-          <input
-            id="resources-search-mobile"
-            name="resources-search-mobile"
-            aria-label="Search resources"
-            type="search"
-            className="h-full w-full bg-transparent pl-2 pr-2 text-[13px] leading-[100%] text-black outline-none placeholder:text-black/45"
-            value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
-            onFocus={onSearchFocus}
-            onBlur={onSearchBlur}
-            placeholder="Search resources"
-          />
-        </div>
+        <SearchInput placeholder={""} className="resources-glass-search-shell relative flex h-11 w-full items-center px-3 isSearchActive resources-glass-search-open" />
 
         {uniqueTags.length > 0 && (
           <button
@@ -137,15 +87,7 @@ export function ResourcesFiltersBarMobile({
         >
           <div className="max-h-[45vh] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex flex-wrap gap-2">
-              {uniqueTags.map((tag) => (
-                <ResourceTag
-                  key={tag}
-                  tag={tag}
-                  active={activeTags.includes(tag)}
-                  onClick={() => onToggleTag(tag)}
-                  glass
-                />
-              ))}
+              <Tags tags={uniqueTags} />
             </div>
           </div>
         </div>

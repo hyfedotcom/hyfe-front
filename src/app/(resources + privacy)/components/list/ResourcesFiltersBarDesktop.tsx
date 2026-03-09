@@ -1,36 +1,24 @@
-import clsx from "clsx";
-import { ResourceTag } from "@/app/(resources + privacy)/components/ui/ResourceTag";
 import { cross } from "@/shared/icons/icons";
+import { SearchInput } from "@/components/ui/search&Tags/SearchInput";
+import { Tags } from "@/components/ui/search&Tags/Tags";
 
 type ResourcesFiltersBarDesktopProps = {
   uniqueTags: string[];
   activeTags: string[];
   hasFilters: boolean;
-  isDesktopSearchOpen: boolean;
-  search: string;
+
   searchPlaceholder: string;
-  onToggleTag: (tag: string) => void;
-  onSearchChange: (value: string) => void;
-  onSearchFocus: () => void;
-  onSearchBlur: () => void;
   onClearAllFilters: () => void;
 };
 
 export function ResourcesFiltersBarDesktop({
   uniqueTags,
-  activeTags,
   hasFilters,
-  isDesktopSearchOpen,
-  search,
   searchPlaceholder,
-  onToggleTag,
-  onSearchChange,
-  onSearchFocus,
-  onSearchBlur,
   onClearAllFilters,
 }: ResourcesFiltersBarDesktopProps) {
   return (
-    <div className={`${ uniqueTags.length === 0 && "pl-3"} hidden min-w-0 md:flex items-center`}>
+    <div className={`${uniqueTags.length === 0 && "pl-3"} hidden min-w-0 md:flex items-center`}>
       {uniqueTags.length > 0 && (
         <div className="flex min-w-0 flex-1 items-center overflow-visible">
           {hasFilters && (
@@ -46,20 +34,7 @@ export function ResourcesFiltersBarDesktop({
           <div className="min-w-0 flex-1 overflow-visible">
             <div className="">
               <div className="flex min-w-0 gap-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                {uniqueTags.map((tag, index) => (
-                  <ResourceTag
-                    key={tag}
-                    tag={tag}
-                    active={activeTags.includes(tag)}
-                    onClick={() => onToggleTag(tag)}
-                    glass
-                    className={clsx(
-                      "shrink-0",
-                      index === 0 && "ml-3",
-                      index === uniqueTags.length - 1 && "mr-3",
-                    )}
-                  />
-                ))}
+                <Tags tags={uniqueTags} />
               </div>
             </div>
           </div>
@@ -79,7 +54,9 @@ export function ResourcesFiltersBarDesktop({
         </button>
       )}
 
-      <label
+
+      <SearchInput placeholder={searchPlaceholder} className="resources-glass-search-shell group relative ml-auto mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3  resources-glass-search-open" />
+      {/* <label
         className={clsx(
           "resources-glass-search-shell group relative ml-auto mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3",
           isDesktopSearchOpen
@@ -116,8 +93,8 @@ export function ResourcesFiltersBarDesktop({
           onFocus={onSearchFocus}
           onBlur={onSearchBlur}
           placeholder={searchPlaceholder}
-        />
-      </label>
-    </div>
+        /> */}
+      {/* </label> */}
+    </div >
   );
 }

@@ -135,7 +135,7 @@ export function HeroStatsScene({
                 width={1600}
                 height={900}
                 alt="Global map"
-                quality={80}
+                quality={70}
                 sizes="100vw"
                 loading="eager"
                 onLoad={() => setIsMapReady(true)}

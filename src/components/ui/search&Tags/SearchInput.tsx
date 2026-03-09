@@ -1,5 +1,6 @@
 "use client";
 
+import { s } from "framer-motion/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useRef } from "react";
 

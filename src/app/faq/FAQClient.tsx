@@ -1,7 +1,7 @@
 "use client";
 
 import { JumpLinks } from "@/components/navigation/JumpLinks";
-import { SearchInput } from "@/components/ui/search/SearchInput";
+import { SearchInput } from "@/components/ui/search&Tags/SearchInput";
 import { FaqSectionType } from "@/features/faq/schema/faq.schema";
 import { filterFaqSections } from "@/features/faq/utils/filterSections";
 import { useActiveSection } from "@/hooks/useActiveSection";

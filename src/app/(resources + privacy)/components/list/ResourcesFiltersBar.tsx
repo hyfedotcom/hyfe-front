@@ -7,17 +7,10 @@ type ResourcesFiltersBarProps = {
   type: string;
   uniqueTags: string[];
   activeTags: string[];
-  search: string;
-  hasSearch: boolean;
   hasFilters: boolean;
   isPinned: boolean;
   isDown: boolean;
-  isDesktopSearchOpen: boolean;
   mobileFiltersOpen: boolean;
-  onToggleTag: (tag: string) => void;
-  onSearchChange: (value: string) => void;
-  onSearchFocus: () => void;
-  onSearchBlur: () => void;
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
   onCloseMobilePanels: () => void;
@@ -27,17 +20,10 @@ export function ResourcesFiltersBar({
   type,
   uniqueTags,
   activeTags,
-  search,
-  hasSearch,
   hasFilters,
   isPinned,
   isDown,
-  isDesktopSearchOpen,
   mobileFiltersOpen,
-  onToggleTag,
-  onSearchChange,
-  onSearchFocus,
-  onSearchBlur,
   onClearAllFilters,
   onToggleMobileFilters,
   onCloseMobilePanels,
@@ -77,27 +63,16 @@ export function ResourcesFiltersBar({
               uniqueTags={uniqueTags}
               activeTags={activeTags}
               hasFilters={hasFilters}
-              isDesktopSearchOpen={isDesktopSearchOpen}
-              search={search}
+
               searchPlaceholder={searchPlaceholder}
-              onToggleTag={onToggleTag}
-              onSearchChange={onSearchChange}
-              onSearchFocus={onSearchFocus}
-              onSearchBlur={onSearchBlur}
               onClearAllFilters={onClearAllFilters}
             />
 
             <ResourcesFiltersBarMobile
               uniqueTags={uniqueTags}
               activeTags={activeTags}
-              search={search}
               mobileFiltersOpen={mobileFiltersOpen}
-              hasSearch={hasSearch}
               hasFilters={hasFilters}
-              onToggleTag={onToggleTag}
-              onSearchChange={onSearchChange}
-              onSearchFocus={onSearchFocus}
-              onSearchBlur={onSearchBlur}
               onClearAllFilters={onClearAllFilters}
               onToggleMobileFilters={onToggleMobileFilters}
             />

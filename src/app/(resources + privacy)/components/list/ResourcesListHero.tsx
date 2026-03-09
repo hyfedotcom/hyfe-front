@@ -48,7 +48,7 @@ export function ResourcesListHero({
           </p>
         )}
       </div>
-      {!isCompact && statsList.length > 0 && (
+      {statsList.length > 0 && (
         <section aria-label="Resource stats" className="max-w-[1140px]">
           <div className="rounded-[30px]">
             <ul className="relative z-10 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
