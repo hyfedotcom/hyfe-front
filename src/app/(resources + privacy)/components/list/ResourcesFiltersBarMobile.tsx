@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { ResourceTag } from "@/app/(resources + privacy)/components/ui/ResourceTag";
 import { cross } from "@/shared/icons/icons";
 import { SearchInput } from "@/components/ui/search&Tags/SearchInput";
 import { Tags } from "@/components/ui/search&Tags/Tags";
@@ -29,9 +28,9 @@ export function ResourcesFiltersBarMobile({
       : "resources-glass-search-idle";
 
   return (
-    <div className="md:hidden space-y-2 m-2">
-      <div className="flex items-center gap-2">
-        <SearchInput placeholder={""} className="resources-glass-search-shell relative flex h-11 w-full items-center px-3 isSearchActive resources-glass-search-open" />
+    <div className="md:hidden space-y-2 ">
+      <div className="flex items-center max-md:px-2 gap-2">
+        <SearchInput placeholder={""} className={`${uniqueTags.length === 0  ? "ml-2" : "mr-0!"} ${hasFilters && "mr-0!"}  resources-glass-search-shell relative flex max-md:shrink-1  w-full items-center px-3  resources-glass-search-open`}/>
 
         {uniqueTags.length > 0 && (
           <button
@@ -69,7 +68,7 @@ export function ResourcesFiltersBarMobile({
           <button
             type="button"
             onClick={onClearAllFilters}
-            className="resources-glass-pill-surface resources-glass-pill-action flex h-11 w-11 shrink-0 items-center justify-center"
+            className="resources-glass-pill-surface  resources-glass-pill-action flex h-11 w-11 shrink-0 items-center justify-center"
             aria-label="Clear search and filters"
           >
             {cross}

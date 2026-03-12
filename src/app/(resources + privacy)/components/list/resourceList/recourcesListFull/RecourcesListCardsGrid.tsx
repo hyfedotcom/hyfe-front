@@ -9,6 +9,7 @@ type RecourcesListCardsGridProps = {
   cards: ResourceCardType[];
   cardsStartRef: RefObject<HTMLDivElement | null>;
   detailHref: (slug: string) => string;
+  onOpenCard: () => void;
   renderMode: ResourceListRenderMode;
 };
 
@@ -16,6 +17,7 @@ export function RecourcesListCardsGrid({
   cards,
   cardsStartRef,
   detailHref,
+  onOpenCard,
   renderMode,
 }: RecourcesListCardsGridProps) {
   return (
@@ -28,6 +30,7 @@ export function RecourcesListCardsGrid({
           className="block h-full w-full"
           href={detailHref(card.slug)}
           key={card.slug}
+          onClick={onOpenCard}
           scroll={false}
         >
           <ResourceCard card={card} renderMode={renderMode} index={index} />

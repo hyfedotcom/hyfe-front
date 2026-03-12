@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SheetProvider } from "@/context/sheet/sheetContext";
 import { useSheetNavigationState } from "@/context/sheet/sheetNavigationContext";
+import { resolveResourceListHrefFromStorage } from "@/features/resources/utils/resourceListUrlState";
 import { lockBodyScroll } from "@/shared/utils/bodyScrollLock";
 
 type Props = {
@@ -146,22 +147,32 @@ export function Sheet({
       isClosingRef.current = true;
       setIsClosingState(true);
 
-      const fallback = inheritedFallbackRef.current ?? returnBackRef.current;
+      const resolvedHref = href
+        ? resolveResourceListHrefFromStorage(href)
+        : undefined;
+      const resolvedFallbackPath = fallbackPath
+        ? resolveResourceListHrefFromStorage(fallbackPath)
+        : undefined;
+      const inheritedFallback = inheritedFallbackRef.current;
+      const fallbackBase = inheritedFallback ?? returnBackRef.current;
+      const fallback = fallbackBase
+        ? resolveResourceListHrefFromStorage(fallbackBase)
+        : undefined;
 
-      if (href) {
-        if (fallbackPath && fallbackPath !== href) {
+      if (resolvedHref) {
+        if (resolvedFallbackPath && resolvedFallbackPath !== resolvedHref) {
           setNextCloseFallback({
-            targetPath: href,
-            fallbackPath,
+            targetPath: resolvedHref,
+            fallbackPath: resolvedFallbackPath,
           });
         }
-        pendingNavRef.current = { link: href };
+        pendingNavRef.current = { link: resolvedHref };
         setOpen(false);
         closeTimerRef.current = window.setTimeout(finishClose, 400);
         return;
       }
       if (fallback) pendingNavRef.current = { link: fallback };
-      if (fallback === inheritedFallbackRef.current) {
+      if (fallbackBase === inheritedFallbackRef.current) {
         inheritedFallbackRef.current = undefined;
       }
 

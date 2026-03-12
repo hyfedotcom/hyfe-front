@@ -49,6 +49,7 @@ export function RecourcesListFull({
     nextPage,
     pageHref,
     pageSize,
+    rememberCurrentListState,
     shown,
     total,
     uniqueTags,
@@ -56,6 +57,7 @@ export function RecourcesListFull({
   } = useRecourcesListViewModel({
     data,
     initialPage,
+    renderMode,
     tags,
     type,
   });
@@ -87,6 +89,7 @@ export function RecourcesListFull({
         cards={visibleList}
         cardsStartRef={cardsStartRef}
         detailHref={detailHref}
+        onOpenCard={rememberCurrentListState}
         renderMode={renderMode}
       />
 

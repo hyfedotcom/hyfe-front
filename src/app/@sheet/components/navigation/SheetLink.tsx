@@ -27,6 +27,7 @@ export function SheetLink({
     if (isSimpleLeftClick && isInternal) {
       e.preventDefault();
       if (context?.isClosing) return;
+
       context?.close(href, fallbackPath);
     }
   };

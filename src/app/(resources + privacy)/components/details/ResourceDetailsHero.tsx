@@ -28,13 +28,13 @@ export function ResourceDetailsHero({
         {tags.length > 0 && (
           <div className="flex justify-start gap-2">
             {tags.map((t: { tag: string }, i: number) => (
-              <SheetLink mode="close" key={i} href={`/${type}`}>
+              <SheetLink mode="close" key={i} href={`/${type}?tag=${t.tag}`}>
                 <ResourceTag tag={t.tag} />
               </SheetLink>
             ))}
           </div>
         )}
-        <h1 className="w-full  text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px] text-balance mx-auto! mx-auto">
+        <h1 className="w-full  text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px]! text-balance mx-auto! mx-auto">
           {title}
         </h1>
         <div className="flex justify-between items-center gap-5 w-max mr-auto">

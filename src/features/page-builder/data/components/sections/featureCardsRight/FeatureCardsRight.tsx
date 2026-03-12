@@ -14,7 +14,7 @@ export function FeatureCardsRight({
       <div
         className={`  flex flex-col justify-between lg:flex-row gap-10 md:gap-15 lg:gap-8 bg-white`}
       >
-        <div className="">
+        <div className="min-w-1/3">
           <ContentContainer
             content={section}
             classContainer=" lg:text-left sticky top-[30%]  max-w-[700px] lg:w-full px-4 md:px-10 lg:pr-0 xl:pr-0 xl:pl-20"

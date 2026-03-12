@@ -33,7 +33,7 @@ export default async function VacancySingle({ params }: { params: Props }) {
             <TimeZone time_zone={time_zone} />
             <EmploymentType employment_type={employment_type} />
           </div>
-          <h1 className="text-[22px]! md:text-[42px]! lg:text-[52px]!">
+          <h1 className="text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px]!">
             {title}
           </h1>
         </div>

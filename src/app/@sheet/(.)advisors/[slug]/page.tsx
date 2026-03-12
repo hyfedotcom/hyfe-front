@@ -29,7 +29,7 @@ export default async function Member({ params }: { params: Props }) {
       </div>
       <div className="space-y-10">
         <div className="space-y-1 mb-10">
-          <h1 className="text-[28px]! md:text-[52px]!">{name}</h1>
+          <h1 className="text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px]!">{name}</h1>
           <p className="body-large text-black! font-medium!">{job}</p>
         </div>
         {location && <LocationsType location_type={location} />}

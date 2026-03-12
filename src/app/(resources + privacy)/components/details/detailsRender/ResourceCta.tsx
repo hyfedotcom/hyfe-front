@@ -61,7 +61,7 @@ export function ResourceCta({
             mode === "close" && target ? `/${target.type}` : undefined;
 
           const content = (
-            <div className="flex flex-row justify-between items-center flex-1 h-full w-full ">
+            <div className="flex gap-3 md:gap-4  flex-row justify-between items-center flex-1 h-full w-full ">
               <span className="text-balance text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-medium ">
                 {e.label}
               </span>

@@ -17,8 +17,7 @@ export default async function Member({ params }: { params: Props }) {
   const member = await getMember(slug);
   if (!member) notFound();
   const { biography, image, job, location, name, linkedin, twitter } = member;
-  console.log(twitter);
-  console.log(linkedin);
+
   const Linkedin = ICONS.Linkedin;
   const Twitter = ICONS.Twitter;
 
@@ -37,7 +36,7 @@ export default async function Member({ params }: { params: Props }) {
       </div>
       <div className="space-y-5 md:space-y-8 lg:space-y-10">
         <div className="space-y-3 mb-5 md:mb-10">
-          <h1 className="text-[28px]! md:text-[34px]! lg:text-[40px]!">
+          <h1 className="text-[24px]! md:text-[28px]! lg:text-[32px] xl:text-[36px]! 2xl:text-[40px]!">
             {name}
           </h1>
           <h4 className="text-[16px]! md:text-[18px]! lg:text-[20px]! text-body!">

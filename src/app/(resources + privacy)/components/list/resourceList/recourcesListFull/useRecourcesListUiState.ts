@@ -15,9 +15,7 @@ export function useRecourcesListUiState({
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const cardsStartRef = useRef<HTMLDivElement | null>(null);
-  const [isPinned, setIsPinned] = useState<boolean>(() =>
-    typeof window !== "undefined" ? window.scrollY > 0 : false,
-  );
+  const [isPinned, setIsPinned] = useState(false);
 
   const scrollToCardsStart = useCallback(() => {
     requestAnimationFrame(() => {

@@ -1,8 +1,14 @@
 "use client";
 
-import { s } from "framer-motion/client";
+import { isResourceType } from "@/features/resources/data/api/resourceType";
+import {
+  hasResourceListStateInSearchParams,
+  readResourceListUrlState,
+  saveResourceListUrlState,
+  subscribeResourceListUrlState,
+} from "@/features/resources/utils/resourceListUrlState";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 export function SearchInput({
   placeholder,
@@ -14,11 +20,39 @@ export function SearchInput({
   const searchParams = useSearchParams();
   const path = usePathname();
   const router = useRouter();
-  const value = searchParams.get("search") ?? "";
   const inputRef = useRef<HTMLInputElement | null>(null);
   const timeoutRef = useRef<number | null>(null);
+  const [storageVersion, setStorageVersion] = useState(0);
+
+  const pathSegments = useMemo(() => path.split("/").filter(Boolean), [path]);
+  const resourceType = useMemo(() => {
+    if (pathSegments.length === 0) return null;
+    return isResourceType(pathSegments[0]) ? pathSegments[0] : null;
+  }, [pathSegments]);
+
+  const isResourceDetailPath = Boolean(resourceType && pathSegments.length === 2);
+  const hasListStateInUrl = hasResourceListStateInSearchParams(searchParams);
+  const canUseStoredListState = isResourceDetailPath && !hasListStateInUrl;
+
+  const storedListState = useMemo(() => {
+    void storageVersion;
+    if (!resourceType || !canUseStoredListState) return null;
+    return readResourceListUrlState(resourceType);
+  }, [canUseStoredListState, resourceType, storageVersion]);
+
+  const value =
+    (searchParams.get("search") ?? "") || (storedListState?.search ?? "");
   const draftValueRef = useRef(value);
   const inputId = useId();
+
+  useEffect(() => {
+    if (!resourceType || !isResourceDetailPath) return;
+
+    return subscribeResourceListUrlState((detail) => {
+      if (detail.type !== resourceType) return;
+      setStorageVersion((prev) => prev + 1);
+    });
+  }, [isResourceDetailPath, resourceType]);
 
   const syncUrl = (nextValue: string) => {
     draftValueRef.current = nextValue;
@@ -28,6 +62,18 @@ export function SearchInput({
     }
 
     timeoutRef.current = window.setTimeout(() => {
+      if (resourceType && canUseStoredListState) {
+        const currentState =
+          storedListState ?? { search: "", tags: [], page: undefined };
+
+        saveResourceListUrlState(resourceType, {
+          ...currentState,
+          search: nextValue,
+          page: undefined,
+        });
+        return;
+      }
+
       const params = new URLSearchParams(searchParams.toString());
 
       if (nextValue.trim()) params.set("search", nextValue);

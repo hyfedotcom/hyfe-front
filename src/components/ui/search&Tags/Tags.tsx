@@ -1,30 +1,98 @@
+"use client";
+
 import { ResourceTag } from "@/features/resources/client";
+import { isResourceType } from "@/features/resources/data/api/resourceType";
+import {
+  hasResourceListStateInSearchParams,
+  readResourceListUrlState,
+  saveResourceListUrlState,
+  subscribeResourceListUrlState,
+} from "@/features/resources/utils/resourceListUrlState";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export function Tags({ tags }: { tags: string[] }) {
-    const router = useRouter()
-    const path = usePathname()
-    const searchParams = useSearchParams()
-    const tagsParams = searchParams.getAll("tag") ?? []
+  const router = useRouter();
+  const path = usePathname();
+  const searchParams = useSearchParams();
+  const [storageVersion, setStorageVersion] = useState(0);
 
+  const pathSegments = useMemo(() => path.split("/").filter(Boolean), [path]);
+  const resourceType = useMemo(() => {
+    if (pathSegments.length === 0) return null;
+    return isResourceType(pathSegments[0]) ? pathSegments[0] : null;
+  }, [pathSegments]);
 
-    const onChangeTag = (tag: string) => {
-        const params = new URLSearchParams(searchParams.toString())
-        const currentTags = params.getAll("tag")
+  const isResourceDetailPath = Boolean(resourceType && pathSegments.length === 2);
+  const hasListStateInUrl = hasResourceListStateInSearchParams(searchParams);
+  const canUseStoredListState = isResourceDetailPath && !hasListStateInUrl;
 
-        const nextTags = currentTags.includes(tag) ? currentTags.filter(t => t !== tag) : [...currentTags, tag]
+  const storedListState = useMemo(() => {
+    void storageVersion;
+    if (!resourceType || !canUseStoredListState) return null;
+    return readResourceListUrlState(resourceType);
+  }, [canUseStoredListState, resourceType, storageVersion]);
 
-        params.delete("tag")
+  const tagsParams = canUseStoredListState
+    ? storedListState?.tags ?? []
+    : searchParams.getAll("tag") ?? [];
 
-        nextTags.forEach(t => { params.append("tag", t) })
+  useEffect(() => {
+    if (!resourceType || !isResourceDetailPath) return;
 
-        const query = params.toString()
-        const nextUrl = query ? `${path}?${query}` : path
+    return subscribeResourceListUrlState((detail) => {
+      if (detail.type !== resourceType) return;
+      setStorageVersion((prev) => prev + 1);
+    });
+  }, [isResourceDetailPath, resourceType]);
 
-        router.replace(nextUrl, { scroll: true })
+  const onChangeTag = (tag: string) => {
+    if (resourceType && canUseStoredListState) {
+      const currentState =
+        storedListState ?? { search: "", tags: [], page: undefined };
+      const currentTags = currentState.tags;
+      const nextTags = currentTags.includes(tag)
+        ? currentTags.filter((t) => t !== tag)
+        : [...currentTags, tag];
+
+      saveResourceListUrlState(resourceType, {
+        ...currentState,
+        tags: nextTags,
+        page: undefined,
+      });
+      return;
     }
 
-    return <div className="flex gap-3">
-        {tags.map((t, i) => <ResourceTag key={`${t}-${i}`} active={tagsParams.includes(t)} glass tag={t} onClick={() => onChangeTag(t)} />)}
+    const params = new URLSearchParams(searchParams.toString());
+    const currentTags = params.getAll("tag");
+
+    const nextTags = currentTags.includes(tag)
+      ? currentTags.filter((t) => t !== tag)
+      : [...currentTags, tag];
+
+    params.delete("tag");
+
+    nextTags.forEach((t) => {
+      params.append("tag", t);
+    });
+
+    const query = params.toString();
+    const nextUrl = query ? `${path}?${query}` : path;
+
+    router.replace(nextUrl, { scroll: true });
+  };
+
+  return (
+    <div className="flex max-md:flex-wrap gap-3 md:pl-3.5">
+      {tags.map((tag, index) => (
+        <ResourceTag
+          key={`${tag}-${index}`}
+          active={tagsParams.includes(tag)}
+          glass
+          tag={tag}
+          onClick={() => onChangeTag(tag)}
+        />
+      ))}
     </div>
+  );
 }

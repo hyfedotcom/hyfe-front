@@ -5,21 +5,24 @@ export function ButtonAccordion({
   isActive,
   arialLabel = "Arrow button",
   activTextcolor = "text-white",
+  disabled = false,
   onClick,
 }: {
   className?: string;
   isActive?: boolean;
   arialLabel?: string;
   activTextcolor?: string;
+  disabled?: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       className={clsx(
-        "relative w-[36px] min-w-[36px] h-[36px] min-h-[36px] md:w-[50px] md:min-w-[50px] md:h-[50px] md:min-h-[50px] rounded-full flex items-center justify-center overflow-hidden cursor-pointer transition-colors",
+        "relative w-[36px] min-w-[36px] h-[36px] min-h-[36px] md:w-[50px] md:min-w-[50px] md:h-[50px] md:min-h-[50px] rounded-full flex items-center justify-center overflow-hidden cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-70",
         className,
       )}
       onClick={onClick}
+      disabled={disabled}
       aria-label={arialLabel}
     >
       {/* первая стрелка (базовая) */}

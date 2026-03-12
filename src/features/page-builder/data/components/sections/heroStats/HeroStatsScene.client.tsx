@@ -73,7 +73,7 @@ export function HeroStatsScene({
   const revealStart = 0.4;
   const revealSpan = 0.4;
   const step = totalItems > 0 ? revealSpan / totalItems : revealSpan;
-  console.log(ratio);
+
   const mapY = useTransform(scrollYProgress, [0, 0.2], [0, -120]);
   const mapTitleY = useTransform(scrollYProgress, [0.95, 1], [0, -45]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, !isMobile ? 1.5 : 1]);

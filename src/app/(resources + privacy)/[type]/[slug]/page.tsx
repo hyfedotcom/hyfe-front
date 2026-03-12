@@ -1,7 +1,7 @@
 import { ResourceDetails } from "@/app/(resources + privacy)/components/details/ResourceDetails";
 import {
   getResource,
-  getResourcesList,
+  getResourceSlugs,
   ResourceType,
 } from "@/features/resources";
 import { buildResourceDetailsBlocks } from "@/features/resources/utils/ResourceDetailsBuilder";
@@ -15,7 +15,6 @@ import { buildArticleJsonLd } from "@/components/seo/jsonLdBuilders";
 import { notFound } from "next/navigation";
 import { isResourceType } from "@/features/resources/data/api/resourceType";
 import { SheetShare } from "@/components/layouts/sheet/SheetShare";
-import { SheetNewsTimelineContainer } from "@/components/ui/timeline/SheetNewsTimelineContainer";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -37,9 +36,9 @@ const TYPES = [
 export async function generateStaticParams(): Promise<Params[]> {
   const all = await Promise.all(
     TYPES.map(async (type) => {
-      const data = await getResourcesList({ type });
-      if (!data?.list?.length) return [];
-      return data.list.map((item) => ({ type, slug: item.slug }));
+      const slugs = await getResourceSlugs(type);
+      if (!slugs.length) return [];
+      return slugs.map((slug) => ({ type, slug }));
     }),
   );
 

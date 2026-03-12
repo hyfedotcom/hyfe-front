@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ButtonAccordion } from "../buttons/ButtonAccordion";
 
 export function HorizontalRailClient({
@@ -17,46 +17,17 @@ export function HorizontalRailClient({
   classScoll?: string;
 }) {
   const railRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const rail = railRef.current;
-    if (!rail) return;
-
-    let rafId = 0;
-    const clampScrollPosition = () => {
-      rafId = 0;
-      const maxScrollLeft = Math.max(0, rail.scrollWidth - rail.clientWidth);
-      if (rail.scrollLeft < 0) {
-        rail.scrollLeft = 0;
-      } else if (rail.scrollLeft > maxScrollLeft) {
-        rail.scrollLeft = maxScrollLeft;
-      }
-    };
-
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(clampScrollPosition);
-    };
-
-    rail.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", clampScrollPosition);
-    clampScrollPosition();
-
-    return () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-      }
-      rail.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", clampScrollPosition);
-    };
-  }, []);
+  const [canLeft, setCanLeft] = useState<boolean>(false);
+  const [canRight, setCanRight] = useState<boolean>(true);
 
   function move(side: "left" | "right") {
     const rail = railRef.current;
     const firstCard = rail?.querySelector<HTMLElement>("[data-card]");
+
     if (!rail || !firstCard) return;
 
     const row = firstCard.parentElement;
+
     const styleTarget = row ?? rail;
     const rawGap =
       getComputedStyle(styleTarget).columnGap ||
@@ -78,6 +49,32 @@ export function HorizontalRailClient({
     });
   }
 
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const updateButtons = () => {
+      const scrollLeft = rail.scrollLeft;
+      const maxScrollLeft = Math.max(0, rail.scrollWidth - rail.clientWidth);
+      setCanLeft(scrollLeft > 1);
+      setCanRight(scrollLeft < maxScrollLeft - 1);
+      if (rail.scrollLeft < 0) {
+        rail.scrollLeft = 0;
+      } else if (rail.scrollLeft > maxScrollLeft) {
+        rail.scrollLeft = maxScrollLeft;
+      }
+    };
+
+    updateButtons();
+
+    rail.addEventListener("scroll", updateButtons, { passive: true });
+    window.addEventListener("resize", updateButtons);
+    return () => {
+      rail.removeEventListener("scroll", updateButtons);
+      window.removeEventListener("resize", updateButtons);
+    };
+  }, []);
+
   return (
     <div className={className}>
       <div
@@ -87,15 +84,17 @@ export function HorizontalRailClient({
         {children}
       </div>
       <div
-        className={`${hasManyCards ? "" : "flex lg:hidden"} ${classNameBtn} w-full flex gap-3 ml-auto w-max pr-4 md:pr-10 lg:pr-20 pt-4 md:pt-10 `}
+        className={`${hasManyCards ? "" : "flex lg:hidden"} ${classNameBtn}  flex gap-3 ml-auto w-max pr-4 md:pr-10 lg:pr-20 pt-4 md:pt-10 `}
       >
         <ButtonAccordion
           onClick={() => move("left")}
-          className="rotate-180 bg-black text-white active:scale-110 duration-300"
+          disabled={!canLeft}
+          className={`rotate-180 ${canLeft ? "active:scale-110 duration-300 bg-black text-white" : "bg-black/30 text-white cursor-not-allowed"}`}
         />
         <ButtonAccordion
           onClick={() => move("right")}
-          className=" bg-black text-white active:scale-110 duration-300"
+          disabled={!canRight}
+          className={`${canRight ? "active:scale-110 duration-300 bg-black text-white" : "bg-black/30 text-white cursor-not-allowed"}`}
         />
       </div>
     </div>
