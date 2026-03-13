@@ -20,6 +20,7 @@ import NewsIcon from "@/shared/icons/resources/NewsIcon";
 import PublicationIcon from "@/shared/icons/resources/PublicationIcon";
 import WhitePapersIcon from "@/shared/icons/resources/WhitePapersIcon";
 import { Button } from "@/components/ui/buttons/Button";
+import { HorizontalRailClient } from "@/components/ui/rail/HorizontalRailClient";
 
 export type ResourcesLists = ResourceCardListType[];
 export type ResourceTypes = Array<{ type: ResourcesTypes }>;
@@ -278,42 +279,42 @@ export function FeedContainer({
           const isActive = normalizedIndex === index;
           const panelId = `${tabListId}-panel-${index}`;
           const tabId = `${tabListId}-tab-${index}`;
+          const list = resourceCards
+          const length = resourceCards.length
+          const gridCols = length === 4 ? "grid-cols-4" : length === 3 ? "grid-cols-3" : length === 2 ? "grid-cols-2" : "grid-cols-1"
 
           return (
-            <div
-              key={`${type[index]?.type ?? index}-${index}`}
-              ref={(node) => {
-                panelRef.current[index] = node;
-              }}
-              id={panelId}
-              role="tabpanel"
-              aria-labelledby={tabId}
-              aria-hidden={!isActive}
-              inert={!isActive}
-              className={cx(
-                "w-full transition-all duration-300 ease-out",
-                "flex items-stretch gap-3 lg:gap-4 overflow-x-auto pb-2 pl-4 pr-4 snap-x snap-mandatory [scroll-padding-left:1rem] [scroll-padding-right:1rem] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-                "md:pb-0 md:pl-0 md:pr-0 md:grid md:gap-5 md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none",
-                isActive
-                  ? "relative z-10 opacity-100 translate-y-0 pointer-events-auto"
-                  : "absolute inset-0 z-0 opacity-0 translate-y-2 pointer-events-none",
-              )}
-            >
-              {resourceCards.map((card, cardIndex) => (
-                <Link
-                  scroll={false}
-                  key={`${card.slug}-${cardIndex}`}
-                  className={cx(
-                    "snap-start flex self-stretch flex-none w-[82vw] max-w-[340px]",
-                    "sm:w-[66vw] md:w-auto md:max-w-none md:h-full",
-                  )}
-                  href={`/${card.type}/${card.slug}`}
-                >
-                  <ResourceCard card={card}  renderMode="full"/>
-                </Link>
-              ))}
-            </div>
-          );
+            <HorizontalRailClient hasManyCards classNameBtn={`  ${list.length > 1 ? "min-xl:hidden!" : "hidden"}`} key={`${type[index]?.type ?? index}-${index}`} className={`left-1/2 -translate-x-1/2 w-screen  transition-all duration-300 ease-out ${isActive
+              ? "relative z-10 opacity-100 translate-y-0 pointer-events-auto"
+              : "absolute inset-0 z-0 opacity-0 translate-y-2 pointer-events-none"}`}>
+              <div
+
+                ref={(node) => {
+                  panelRef.current[index] = node;
+                }}
+                id={panelId}
+                role="tabpanel"
+                aria-labelledby={tabId}
+                aria-hidden={!isActive}
+                inert={!isActive}
+                className={`items-stretch gap-3 lg:gap-4 ${list.length > 1 ? "w-max" : "w-full"} xl:w-full grid ${gridCols}  px-4 md:px-10 xl:px-20`}
+              >
+                {resourceCards.map((card, cardIndex) => (
+                  <Link
+                    scroll={false}
+                    key={`${card.slug}-${cardIndex}`}
+                    className={
+                      `block self-stretch shrink-0 h-full  ${list.length > 1 ? "sm:w-[40vw] lg:w-[30vw] xl:w-full  w-[85vw]" : "w-full lg:w-[30vw] xl:w-full"}`
+                    }
+                    href={`/${card.type}/${card.slug}`}
+                    data-card
+                  >
+                    <ResourceCard card={card} renderMode="full" />
+                  </Link>
+                ))}
+              </div>
+            </HorizontalRailClient>
+          )
         })}
       </div>
     </div>

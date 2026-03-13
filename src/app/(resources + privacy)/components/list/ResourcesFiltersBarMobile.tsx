@@ -10,6 +10,7 @@ type ResourcesFiltersBarMobileProps = {
   hasFilters: boolean;
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
+  scrollToCardsStart: () => void
 };
 
 export function ResourcesFiltersBarMobile({
@@ -19,6 +20,7 @@ export function ResourcesFiltersBarMobile({
   hasFilters,
   onClearAllFilters,
   onToggleMobileFilters,
+  scrollToCardsStart
 }: ResourcesFiltersBarMobileProps) {
   const hasActiveTags = activeTags.length > 0;
   const filtersButtonStateClass = hasActiveTags
@@ -30,7 +32,7 @@ export function ResourcesFiltersBarMobile({
   return (
     <div className="md:hidden space-y-2 ">
       <div className="flex items-center max-md:px-2 gap-2">
-        <SearchInput placeholder={""} className={`${uniqueTags.length === 0  ? "ml-2" : "mr-0!"} ${hasFilters && "mr-0!"}  resources-glass-search-shell relative flex max-md:shrink-1  w-full items-center px-3  resources-glass-search-open`}/>
+        <SearchInput scrollToCardsStart={scrollToCardsStart} placeholder={""} className={`${uniqueTags.length === 0 ? "ml-2" : "mr-0!"} ${hasFilters && "mr-0!"}  resources-glass-search-shell relative flex max-md:shrink-1  w-full items-center px-3  resources-glass-search-open`} />
 
         {uniqueTags.length > 0 && (
           <button
@@ -86,7 +88,7 @@ export function ResourcesFiltersBarMobile({
         >
           <div className="max-h-[45vh] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex flex-wrap gap-2">
-              <Tags tags={uniqueTags} />
+              <Tags scrollToCardsStart={scrollToCardsStart} tags={uniqueTags} />
             </div>
           </div>
         </div>

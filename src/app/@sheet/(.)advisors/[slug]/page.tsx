@@ -18,12 +18,13 @@ export default async function Member({ params }: { params: Props }) {
   const { biography, image, job, location, name } = member;
   return (
     <div className="max-w-[970px] mx-auto pt-10 px-4 md:px-10">
-      <div className="relative w-[160px] h-[160px] sm:w-[240px] sm:h-[240px] lg:w-[320px] lg:h-[320px] mb-10">
+      <div className="relative w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px] lg:w-[280px] lg:h-[280px] mb-10">
         <Image
           src={image.url}
           alt={image.alt ?? name}
           fill
-          sizes="(max-width: 640px) 160px, (max-width: 1024px) 240px, 400px"
+          preload
+          sizes="(max-width: 639px) 160px, (max-width: 767px) 200px, (max-width: 1023px) 240px, 280px"
           className="object-cover rounded-full border border-border"
         />
       </div>

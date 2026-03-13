@@ -30,11 +30,13 @@ export function NavLink({
   children,
   className,
   onClick,
+  id
 }: {
   href: string;
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  id?: string
 }) {
   const hrefNormalized = normalizeHref(href);
   const isInternal = isInternalHref(hrefNormalized);

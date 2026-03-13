@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-export function Tags({ tags }: { tags: string[] }) {
+export function Tags({ tags, scrollToCardsStart }: { tags: string[], scrollToCardsStart: () => void }) {
   const router = useRouter();
   const path = usePathname();
   const searchParams = useSearchParams();
@@ -90,7 +90,7 @@ export function Tags({ tags }: { tags: string[] }) {
           active={tagsParams.includes(tag)}
           glass
           tag={tag}
-          onClick={() => onChangeTag(tag)}
+          onClick={() => { onChangeTag(tag); if (scrollToCardsStart) { scrollToCardsStart() } }}
         />
       ))}
     </div>

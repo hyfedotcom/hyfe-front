@@ -1,11 +1,10 @@
-"use client";
-
-import { NavLink } from "@/features/header/helpers/header.helpers";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Fragment } from "react";
 import type { NewsletterFormType } from "@/features/newsletter";
 import { NewsletterSignupForm } from "@/features/newsletter/components/NewsletterSignupForm";
 import type { FooterType } from "@/features/general/schema/domain";
-import { usePathname } from "next/navigation";
+import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
+import { FooterFrame } from "./FooterFrame";
 
 type FooterLink = {
   label: string;
@@ -19,6 +18,37 @@ type FooterGroup = {
 
 const FALLBACK_COPYRIGHT = "© 2026 Hyfe Inc. All Rights Reserved.";
 
+function FooterNavLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const normalizedHref = normalizeHref(href);
+
+  if (!isInternalHref(normalizedHref)) {
+    return (
+      <a
+        href={normalizedHref}
+        target="_blank"
+        rel="noreferrer"
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={normalizedHref} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 export function Footer({
   newsletter,
   footer,
@@ -26,37 +56,14 @@ export function Footer({
   newsletter: NewsletterFormType;
   footer?: FooterType | null;
 }) {
-  const pathname = usePathname();
-  const [hasCtaBeforeFooter, setHasCtaBeforeFooter] = useState(false);
   const navigationGroups: FooterGroup[] = footer?.navigation_groups ?? [];
   const legalLinks: FooterLink[] = footer?.legal_links ?? [];
   const copyrightText = footer?.copyright_text?.trim() || FALLBACK_COPYRIGHT;
-  const footerTopSpacingClass = hasCtaBeforeFooter
-    ? " "
-    : "rounded-t-[80px] shadow-[0_20px_40px_rgba(0,0,0,0.30)] pt-15 md:pt-20";
-
-  useEffect(() => {
-    const syncFooterSpacing = () => {
-      const markers = document.querySelectorAll<HTMLElement>(
-        "[data-page-builder-last-section]",
-      );
-      const marker = markers.item(markers.length - 1);
-      setHasCtaBeforeFooter(
-        marker?.dataset.pageBuilderLastSection === "cta"
-      );
-    };
-
-    syncFooterSpacing();
-    const frame = window.requestAnimationFrame(syncFooterSpacing);
-    return () => window.cancelAnimationFrame(frame);
-  }, [pathname]);
 
   return (
-    <footer
-      className={`px-4 md:px-10 xl:px-20 ${footerTopSpacingClass} pb-10  bg-white space-y-[60px] z-1000 relative`}
-    >
+    <FooterFrame>
       <div
-        className=" space-y-8 mt-2  text-center! mx-auto"
+        className="space-y-8 mt-2 text-center! mx-auto"
         aria-labelledby="news-subscription-title-footer"
       >
         <div className="space-y-3">
@@ -76,7 +83,9 @@ export function Footer({
           align="center"
         />
       </div>
-      <div className="w-[70vw] mx-auto h-[1px] bg-[#D5D7DD]"></div>
+
+      <div className="w-[70vw] mx-auto h-[1px] bg-[#D5D7DD]" />
+
       {navigationGroups.length > 0 && (
         <div className="grid grid-cols-2 gap-10 md:flex w-full justify-evenly">
           {navigationGroups.map((group) => (
@@ -85,41 +94,43 @@ export function Footer({
                 {group.title}
               </p>
               {group.links.map((link) => (
-                <NavLink
+                <FooterNavLink
                   href={link.url}
                   key={`${group.title}-${link.url}-${link.label}`}
                   className="body-medium text-black! pb-3 font-medium!"
                 >
                   {link.label}
-                </NavLink>
+                </FooterNavLink>
               ))}
             </div>
           ))}
         </div>
       )}
-      <div className="w-[70vw] mx-auto h-[1px] bg-[#D5D7DD]"></div>
+
+      <div className="w-[70vw] mx-auto h-[1px] bg-[#D5D7DD]" />
+
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-center">{copyrightText}</p>
         {legalLinks.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm md:text-base">
             {legalLinks.map((link, idx) => (
-              <React.Fragment key={`${link.url}-${link.label}`}>
+              <Fragment key={`${link.url}-${link.label}`}>
                 {idx > 0 && (
                   <span aria-hidden className="text-black/30">
                     |
                   </span>
                 )}
-                <NavLink
+                <FooterNavLink
                   href={link.url}
                   className="underline-offset-2 hover:underline text-black/80 hover:text-black"
                 >
                   {link.label}
-                </NavLink>
-              </React.Fragment>
+                </FooterNavLink>
+              </Fragment>
             ))}
           </div>
         )}
       </div>
-    </footer>
+    </FooterFrame>
   );
 }

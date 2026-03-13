@@ -6,7 +6,7 @@ type ResourcesFiltersBarDesktopProps = {
   uniqueTags: string[];
   activeTags: string[];
   hasFilters: boolean;
-
+  scrollToCardsStart: () => void,
   searchPlaceholder: string;
   onClearAllFilters: () => void;
 };
@@ -16,6 +16,7 @@ export function ResourcesFiltersBarDesktop({
   hasFilters,
   searchPlaceholder,
   onClearAllFilters,
+  scrollToCardsStart
 }: ResourcesFiltersBarDesktopProps) {
   return (
     <div className={`${uniqueTags.length === 0 && "pl-3"} hidden min-w-0 md:flex items-center`}>
@@ -34,7 +35,7 @@ export function ResourcesFiltersBarDesktop({
           <div className="min-w-0 flex-1 overflow-visible">
             <div className="">
               <div className="flex min-w-0 gap-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                <Tags tags={uniqueTags} />
+                <Tags scrollToCardsStart={scrollToCardsStart} tags={uniqueTags} />
               </div>
             </div>
           </div>
@@ -55,7 +56,7 @@ export function ResourcesFiltersBarDesktop({
       )}
 
 
-      <SearchInput placeholder={searchPlaceholder} className="resources-glass-search-shell group relative ml-auto mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3  resources-glass-search-open" />
+      <SearchInput scrollToCardsStart={scrollToCardsStart} placeholder={searchPlaceholder} className="resources-glass-search-shell group relative ml-auto mr-2 my-2 flex h-11 w-[250px] shrink-0 items-center px-3 transition-colors md:mr-3 md:my-3  resources-glass-search-open" />
 
     </div >
   );

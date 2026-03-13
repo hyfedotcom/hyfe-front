@@ -61,10 +61,9 @@ export function ResourceDetailsHero({
         alt={cover.alt ?? title}
         width={cover.width}
         height={cover.height}
-        priority
-        fetchPriority="high"
+        preload
         quality={70}
-        sizes="(max-width: 768px) 100vw, 70vw"
+        sizes="(max-width: 767px) 100vw, 70vw"
         className="w-full md:w-[70%] max-md:object-left mx-auto max-h-[300px] md:max-h-[400px] lg:max-h-[500px] object-contain border-border border-0 rounded-[20px]"
       ></Image>
     </div>

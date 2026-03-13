@@ -24,7 +24,6 @@ export default function HeroClient() {
             src="/image/tablet-hero.png"
             width={1254}
             height={807}
-            fetchPriority="high"
             preload
             alt="cough monitor and dashboard"
           />

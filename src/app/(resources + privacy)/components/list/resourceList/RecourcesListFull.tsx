@@ -83,6 +83,7 @@ export function RecourcesListFull({
         onClearAllFilters={clearAllFilters}
         onToggleMobileFilters={toggleMobileFilters}
         onCloseMobilePanels={closeMobilePanels}
+        scrollToCardsStart={scrollToCardsStart}
       />
 
       <RecourcesListCardsGrid

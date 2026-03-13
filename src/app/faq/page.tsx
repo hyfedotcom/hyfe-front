@@ -35,9 +35,9 @@ export default async function FAQ({}) {
       {faqJsonLd && <JsonLd data={faqJsonLd} id="faq-jsonld" />}
       <SeoStructuredData seo={data.seo} id="faq-seo-jsonld" />
       <div className="relative mx-auto lg:grid xl:grid-cols-[30%_70%] 2xl:grid-cols-[30%_70%] lg:gap-x-4 items-stretch">
-        <main className="lg:col-start-2 xl:justify-self-start w-full max-w-[1000px] pt-[140px] md:pt-[260px] lg:pb-[60px]">
+        <main className="lg:col-start-2 xl:justify-self-start w-full max-w-[1000px] pt-[100px] md:pt-[160px] lg:pb-[60px]">
           <div className="space-y-5">
-            <h1>{title}</h1>
+            <h1 className="font-medium!">{title}</h1>
             <p>{paragraph}</p>
           </div>
         </main>

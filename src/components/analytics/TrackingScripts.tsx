@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useEffect, useState } from "react";
 
 const GTM_ID = "GTM-K646M5L";
 const GOOGLE_TAG_ID = "G-FDYY62BKMY";
@@ -8,6 +9,12 @@ const AHREFS_KEY = "oKxNRpsjYqZ73g8TXQbS7w";
 const CLARITY_ID = "i3tshx1j7p";
 
 export function TrackingScripts() {
+  const [isReady, setIsReady] = useState(false)
+  useEffect(() => {
+    setIsReady(true)
+  }, [])
+
+  if (!isReady) return null
   return (
     <>
       <Script
@@ -26,7 +33,7 @@ export function TrackingScripts() {
       </Script>
 
       {/* GTM still loads separately for container-managed tags. */}
-      <Script id="gtm-init" strategy="lazyOnload">
+      {/* <Script id="gtm-init" strategy="lazyOnload">
         {`
           (function(w,d,s,l,i){
             w[l]=w[l]||[];
@@ -39,7 +46,7 @@ export function TrackingScripts() {
             f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','${GTM_ID}');
         `}
-      </Script>
+      </Script> */}
 
       {/* Deferred analytics: load non-critical third-party trackers after window load. */}
       <Script

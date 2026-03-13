@@ -14,7 +14,7 @@ export default async function TeamListPage() {
       <SeoStructuredData seo={team.seo} id="team-seo-jsonld" />
       <div className="max-w-[1220px] mx-auto">
         <main className="pt-[100px] md:pt-[160px] pb-[40px] md:pb-[80px]  space-y-5">
-          <h1 className="mx-auto">{title}</h1>
+          <h1 className="mx-auto font-medium!">{title}</h1>
           {paragraph && <p className="mx-auto">{paragraph}</p>}
         </main>
         <div className="space-y-20">

@@ -23,7 +23,7 @@ export function HorizontalRailClient({
   function move(side: "left" | "right") {
     const rail = railRef.current;
     const firstCard = rail?.querySelector<HTMLElement>("[data-card]");
-
+    console.log(rail)
     if (!rail || !firstCard) return;
 
     const row = firstCard.parentElement;
@@ -79,12 +79,12 @@ export function HorizontalRailClient({
     <div className={className}>
       <div
         ref={railRef}
-        className={`${classScoll} ax-w-full overscroll-x-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+        className={`${classScoll} max-w-full overscroll-x-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {children}
       </div>
       <div
-        className={`${hasManyCards ? "" : "flex lg:hidden"} ${classNameBtn}  flex gap-3 ml-auto w-max pr-4 md:pr-10 lg:pr-20 pt-4 md:pt-10 `}
+        className={`${hasManyCards ? "" : "flex lg:hidden"} ${classNameBtn}  flex gap-3 ml-auto w-max pr-4 md:pr-10 xl:pr-20 pt-4 md:pt-10 `}
       >
         <ButtonAccordion
           onClick={() => move("left")}

@@ -33,7 +33,7 @@ export default async function LegalLayout({ type }: { type: string }) {
         className={` legal max-w-[950px] mx-auto px-4 md:px-10 ${
           legalPage.content_only
             ? "py-10 md:py-16"
-            : "pt-[220px] pb-[100px] md:pt-[240px] md:pb-[140px]"
+            : "pt-[100px] pb-[100px] md:pt-[140px] md:pb-[140px]"
         }`}
       >
         <div className="space-y-8 md:space-y-10">

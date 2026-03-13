@@ -13,9 +13,11 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 export function SearchInput({
   placeholder,
   className,
+  scrollToCardsStart
 }: {
   placeholder: string;
   className: string;
+  scrollToCardsStart?: () => void
 }) {
   const searchParams = useSearchParams();
   const path = usePathname();
@@ -143,7 +145,11 @@ export function SearchInput({
         type="search"
         placeholder={placeholder}
         defaultValue={value}
-        onChange={(e) => syncUrl(e.target.value)}
+        onChange={(e) => {
+          syncUrl(e.target.value); if (scrollToCardsStart) {
+            scrollToCardsStart();
+          }
+        }}
       />
     </label>
   );

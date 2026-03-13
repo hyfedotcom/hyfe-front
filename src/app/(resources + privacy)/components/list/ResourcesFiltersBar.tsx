@@ -14,6 +14,7 @@ type ResourcesFiltersBarProps = {
   onClearAllFilters: () => void;
   onToggleMobileFilters: () => void;
   onCloseMobilePanels: () => void;
+  scrollToCardsStart: () => void;
 };
 
 export function ResourcesFiltersBar({
@@ -27,6 +28,7 @@ export function ResourcesFiltersBar({
   onClearAllFilters,
   onToggleMobileFilters,
   onCloseMobilePanels,
+  scrollToCardsStart,
 }: ResourcesFiltersBarProps) {
   const containerClassName = clsx(
     "sticky z-[100] w-full px-4 md:px-10 mt-3 md:mt-8 xl:px-20",
@@ -66,15 +68,16 @@ export function ResourcesFiltersBar({
 
               searchPlaceholder={searchPlaceholder}
               onClearAllFilters={onClearAllFilters}
+              scrollToCardsStart={scrollToCardsStart}
             />
 
             <ResourcesFiltersBarMobile
               uniqueTags={uniqueTags}
               activeTags={activeTags}
               hasFilters={hasFilters}
-              
-              mobileFiltersOpen={mobileFiltersOpen}
 
+              mobileFiltersOpen={mobileFiltersOpen}
+              scrollToCardsStart={scrollToCardsStart}
               onClearAllFilters={onClearAllFilters}
               onToggleMobileFilters={onToggleMobileFilters}
             />
