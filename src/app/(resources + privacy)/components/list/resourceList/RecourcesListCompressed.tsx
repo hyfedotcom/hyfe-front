@@ -1,4 +1,4 @@
-import { ResourceCard } from "@/features/resources/client";
+import { ResourceCard } from "@/features/resources/card";
 import type { ResourceCardType } from "@/features/resources/data/resources.types";
 import Link from "next/link";
 import { ResourcesFiltersBarCompressed } from "./ResourcesFiltersBarCompressed";

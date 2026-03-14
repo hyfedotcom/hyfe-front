@@ -9,7 +9,7 @@ import { SolutionCard } from "./SolutionsCard";
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "@/framer";
-import { useWindowMetrics } from "@/context/window/windowContext";
+import { STACKED_LAYOUT_QUERY, useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ScrollRevealItem({
   progress,
@@ -44,8 +44,7 @@ export function ProblemInsightSolution({
   section: ProblemInsightSolutionType;
 }) {
   const { insight, problem, solution } = section;
-  const { width } = useWindowMetrics();
-  const isMobileLayout = width > 0 ? width < 1000 : false;
+  const isMobileLayout = useMediaQuery(STACKED_LAYOUT_QUERY, false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,

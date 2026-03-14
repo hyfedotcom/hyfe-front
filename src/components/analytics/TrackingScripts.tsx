@@ -3,18 +3,54 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
-const GTM_ID = "GTM-K646M5L";
 const GOOGLE_TAG_ID = "G-FDYY62BKMY";
 const AHREFS_KEY = "oKxNRpsjYqZ73g8TXQbS7w";
 const CLARITY_ID = "i3tshx1j7p";
+const TRACKING_DELAY_MS = 2000;
+const TRACKING_IDLE_TIMEOUT_MS = 5000;
 
 export function TrackingScripts() {
-  const [isReady, setIsReady] = useState(false)
-  useEffect(() => {
-    setIsReady(true)
-  }, [])
+  const [isReady, setIsReady] = useState(false);
 
-  if (!isReady) return null
+  useEffect(() => {
+    let delayId: number | null = null;
+    let idleId: number | null = null;
+
+    const mountScripts = () => {
+      delayId = window.setTimeout(() => {
+        if ("requestIdleCallback" in window) {
+          idleId = window.requestIdleCallback(
+            () => setIsReady(true),
+            { timeout: TRACKING_IDLE_TIMEOUT_MS },
+          );
+          return;
+        }
+
+        setIsReady(true);
+      }, TRACKING_DELAY_MS);
+    };
+
+    if (document.readyState === "complete") {
+      mountScripts();
+    } else {
+      window.addEventListener("load", mountScripts, { once: true });
+    }
+
+    return () => {
+      if (delayId !== null) {
+        window.clearTimeout(delayId);
+      }
+
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+
+      window.removeEventListener("load", mountScripts);
+    };
+  }, []);
+
+  if (!isReady) return null;
+
   return (
     <>
       <Script

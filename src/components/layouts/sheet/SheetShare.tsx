@@ -1,12 +1,11 @@
 "use client";
 
-import { useWindowMetrics } from "@/context/window/windowContext";
+import { MD_UP_QUERY, useMediaQuery } from "@/hooks/useMediaQuery";
 import { ICONS } from "@/shared/icons/resources";
 import { useEffect, useRef, useState } from "react";
 
 export function SheetShare({ citation }: { citation?: string }) {
-  const { width } = useWindowMetrics();
-  const isDesktop = width >= 768;
+  const isDesktop = useMediaQuery(MD_UP_QUERY, true);
   const [isMobileShareOpen, setIsMobileShareOpen] = useState(false);
   const [isLinkCopied, setIsLinkCopied] = useState(false);
   const [isCiteCopied, setIsCiteCopied] = useState(false);

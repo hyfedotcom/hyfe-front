@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceButton } from "@/app/(resources + privacy)/components/ui/ResourceButton";
-import { useWindowMetrics } from "@/context/window/windowContext";
+import { MD_DOWN_QUERY, matchesMediaQuery } from "@/hooks/useMediaQuery";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,8 +11,6 @@ export function CompanyResourcesClient() {
   const [isPinned, setIsPinned] = useState(false);
   const isDown = useIsScrollingDown(10);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const { width } = useWindowMetrics();
-  const isMobile = width <= 768;
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -39,6 +37,7 @@ export function CompanyResourcesClient() {
   const Scroll = (label: string) => {
     const div = document.getElementById(label);
     if (!div) return;
+    const isMobile = matchesMediaQuery(MD_DOWN_QUERY);
     const top =
       window.scrollY + div.getBoundingClientRect().top - (isMobile ? 150 : 200);
 

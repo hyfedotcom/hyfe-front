@@ -4,8 +4,8 @@ import type { ResourceCardType } from "@/features/resources/data/resources.types
 import { useCallback } from "react";
 
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
+import { MD_DOWN_QUERY, useMediaQuery } from "@/hooks/useMediaQuery";
 import { ResourcesFiltersBar } from "../ResourcesFiltersBar";
-import { useWindowMetrics } from "@/context/window/windowContext";
 import { RecourcesListCardsGrid } from "./recourcesListFull/RecourcesListCardsGrid";
 import { RecourcesListFooter } from "./recourcesListFull/RecourcesListFooter";
 import type { ResourceListRenderMode } from "./recourcesListFull/types";
@@ -25,8 +25,7 @@ export function RecourcesListFull({
   initialPage?: number;
   renderMode: ResourceListRenderMode;
 }) {
-  const { width } = useWindowMetrics();
-  const isMobile = (width ?? 0) <= 768;
+  const isMobile = useMediaQuery(MD_DOWN_QUERY, false);
   const isDown = useIsScrollingDown(10);
 
   const {

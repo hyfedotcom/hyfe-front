@@ -10,8 +10,6 @@ import getGeneral from "@/features/general/api/getGeneral";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { CookieConsentRuntime } from "@/components/cookie/CookieConsentRuntime";
-import { SheetNavigationProvider } from "@/context/sheet/sheetNavigationContext";
-import { WindowProvider } from "@/context/window/windowContext";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -40,12 +38,8 @@ export default async function RootLayout({
         <div data-site-header>
           <Header header={general.header} topBannerHeight={topBannerHeight} />
         </div>
-        <WindowProvider>
-          <SheetNavigationProvider>
-            {children}
-            {sheet}
-          </SheetNavigationProvider>
-        </WindowProvider>
+        {children}
+        {sheet}
         <div data-site-footer>
           <Footer newsletter={newsletter} footer={general.footer} />
         </div>

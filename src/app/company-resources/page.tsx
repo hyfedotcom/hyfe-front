@@ -1,4 +1,4 @@
-import { ResourcesListHero } from "@/features/resources/client";
+import { ResourcesListHero } from "@/features/resources/list";
 import { notFound } from "next/navigation";
 import { getPageResource } from "@/features/resources/data/api/getResourceFeedPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";

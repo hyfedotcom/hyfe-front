@@ -7,17 +7,19 @@ import { usePathname } from "next/navigation";
 import type { NavItem, CtaNavItem } from "@/features/header/type/header.type";
 import { cx, NavLink } from "@/features/header/helpers/header.helpers";
 import { TriggerButton } from "./components/TriggerButton";
-import { DropdownPanel } from "./components/DropdownPanel";
-import { MegaPanel } from "./components/MegaPanel";
 import {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { BigCardsPanel } from "./components/BigCardsPanel";
 import { LinkIndicator } from "@/components/ui/buttons/LinkIndicator";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
+
+const loadHeaderDesktopPanels = () =>
+  import("./HeaderDesktopPanels").then((module) => ({
+    default: module.HeaderDesktopPanels,
+  }));
 
 const HeaderMobileMenu = dynamic(
   () =>
@@ -26,6 +28,10 @@ const HeaderMobileMenu = dynamic(
     })),
   { ssr: false },
 );
+
+const HeaderDesktopPanels = dynamic(loadHeaderDesktopPanels, {
+  ssr: false,
+});
 
 export function HeaderClient({
   nav,
@@ -138,6 +144,10 @@ export function HeaderClient({
     }
   };
 
+  const prefetchDesktopPanels = useCallback(() => {
+    void loadHeaderDesktopPanels();
+  }, []);
+
   const cta = nav.find((item) => item.kind === "cta") as
     | CtaNavItem
     | undefined;
@@ -220,57 +230,33 @@ export function HeaderClient({
               }
 
               const isOpen = openId === item.id;
-              const megaItem = item.kind === "mega" ? item : null;
-
               return (
                 <div
                   key={item.id}
                   className="relative"
-                  onPointerEnter={() => openDesktopMenu(item.id)}
+                  onPointerEnter={() => {
+                    prefetchDesktopPanels();
+                    openDesktopMenu(item.id);
+                  }}
                   onPointerLeave={scheduleDesktopClose}
+                  onFocusCapture={prefetchDesktopPanels}
                 >
                   <TriggerButton
                     label={item.label}
                     open={isOpen}
-                    onClick={() => openDesktopMenu(item.id)}
+                    onClick={() => {
+                      prefetchDesktopPanels();
+                      openDesktopMenu(item.id);
+                    }}
                   />
 
-                  {isOpen && item.kind === "dropdown" && (
-                    <div
+                  {isOpen && (
+                    <HeaderDesktopPanels
+                      item={item}
+                      close={closeDesktopMenus}
                       onPointerEnter={cancelDesktopClose}
                       onPointerLeave={scheduleDesktopClose}
-                    >
-                      <DropdownPanel
-                        items={item.items}
-                        close={closeDesktopMenus}
-                      />
-                    </div>
-                  )}
-
-                  {isOpen && item.kind === "card" && (
-                    <div
-                      onPointerEnter={cancelDesktopClose}
-                      onPointerLeave={scheduleDesktopClose}
-                    >
-                      <BigCardsPanel
-                        items={item.items}
-                        close={closeDesktopMenus}
-                      />
-                    </div>
-                  )}
-
-                  {isOpen && megaItem && (
-                    <div
-                      onPointerEnter={cancelDesktopClose}
-                      onPointerLeave={scheduleDesktopClose}
-                      className="mx-auto backdrop-blur-[20px]!"
-                    >
-                      <MegaPanel
-                        sections={megaItem.sections}
-                        quickLinks={megaItem.quickLinks}
-                        close={closeDesktopMenus}
-                      />
-                    </div>
+                    />
                   )}
                 </div>
               );

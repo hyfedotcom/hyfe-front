@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ResourceButton } from "@/app/(resources + privacy)/components/ui/ResourceButton";
 import { useIsScrollingDown } from "@/hooks/useIsScrollingDown";
-import { useWindowMetrics } from "@/context/window/windowContext";
+import { MD_DOWN_QUERY, matchesMediaQuery } from "@/hooks/useMediaQuery";
 
 const resourceTypes: Array<"publications" | "white-papers" | "cough-news"> = [
   "publications",
@@ -15,8 +15,6 @@ export function ScienceResourcesClient() {
   const [isPinned, setIsPinned] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isDown = useIsScrollingDown(10);
-  const { width } = useWindowMetrics();
-  const isMobile = width <= 768;
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -39,6 +37,7 @@ export function ScienceResourcesClient() {
   const scroll = (t: string) => {
     const div = document.getElementById(t);
     if (!div) return;
+    const isMobile = matchesMediaQuery(MD_DOWN_QUERY);
     const top =
       window.scrollY + div.getBoundingClientRect().top - (isMobile ? 150 : 200);
 

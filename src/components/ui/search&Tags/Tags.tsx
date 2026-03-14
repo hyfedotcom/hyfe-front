@@ -1,6 +1,6 @@
 "use client";
 
-import { ResourceTag } from "@/features/resources/client";
+import { ResourceTag } from "@/features/resources/tag";
 import { isResourceType } from "@/features/resources/data/api/resourceType";
 import {
   hasResourceListStateInSearchParams,

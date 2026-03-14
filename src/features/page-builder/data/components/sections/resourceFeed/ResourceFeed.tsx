@@ -1,6 +1,6 @@
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { ContentContainer } from "@/components/content/ContentContainer";
-import { ResourceCard } from "@/features/resources/client";
+import { ResourceCard } from "@/features/resources/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/buttons/Button";
 import type { ResourceFeedSectionRenderable } from "../../pageBuilder.types";

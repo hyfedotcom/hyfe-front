@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
-import { RecourcesListDispatcher } from "@/features/resources/client";
+import { RecourcesListDispatcher } from "@/features/resources/list";
 import type {
   LandingType,
   ResourceCardType,

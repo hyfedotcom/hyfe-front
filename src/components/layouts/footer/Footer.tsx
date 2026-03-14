@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import type { NewsletterFormType } from "@/features/newsletter";
-import { NewsletterSignupForm } from "@/features/newsletter/components/NewsletterSignupForm";
 import type { FooterType } from "@/features/general/schema/domain";
 import { isInternalHref, normalizeHref } from "@/shared/utils/resolveLink";
 import { FooterFrame } from "./FooterFrame";
+import { FooterNewsletterForm } from "./FooterNewsletterForm";
 
 type FooterLink = {
   label: string;
@@ -75,12 +75,9 @@ export function Footer({
           </h3>
         </div>
 
-        <NewsletterSignupForm
-          className="space-y-5 md:w-max mx-auto"
-          idSuffix="footer"
+        <FooterNewsletterForm
           ctaLabel={newsletter.ctaLabel}
           consentLabel={newsletter.consentLabel}
-          align="center"
         />
       </div>
 
