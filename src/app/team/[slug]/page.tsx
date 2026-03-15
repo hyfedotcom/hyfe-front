@@ -11,6 +11,7 @@ import FacebookIcon from "@/shared/icons/socialMedia/FacebookIcon";
 import { RESOURCE_ICONS } from "@/app/(resources + privacy)/components/navigation/resourceNav.utils";
 import { ICONS } from "@/shared/icons/resources";
 import LinkedinIcon from "@/shared/icons/socialMedia/LinkedinIcon";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -32,6 +33,11 @@ export async function generateMetadata({ params }: { params: Props }) {
     robots: { index: false, follow: false },
   };
 
+  if (!isValidCmsPathSegment(slug)) return fallback;
+
+  const slugs = await getSlugs("teams");
+  if (!slugs.includes(slug)) return fallback;
+
   const member = await getMember(slug);
   if (!member?.seo) return fallback;
   return getSeoMetadata(member.seo);
@@ -39,6 +45,9 @@ export async function generateMetadata({ params }: { params: Props }) {
 
 export default async function Member({ params }: { params: Props }) {
   const { slug } = await params;
+  if (!isValidCmsPathSegment(slug)) notFound();
+  const slugs = await getSlugs("teams");
+  if (!slugs.includes(slug)) notFound();
   const member = await getMember(slug);
   if (!member) notFound();
 

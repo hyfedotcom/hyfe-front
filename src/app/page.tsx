@@ -1,6 +1,7 @@
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { getPage } from "@/features/page-builder/data/api/getPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+import { homePageBuilderRegistry } from "@/features/page-builder/data/components/pageBuilder.registry.home";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
@@ -34,7 +35,7 @@ export default async function Home() {
   return (
     <>
       <SeoStructuredData seo={page.seo} id="home-seo-jsonld" />
-      <PageBuilder sections={page.sections} />
+      <PageBuilder registry={homePageBuilderRegistry} sections={page.sections} />
     </>
   );
 }

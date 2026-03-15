@@ -23,7 +23,6 @@ export function HorizontalRailClient({
   function move(side: "left" | "right") {
     const rail = railRef.current;
     const firstCard = rail?.querySelector<HTMLElement>("[data-card]");
-    console.log(rail)
     if (!rail || !firstCard) return;
 
     const row = firstCard.parentElement;

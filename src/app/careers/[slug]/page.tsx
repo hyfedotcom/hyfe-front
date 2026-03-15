@@ -8,6 +8,7 @@ import { Sheet } from "@/components/layouts/sheet/Sheet";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { getSlugs } from "@/features/shared/api/getSlugs";
 import getVacancy from "@/features/careers/api/getVacancy";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -24,6 +25,24 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Props }) {
   try {
     const { slug } = await params;
+
+    if (!isValidCmsPathSegment(slug)) {
+      return {
+        title: "Page not found",
+        description: "This page does not exist.",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    const slugs = await getSlugs("vacancies-items");
+    if (!slugs.includes(slug)) {
+      return {
+        title: "Page not found",
+        description: "This page does not exist.",
+        robots: { index: false, follow: false },
+      };
+    }
+
     const vacancy = await getVacancy(slug);
 
     if (!vacancy) {
@@ -55,6 +74,9 @@ export async function generateMetadata({ params }: { params: Props }) {
 
 export default async function VacancySingle({ params }: { params: Props }) {
   const { slug } = await params;
+  if (!isValidCmsPathSegment(slug)) return notFound();
+  const slugs = await getSlugs("vacancies-items");
+  if (!slugs.includes(slug)) return notFound();
   const vacancy = await getVacancy(slug);
   if (!vacancy) return notFound();
   const {

@@ -1,4 +1,5 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { resourceBySlug } from "../resources.query";
 import { parseOrThrow, SlugSchema } from "../resources.schema";
 import { resolveResourceItemsType } from "./resourceType";
@@ -18,6 +19,10 @@ export async function getResource({
   slug: string;
   isDraft?: boolean;
 }) {
+  if (!isValidCmsPathSegment(type) || !isValidCmsPathSegment(slug)) {
+    return null;
+  }
+
   const itemsType = resolveResourceItemsType(type);
   const isPublication = itemsType === "publications";
   const resourceData = await StrapiFetch<unknown>({

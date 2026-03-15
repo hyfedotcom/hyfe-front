@@ -9,6 +9,7 @@ import {
   isResourceType,
   RESOURCE_TYPES,
 } from "@/features/resources/data/api/resourceType";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { Metadata } from "next";
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -41,10 +42,19 @@ export async function generateMetadata({
   try {
     const { type } = await params;
 
+    if (!isValidCmsPathSegment(type)) {
+      return fallback;
+    }
+
     if (isResourceType(type)) {
       const data = await getResourcesList({ type });
       if (!data?.landing?.seo) return fallback;
       return getSeoMetadata(data.landing.seo);
+    }
+
+    const privacyTermSlugs = await getIndexablePrivacyTermSlugs();
+    if (!privacyTermSlugs.includes(type)) {
+      return fallback;
     }
 
     const legalPage = await getPrivacyTermPage(type);
@@ -64,7 +74,7 @@ export default async function DynamicTypePage({
 }) {
   const { type } = await params;
 
-  if (!isResourceType(type)) {
+  if (!isValidCmsPathSegment(type) || !isResourceType(type)) {
     return null;
   }
 

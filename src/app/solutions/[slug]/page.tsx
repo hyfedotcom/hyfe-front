@@ -1,10 +1,12 @@
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+import { solutionsPageBuilderRegistry } from "@/features/page-builder/data/components/pageBuilder.registry.solutions";
 import { getSlugs } from "@/features/shared/api/getSlugs";
 import getSolutionPage from "@/features/solutions/api/getSolutionPage";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -26,6 +28,9 @@ export async function generateMetadata({ params }: { params: Params }) {
   };
 
   const { slug } = await params;
+  if (!isValidCmsPathSegment(slug)) return fallBack;
+  const slugs = await getSlugs("solutions");
+  if (!slugs.includes(slug)) return fallBack;
   const page = await getSolutionPage({ slug });
   if (!page || !page.seo) return fallBack;
   return getSeoMetadata(page.seo);
@@ -33,13 +38,19 @@ export async function generateMetadata({ params }: { params: Params }) {
 
 export default async function SolutionPage({ params }: { params: Params }) {
   const { slug } = await params;
+  if (!isValidCmsPathSegment(slug)) return notFound();
+  const slugs = await getSlugs("solutions");
+  if (!slugs.includes(slug)) return notFound();
   const page = await getSolutionPage({ slug });
   if (!page || !page.sections) return notFound();
 
   return (
     <>
       <SeoStructuredData seo={page.seo} id="solution-seo-jsonld" />
-      <PageBuilder sections={page.sections}></PageBuilder>
+      <PageBuilder
+        registry={solutionsPageBuilderRegistry}
+        sections={page.sections}
+      ></PageBuilder>
     </>
   );
 }

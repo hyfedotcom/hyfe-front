@@ -69,13 +69,17 @@ export type PageBuilderComponent<P> = (
   props: P,
 ) => ReactNode | Promise<ReactNode>;
 
+export type PageBuilderComponentLoader<P> = () => Promise<
+  PageBuilderComponent<P>
+>;
+
 type PageBuilderSectionByType<K extends PageBuilderSectionType> =
   K extends "hero-stats"
     ? HeroStatsSectionmodifiedType
     : Extract<PageBuilderSection, { type: K }>;
 
 export type PageBuilderRegistry = {
-  [K in PageBuilderSectionType]: PageBuilderComponent<{
+  [K in PageBuilderSectionType]: PageBuilderComponentLoader<{
     section: PageBuilderSectionByType<K>;
   }>;
 };

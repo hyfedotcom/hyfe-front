@@ -1,3 +1,4 @@
+import { ContentContainer } from "@/components/content/ContentContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { ContentImageSplitType } from "@/features/solutions/schema/hero/strapi.schema";
 import Image from "next/image";
@@ -13,18 +14,8 @@ export default function ContentImageSplit({
       <div
         className={`${variant === "right" ? "flex-col md:flex-row-reverse" : "flex-col md:flex-row"} flex items-center gap-10`}
       >
-        <div className="md:w-1/2 space-y-6">
-          <h2 className="text-balance">{title}</h2>
-          {content && (
-            <div className="space-y-5">
-              {content.map((e, i) => (
-                <p className="text-balance" key={i}>
-                  {e.paragraph}
-                </p>
-              ))}
-            </div>
-          )}
-        </div>
+
+        <ContentContainer content={section} classContainer="md:w-1/2 space-y-6"/>
         <Image
           src={image.url}
           alt={image.alt ?? "image"}

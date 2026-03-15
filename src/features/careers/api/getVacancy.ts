@@ -1,4 +1,5 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { vacancyQuery } from "./careers.query";
 import {
   parseOrThrow,
@@ -7,6 +8,10 @@ import {
 import { VacanciesSchema } from "../schema/careers.schema";
 
 export default async function getVacancy(slug: string) {
+  if (!isValidCmsPathSegment(slug)) {
+    return null;
+  }
+
   const vacancyRaw = await StrapiFetch({
     path: "/api/vacancies-items",
     query: vacancyQuery(slug),

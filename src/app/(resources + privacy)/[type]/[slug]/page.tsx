@@ -15,6 +15,7 @@ import { buildArticleJsonLd } from "@/components/seo/jsonLdBuilders";
 import { notFound } from "next/navigation";
 import { isResourceType } from "@/features/resources/data/api/resourceType";
 import { SheetShare } from "@/components/layouts/sheet/SheetShare";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -53,7 +54,24 @@ export async function generateMetadata({
   try {
     const { slug, type } = await params;
 
+    if (!isValidCmsPathSegment(type) || !isValidCmsPathSegment(slug)) {
+      return {
+        title: "Page not found",
+        description: "This page does not exist.",
+        robots: { index: false, follow: false },
+      };
+    }
+
     if (!isResourceType(type)) {
+      return {
+        title: "Page not found",
+        description: "This page does not exist.",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    const slugs = await getResourceSlugs(type);
+    if (!slugs.includes(slug)) {
       return {
         title: "Page not found",
         description: "This page does not exist.",
@@ -85,7 +103,16 @@ export async function generateMetadata({
 export default async function ResourceSingle({ params }: PageProps) {
   const { slug, type } = await params;
 
+  if (!isValidCmsPathSegment(type) || !isValidCmsPathSegment(slug)) {
+    return notFound();
+  }
+
   if (!isResourceType(type)) {
+    return notFound();
+  }
+
+  const slugs = await getResourceSlugs(type);
+  if (!slugs.includes(slug)) {
     return notFound();
   }
 
@@ -121,19 +148,17 @@ export default async function ResourceSingle({ params }: PageProps) {
         animation={false}
         ariaLabel="Resource details"
       >
-        {/* <SheetNewsTimelineContainer> */}
-          <SheetShare citation={citationForShare} />
-          <div className="max-w-screen relative overflow-hidden">
-            <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
-              <ResourceDetailsHero data={resource} type={type} />
-              <ResourceDetails
-                data={blocks}
-                resourceType={type as ResourceType}
-                closeMode={"close"}
-              />
-            </div>
+        <SheetShare citation={citationForShare} />
+        <div className="max-w-screen relative overflow-hidden">
+          <div className="max-w-screen min-[1200px]:w-[70%] mx-auto max-w-258 pt-[60px] px-4 md:px-10">
+            <ResourceDetailsHero data={resource} type={type} />
+            <ResourceDetails
+              data={blocks}
+              resourceType={type as ResourceType}
+              closeMode={"close"}
+            />
           </div>
-        {/* </SheetNewsTimelineContainer> */}
+        </div>
       </Sheet>
     </>
   );

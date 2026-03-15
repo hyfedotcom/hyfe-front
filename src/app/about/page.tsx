@@ -2,6 +2,7 @@ import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
 import { SeoStructuredData } from "@/components/seo/SeoStructuredData";
 import getAbout from "@/features/about/api/getAbout";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+import { aboutPageBuilderRegistry } from "@/features/page-builder/data/components/pageBuilder.registry.about";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -27,7 +28,7 @@ export default async function About() {
   return (
     <>
       {about.seo && <SeoStructuredData seo={about.seo} id="about-seo-jsonld" />}
-      <PageBuilder sections={about.sections} />
+      <PageBuilder registry={aboutPageBuilderRegistry} sections={about.sections} />
     </>
   );
 }

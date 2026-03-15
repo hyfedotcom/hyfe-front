@@ -1,4 +1,5 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { memberBySlugQuery } from "./team.query";
 import {
   StrapiCollectionSchema,
@@ -7,6 +8,10 @@ import {
 import { MembersSchema } from "../schema/team.schema";
 
 export async function getMember(slug: string) {
+  if (!isValidCmsPathSegment(slug)) {
+    return null;
+  }
+
   const raw = await StrapiFetch({
     path: "/api/teams",
     query: memberBySlugQuery(slug),

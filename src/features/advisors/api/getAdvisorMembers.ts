@@ -1,4 +1,5 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { advisorBySlugQuery } from "./advisors.query";
 import {
   StrapiCollectionSchema,
@@ -7,6 +8,10 @@ import {
 import { AdvisorsSchema } from "../schema/advisors.schema";
 
 export async function getAdvisorMember(slug: string) {
+  if (!isValidCmsPathSegment(slug)) {
+    return null;
+  }
+
   const raw = await StrapiFetch({
     path: "/api/advisors",
     query: advisorBySlugQuery(slug),

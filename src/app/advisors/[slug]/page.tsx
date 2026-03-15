@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAdvisorMember } from "@/features/advisors/api/getAdvisorMembers";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -28,6 +29,11 @@ export async function generateMetadata({ params }: { params: Props }) {
     robots: { index: false, follow: false },
   };
 
+  if (!isValidCmsPathSegment(slug)) return fallback;
+
+  const slugs = await getSlugs("advisors");
+  if (!slugs.includes(slug)) return fallback;
+
   const member = await getAdvisorMember(slug);
   if (!member?.seo) return fallback;
   return getSeoMetadata(member.seo);
@@ -35,6 +41,9 @@ export async function generateMetadata({ params }: { params: Props }) {
 
 export default async function Member({ params }: { params: Props }) {
   const { slug } = await params;
+  if (!isValidCmsPathSegment(slug)) notFound();
+  const slugs = await getSlugs("advisors");
+  if (!slugs.includes(slug)) notFound();
   const member = await getAdvisorMember(slug);
   if (!member) notFound();
   const { biography, image, job, location, name } = member;

@@ -1,4 +1,5 @@
 import StrapiFetch from "@/core/strapi/strapiFetch";
+import { isValidCmsPathSegment } from "@/shared/utils/isValidCmsPathSegment";
 import { pageSolutionSkeleton, SolutionQueryBuild } from "./query";
 import { parseOrThrow } from "@/features/shared/schema/strapi.schema";
 import { SolutionCollectionSchema } from "../schema/hero/strapi.schema";
@@ -21,6 +22,10 @@ type solutionSkeleton = {
 };
 
 export default async function getSolutionPage({ slug }: { slug: string }) {
+  if (!isValidCmsPathSegment(slug)) {
+    return null;
+  }
+
   const solutionSkeletonRaw = await StrapiFetch({
     path: `/api/solutions`,
     query: pageSolutionSkeleton(slug),

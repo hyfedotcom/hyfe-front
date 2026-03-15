@@ -3,6 +3,9 @@ import { Button } from "../ui/buttons/Button";
 type Props = {
   title?: string;
   paragraph?: string | null;
+  content?: {
+    paragraph: string;
+  }[] | undefined;
   ctas?: {
     label: string;
     url: string;
@@ -34,6 +37,15 @@ export function ContentContainer({
       <div className="space-y-4 md:space-y-5">
         {title && <h2 className={`${classH} text-balance`}>{title}</h2>}
         {paragraph && <p className={`${classP} text-balance `}>{paragraph}</p>}
+        {content.content && (
+          <div className="space-y-5">
+            {content.content.map((e, i) => (
+              <p className="text-balance" key={i}>
+                {e.paragraph}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
       {ctas && ctas.length > 0 && (
         <div

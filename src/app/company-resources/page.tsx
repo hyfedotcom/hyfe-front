@@ -2,6 +2,7 @@ import { ResourcesListHero } from "@/features/resources/list";
 import { notFound } from "next/navigation";
 import { getPageResource } from "@/features/resources/data/api/getResourceFeedPage";
 import { PageBuilder } from "@/features/page-builder/data/components/PageBuilder";
+import { resourcePagesBuilderRegistry } from "@/features/page-builder/data/components/pageBuilder.registry.resourcePages";
 import { CompanyResourcesClient } from "./components/CompanyResourcesClient";
 import { Metadata } from "next";
 import { getSeoMetadata } from "@/components/seo/getSeoMetaData";
@@ -43,7 +44,10 @@ export default async function ScienceResources() {
       <div className="mb-30 md:mb-60">
         <CompanyResourcesClient />
         <div className="space-y-[-100px] md:space-y-[-200px]!  -mt-15">
-          <PageBuilder sections={data?.sections} />
+          <PageBuilder
+            registry={resourcePagesBuilderRegistry}
+            sections={data?.sections}
+          />
         </div>
       </div>
     </div>
